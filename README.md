@@ -21,10 +21,10 @@ Follow these steps:
 
 ```sh
 # Step 1: Clone the repository
-git clone <YOUR_GIT_URL>
+git clone https://github.com/Sabeh2005/Quran-Luganda-Ahmadiyya.git
 
 # Step 2: Navigate to the project directory
-cd "Quran Luganda Ahmadiyya"
+cd Quran-Luganda-Ahmadiyya
 
 # Step 3: Install the necessary dependencies
 npm i
