@@ -30,7 +30,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-40 w-full">
-      <div className={`header-gradient px-4 shadow-lg transition-all duration-300 ${isHomePage ? 'py-12' : 'py-6'}`}>
+      <div className={`header-gradient px-4 shadow-lg transition-all duration-300 ${isHomePage ? 'py-4' : 'py-6'}`}>
         <div className="container mx-auto flex items-center justify-between relative">
           {/* Left Side: Back Button or Menu Icon */}
           <div className="flex items-center gap-3 z-10 w-[100px]">
@@ -67,17 +67,17 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Center: Calligraphy (Centered in flow) */}
           {isHomePage && (
-            <div className="flex flex-col items-center justify-center text-center mx-auto z-10 px-2">
+            <div className="flex flex-col items-center justify-center text-center mx-auto z-10">
               <img
                 src={alQuranCalligraphy}
                 alt="Al-Quran Al-Kareem"
-                className="h-28 w-auto mb-3 filter brightness-0 invert"
+                className="h-20 w-auto mb-0 filter brightness-0 invert"
               />
-              <div className="flex flex-col items-center gap-1">
-                <h1 className="text-2xl font-bold text-primary-foreground leading-tight">
+              <div className="flex flex-col items-center gap-0">
+                <h1 className="text-2xl font-bold text-primary-foreground leading-tight whitespace-nowrap">
                   Holy Quran
                 </h1>
-                <p className="text-2xl font-bold text-primary-foreground leading-tight">
+                <p className="text-2xl font-bold text-primary-foreground leading-tight whitespace-nowrap">
                   Luganda and English
                 </p>
               </div>
