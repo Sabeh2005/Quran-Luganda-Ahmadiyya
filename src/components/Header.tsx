@@ -30,7 +30,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-40 w-full">
-      <div className={`header-gradient px-4 shadow-lg transition-all duration-300 ${isHomePage ? 'py-4' : 'py-6'}`}>
+      <div className={`header-gradient px-6 shadow-lg transition-all duration-300 ${isHomePage ? 'py-4' : 'py-6'}`}>
         <div className="container mx-auto grid grid-cols-[1fr_auto_1fr] items-center relative">
           {/* Left Side: Back Button or Menu Icon */}
           <div className="col-start-1 flex justify-start items-center gap-3 z-10 text-left min-w-0">
