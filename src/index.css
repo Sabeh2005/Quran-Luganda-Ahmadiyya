@@ -518,9 +518,6 @@
     --popover: 160 12% 12%;
     --popover-foreground: 120 15% 92%;
 
-    --primary: 142 55% 45%;
-    --primary-foreground: 0 0% 100%;
-
     --secondary: 160 20% 18%;
     --secondary-foreground: 142 55% 65%;
 
@@ -535,14 +532,12 @@
 
     --border: 160 15% 20%;
     --input: 160 15% 20%;
-    --ring: 142 55% 45%;
 
     --verse-bg: 160 15% 14%;
     --verse-border: 160 15% 22%;
     --arabic-color: 142 45% 75%;
     --translation-color: 120 12% 78%;
-    --header-gradient-start: 142 50% 35%;
-    --header-gradient-end: 142 45% 45%;
+    /* Gradient variables removed from dark mode as they are no longer used or should fall back to theme defaults */
     --ornament-color: 142 50% 55%;
 
     --highlight-yellow: 48 70% 25%;
@@ -552,12 +547,9 @@
 
     --sidebar-background: 160 15% 8%;
     --sidebar-foreground: 120 15% 92%;
-    --sidebar-primary: 142 55% 45%;
-    --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 160 25% 22%;
     --sidebar-accent-foreground: 142 55% 65%;
     --sidebar-border: 160 15% 20%;
-    --sidebar-ring: 142 55% 45%;
   }
 }
 
@@ -616,9 +608,7 @@
   }
 
   .header-gradient {
-    background: linear-gradient(135deg,
-        hsl(var(--header-gradient-start)) 0%,
-        hsl(var(--header-gradient-end)) 100%);
+    background-color: hsl(var(--primary));
   }
 
   .ornament {
@@ -649,7 +639,7 @@
   /* Verse number ornament */
   .verse-number-ornament {
     @apply flex items-center justify-center w-10 h-10 rounded-full text-sm font-semibold;
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.8) 100%);
+    background-color: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
     box-shadow: 0 2px 8px hsl(var(--primary) / 0.3);
   }

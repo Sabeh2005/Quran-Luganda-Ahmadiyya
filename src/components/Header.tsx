@@ -31,9 +31,9 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="sticky top-0 z-40 w-full">
       <div className={`header-gradient px-4 shadow-lg transition-all duration-300 ${isHomePage ? 'py-4' : 'py-6'}`}>
-        <div className="container mx-auto flex items-center justify-between relative">
-          {/* Left Side: Back Button or Menu Icon */}
-          <div className="flex items-center gap-3 z-10 w-[100px]">
+        <div className="container mx-auto flex items-center relative">
+          {/* Left Side: Back Button or Menu Icon - Flex 1 to take available space */}
+          <div className="flex-1 flex justify-start items-center gap-3 z-10 text-left">
             {showBack ? (
               <Button
                 variant="ghost"
@@ -65,9 +65,9 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
 
-          {/* Center: Calligraphy (Centered in flow) */}
+          {/* Center: Calligraphy (Centered in flow) - Auto width but constrained */}
           {isHomePage && (
-            <div className="flex flex-col items-center justify-center text-center mx-auto z-10">
+            <div className="flex flex-col items-center justify-center text-center z-10 shrink-0 mx-2">
               <img
                 src={alQuranCalligraphy}
                 alt="Al-Quran Al-Kareem"
@@ -84,8 +84,8 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           )}
 
-          {/* Right Side: Settings and Install */}
-          <div className="flex items-center justify-end gap-2 z-10 w-[100px]">
+          {/* Right Side: Settings and Install - Flex 1 to balance the left side */}
+          <div className="flex-1 flex justify-end items-center gap-2 z-10 text-right">
             {isHomePage && (
               <Button
                 variant="ghost"
@@ -112,7 +112,7 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Decorative pattern */}
-      <div className="h-2 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20" />
+
     </header>
   );
 };

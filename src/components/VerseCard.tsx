@@ -46,7 +46,7 @@ const highlightColors: { color: HighlightColor; className: string; label: string
 export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahName }) => {
   const [copied, setCopied] = useState(false);
   const { settings, getBookmark, addBookmark, removeBookmark, getHighlight, addHighlight, removeHighlight } = useQuranStore();
-  
+
   const bookmark = getBookmark(surahNumber, verse.verseNumber);
   const highlight = getHighlight(surahNumber, verse.verseNumber);
 
@@ -99,7 +99,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
       text += `\n\n${verse.english}`;
     }
     text += `\n\n— ${surahName} (${verse.verseNumber})`;
-    
+
     await navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -118,7 +118,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
       text += `\n\n${verse.english}`;
     }
     text += `\n\n— ${surahName} (${verse.verseNumber})`;
-    
+
     if (navigator.share) {
       try {
         await navigator.share({
@@ -170,7 +170,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
   const translationStyles = getTranslationFontStyle();
 
   return (
-    <div 
+    <div
       className={cn(
         "verse-card animate-fade-in relative overflow-hidden",
         getHighlightClass()
@@ -179,7 +179,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
     >
       {/* Bookmark indicator */}
       {bookmark && (
-        <div 
+        <div
           className={cn(
             "absolute top-0 right-4 w-4 h-8 rounded-b-sm",
             getBookmarkColorClass()
@@ -193,14 +193,14 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
           <div className="verse-number-ornament flex-shrink-0">
             {verse.verseNumber}
           </div>
-          <p 
+          <p
             className={cn("arabic-text flex-1 text-right leading-loose", getArabicFontClass())}
-            style={{ 
+            style={{
               fontSize: `${settings.arabicFontSize}px`,
               color: settings.arabicFontColor,
               fontWeight: settings.arabicFontBold ? 'bold' : 'normal',
-              wordBreak: 'normal',
-              overflowWrap: 'normal',
+              wordBreak: 'break-word',
+              overflowWrap: 'anywhere',
               whiteSpace: 'pre-wrap',
             }}
             dir="rtl"
@@ -211,15 +211,15 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
 
         {/* Luganda translation - full width from left */}
         {showLuganda && (
-          <p 
+          <p
             className="translation-text text-left w-full"
-            style={{ 
+            style={{
               fontSize: `${settings.translationFontSize}px`,
               color: settings.translationFontColor,
               fontFamily: getTranslationFontFamily(settings.translationFont),
               ...translationStyles,
-              wordBreak: 'normal',
-              overflowWrap: 'normal',
+              wordBreak: 'break-word',
+              overflowWrap: 'anywhere',
               whiteSpace: 'pre-wrap',
             }}
           >
@@ -232,15 +232,15 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
 
         {/* English translation - full width from left */}
         {showEnglish && (
-          <p 
+          <p
             className="translation-text text-left w-full"
-            style={{ 
+            style={{
               fontSize: `${settings.translationFontSize}px`,
               color: settings.translationFontColor,
               fontFamily: getTranslationFontFamily(settings.translationFont),
               ...translationStyles,
-              wordBreak: 'normal',
-              overflowWrap: 'normal',
+              wordBreak: 'break-word',
+              overflowWrap: 'anywhere',
               whiteSpace: 'pre-wrap',
             }}
           >
@@ -257,8 +257,8 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
         {/* Bookmark button */}
         <Popover>
           <PopoverTrigger asChild>
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="sm"
               className={cn(
                 "h-8 px-2",
@@ -291,8 +291,8 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
         {/* Highlight button */}
         <Popover>
           <PopoverTrigger asChild>
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="sm"
               className={cn(
                 "h-8 px-2",
@@ -323,8 +323,8 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
         </Popover>
 
         {/* Copy button */}
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           size="sm"
           onClick={handleCopy}
           className="h-8 px-2"
@@ -334,8 +334,8 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
         </Button>
 
         {/* Share button */}
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           size="sm"
           onClick={handleShare}
           className="h-8 px-2"

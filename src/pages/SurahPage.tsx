@@ -127,9 +127,9 @@ const SurahPage = () => {
       <header className="sticky top-0 z-40 w-full">
         <div className="header-gradient px-4 py-4 shadow-lg">
           <div className="container mx-auto flex items-center gap-3">
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => navigate(-1)}
               className="text-primary-foreground hover:bg-primary-foreground/20"
             >
@@ -143,19 +143,20 @@ const SurahPage = () => {
             </div>
           </div>
         </div>
-        <div className="h-2 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20" />
+
       </header>
 
       <main className="container mx-auto py-6 px-4">
         {/* Surah header */}
-        <div className="text-center mb-8 p-6 rounded-2xl bg-card border border-border">
-          <p className="text-4xl font-noorehuda text-primary mb-2" dir="rtl">
+        {/* Surah header */}
+        <div className="text-center mb-8 p-6 rounded-2xl bg-primary text-primary-foreground shadow-lg">
+          <p className="text-4xl font-noorehuda mb-2 text-primary-foreground" dir="rtl">
             {surahInfo.arabic}
           </p>
-          <h2 className="text-2xl font-semibold text-foreground">
+          <h2 className="text-2xl font-semibold text-primary-foreground">
             {surahInfo.transliteration}
           </h2>
-          <div className="flex items-center justify-center gap-4 mt-3 text-sm text-muted-foreground">
+          <div className="flex items-center justify-center gap-4 mt-3 text-sm text-primary-foreground/90 font-medium">
             <span>{surah.totalVerses} Verses</span>
             <span>•</span>
             <span>{surah.revelationType}</span>
@@ -165,7 +166,7 @@ const SurahPage = () => {
         {/* Verses */}
         <div className="space-y-4">
           {surah.verses.map((verse) => (
-            <div 
+            <div
               key={verse.verseNumber}
               ref={(el) => { verseRefs.current[verse.verseNumber] = el; }}
             >

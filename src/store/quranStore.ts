@@ -35,10 +35,10 @@ interface QuranStore {
 const defaultSettings: AppSettings = {
   nightMode: false,
   arabicFont: 'noorehuda',
-  arabicFontSize: 18,
+  arabicFontSize: 40,
   arabicFontBold: false,
   translationFont: 'default',
-  translationFontSize: 12,
+  translationFontSize: 30,
   translationFontBold: false,
   translationFontStyle: 'normal',
   translationDisplay: 'all',
