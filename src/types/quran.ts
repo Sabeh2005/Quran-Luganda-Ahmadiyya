@@ -37,7 +37,7 @@ export interface CombinedSurah {
 export type ArabicFont = 'noorehuda' | 'uthmani' | 'indopak' | 'khat-e-manzoor';
 export type TranslationFont = 'default' | 'times-new-roman' | 'georgia' | 'libre-baskerville' | 'eb-garamond';
 export type TranslationDisplay = 'all' | 'luganda' | 'english' | 'off';
-export type ThemeColor = 'green' | 'blue' | 'purple' | 'gold-rose' | 'orange' | 'brown' | 'black';
+export type ThemeColor = 'green' | 'blue' | 'purple' | 'gold-rose' | 'orange' | 'brown' | 'dark-green' | 'dark-blue' | 'maroon' | 'red';
 export type HighlightColor = 'yellow' | 'green' | 'blue' | 'pink' | 'orange' | 'purple' | 'red' | 'teal' | 'lime' | 'rose' | null;
 export type BookmarkColor = 'red' | 'blue' | 'yellow' | 'purple' | 'green' | 'orange' | 'pink' | 'teal' | 'lime' | 'brown' | null;
 export type TranslationFontStyle = 'normal' | 'italic' | 'bold-italic';

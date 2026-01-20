@@ -19,7 +19,7 @@
 @font-face {
   font-family: 'UthmanicHafs';
   src: url('https://cdn.jsdelivr.net/gh/thetruetruth/quran-data-kfgqpc@main/hafs/font/hafs.18.woff2') format('woff2'),
-       url('https://cdn.jsdelivr.net/gh/thetruetruth/quran-data-kfgqpc@main/hafs/font/hafs.18.ttf') format('truetype');
+    url('https://cdn.jsdelivr.net/gh/thetruetruth/quran-data-kfgqpc@main/hafs/font/hafs.18.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -87,13 +87,13 @@
     --header-gradient-start: 142 64% 34%;
     --header-gradient-end: 142 50% 45%;
     --ornament-color: 142 60% 50%;
-    
+
     /* Highlight Colors */
     --highlight-yellow: 48 96% 89%;
     --highlight-green: 142 60% 85%;
     --highlight-blue: 210 80% 90%;
     --highlight-pink: 330 80% 92%;
-    
+
     /* Bookmark Colors */
     --bookmark-red: 0 75% 55%;
     --bookmark-blue: 210 80% 55%;
@@ -290,40 +290,149 @@
     --ornament-color: 25 40% 45%;
   }
 
-  /* Black Theme */
-  .theme-black {
-    --background: 0 0% 5%;
-    --foreground: 0 0% 95%;
+  /* Dark Green Theme */
+  .theme-dark-green {
+    --background: 140 30% 96%;
+    --foreground: 140 50% 10%;
 
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 95%;
+    --card: 140 25% 98%;
+    --card-foreground: 140 50% 10%;
 
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 140 25% 98%;
+    --popover-foreground: 140 50% 10%;
 
-    --primary: 0 0% 70%;
-    --primary-foreground: 0 0% 5%;
+    --primary: 140 40% 34%;
+    /* #327D3D - user's requested color */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 80%;
+    --secondary: 140 35% 88%;
+    --secondary-foreground: 140 45% 24%;
 
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 60%;
+    --muted: 140 20% 92%;
+    --muted-foreground: 140 15% 42%;
 
-    --accent: 0 0% 18%;
-    --accent-foreground: 0 0% 85%;
+    --accent: 140 40% 86%;
+    --accent-foreground: 140 45% 24%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 0 0% 70%;
+    --border: 140 25% 85%;
+    --input: 140 25% 85%;
+    --ring: 140 40% 34%;
 
-    --verse-bg: 0 0% 10%;
-    --verse-border: 0 0% 18%;
-    --arabic-color: 0 0% 90%;
-    --translation-color: 0 0% 85%;
-    --header-gradient-start: 0 0% 15%;
-    --header-gradient-end: 0 0% 25%;
-    --ornament-color: 0 0% 70%;
+    --verse-bg: 140 30% 94%;
+    --verse-border: 140 30% 82%;
+    --arabic-color: 140 50% 18%;
+    --translation-color: 140 30% 22%;
+    --header-gradient-start: 140 40% 34%;
+    --header-gradient-end: 140 35% 44%;
+    --ornament-color: 140 45% 45%;
+  }
+
+  /* Dark Blue Theme */
+  .theme-dark-blue {
+    --background: 220 35% 97%;
+    --foreground: 220 55% 10%;
+
+    --card: 220 30% 99%;
+    --card-foreground: 220 55% 10%;
+
+    --popover: 220 30% 99%;
+    --popover-foreground: 220 55% 10%;
+
+    --primary: 220 70% 38%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 40% 90%;
+    --secondary-foreground: 220 70% 28%;
+
+    --muted: 220 25% 93%;
+    --muted-foreground: 220 20% 43%;
+
+    --accent: 220 45% 88%;
+    --accent-foreground: 220 70% 28%;
+
+    --border: 220 30% 86%;
+    --input: 220 30% 86%;
+    --ring: 220 70% 38%;
+
+    --verse-bg: 220 35% 95%;
+    --verse-border: 220 35% 83%;
+    --arabic-color: 220 60% 20%;
+    --translation-color: 220 35% 24%;
+    --header-gradient-start: 220 70% 38%;
+    --header-gradient-end: 220 60% 48%;
+    --ornament-color: 220 65% 48%;
+  }
+
+  /* Maroon Theme */
+  .theme-maroon {
+    --background: 350 30% 97%;
+    --foreground: 350 50% 12%;
+
+    --card: 350 25% 99%;
+    --card-foreground: 350 50% 12%;
+
+    --popover: 350 25% 99%;
+    --popover-foreground: 350 50% 12%;
+
+    --primary: 350 70% 30%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 350 35% 90%;
+    --secondary-foreground: 350 70% 22%;
+
+    --muted: 350 20% 93%;
+    --muted-foreground: 350 15% 43%;
+
+    --accent: 350 40% 88%;
+    --accent-foreground: 350 70% 22%;
+
+    --border: 350 25% 86%;
+    --input: 350 25% 86%;
+    --ring: 350 70% 30%;
+
+    --verse-bg: 350 30% 95%;
+    --verse-border: 350 30% 83%;
+    --arabic-color: 350 55% 18%;
+    --translation-color: 350 30% 24%;
+    --header-gradient-start: 350 70% 30%;
+    --header-gradient-end: 350 60% 40%;
+    --ornament-color: 350 65% 42%;
+  }
+
+  /* Red Theme */
+  .theme-red {
+    --background: 0 30% 97%;
+    --foreground: 0 50% 12%;
+
+    --card: 0 25% 99%;
+    --card-foreground: 0 50% 12%;
+
+    --popover: 0 25% 99%;
+    --popover-foreground: 0 50% 12%;
+
+    --primary: 0 72% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 35% 92%;
+    --secondary-foreground: 0 72% 35%;
+
+    --muted: 0 20% 94%;
+    --muted-foreground: 0 15% 44%;
+
+    --accent: 0 40% 90%;
+    --accent-foreground: 0 72% 35%;
+
+    --border: 0 25% 88%;
+    --input: 0 25% 88%;
+    --ring: 0 72% 45%;
+
+    --verse-bg: 0 30% 96%;
+    --verse-border: 0 30% 85%;
+    --arabic-color: 0 55% 20%;
+    --translation-color: 0 30% 25%;
+    --header-gradient-start: 0 72% 45%;
+    --header-gradient-end: 0 62% 55%;
+    --ornament-color: 0 67% 55%;
   }
 
   /* Dark Mode (Night Mode) */
@@ -363,7 +472,7 @@
     --header-gradient-start: 142 50% 35%;
     --header-gradient-end: 142 45% 45%;
     --ornament-color: 142 50% 55%;
-    
+
     --highlight-yellow: 48 70% 25%;
     --highlight-green: 142 45% 22%;
     --highlight-blue: 210 55% 25%;
@@ -377,42 +486,6 @@
     --sidebar-accent-foreground: 142 55% 65%;
     --sidebar-border: 160 15% 20%;
     --sidebar-ring: 142 55% 45%;
-  }
-
-  /* Dark mode with Black theme */
-  .dark.theme-black {
-    --background: 0 0% 3%;
-    --foreground: 0 0% 95%;
-
-    --card: 0 0% 6%;
-    --card-foreground: 0 0% 95%;
-
-    --popover: 0 0% 6%;
-    --popover-foreground: 0 0% 95%;
-
-    --primary: 0 0% 75%;
-    --primary-foreground: 0 0% 5%;
-
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 85%;
-
-    --muted: 0 0% 10%;
-    --muted-foreground: 0 0% 55%;
-
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 90%;
-
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 0 0% 75%;
-
-    --verse-bg: 0 0% 8%;
-    --verse-border: 0 0% 15%;
-    --arabic-color: 0 0% 92%;
-    --translation-color: 0 0% 88%;
-    --header-gradient-start: 0 0% 12%;
-    --header-gradient-end: 0 0% 20%;
-    --ornament-color: 0 0% 75%;
   }
 }
 
@@ -471,11 +544,9 @@
   }
 
   .header-gradient {
-    background: linear-gradient(
-      135deg,
-      hsl(var(--header-gradient-start)) 0%,
-      hsl(var(--header-gradient-end)) 100%
-    );
+    background: linear-gradient(135deg,
+        hsl(var(--header-gradient-start)) 0%,
+        hsl(var(--header-gradient-end)) 100%);
   }
 
   .ornament {
@@ -534,6 +605,7 @@
       opacity: 0;
       transform: translateY(10px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -544,15 +616,19 @@
     from {
       transform: translateX(100%);
     }
+
     to {
       transform: translateX(0);
     }
   }
 
   @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: translateY(0);
     }
+
     50% {
       transform: translateY(-10px);
     }

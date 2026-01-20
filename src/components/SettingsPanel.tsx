@@ -10,6 +10,7 @@ import { useQuranStore, defaultSettings } from '@/store/quranStore';
 import type { ArabicFont, ThemeColor, TranslationFont, TranslationDisplay, TranslationFontStyle } from '@/types/quran';
 import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
+import { updateMetaThemeColor } from '@/utils/themeColors';
 
 interface SettingsPanelProps {
   isOpen: boolean;
@@ -46,12 +47,15 @@ const translationDisplayOptions: { value: TranslationDisplay; label: string }[] 
 
 const themeColors: { value: ThemeColor; label: string; className: string }[] = [
   { value: 'green', label: 'Green', className: 'bg-green-600' },
+  { value: 'dark-green', label: 'Dark Green', className: 'bg-green-800' },
   { value: 'blue', label: 'Blue', className: 'bg-blue-600' },
+  { value: 'dark-blue', label: 'Dark Blue', className: 'bg-blue-800' },
   { value: 'purple', label: 'Purple', className: 'bg-purple-600' },
+  { value: 'maroon', label: 'Maroon', className: 'bg-rose-800' },
+  { value: 'red', label: 'Red', className: 'bg-red-600' },
   { value: 'gold-rose', label: 'Gold Rose', className: 'bg-amber-500' },
   { value: 'orange', label: 'Orange', className: 'bg-orange-500' },
   { value: 'brown', label: 'Brown', className: 'bg-amber-800' },
-  { value: 'black', label: 'Black', className: 'bg-gray-900' },
 ];
 
 // Light mode font colors - 10 colors
@@ -91,9 +95,13 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
   const handleThemeChange = (theme: ThemeColor) => {
     updateSettings({ themeColor: theme });
 
+    // Update meta theme-color tag for Android status bar
+    updateMetaThemeColor(theme);
+
     // Remove all theme classes first
     document.documentElement.classList.remove(
-      'theme-blue', 'theme-purple', 'theme-gold-rose', 'theme-orange', 'theme-brown', 'theme-black'
+      'theme-blue', 'theme-purple', 'theme-gold-rose', 'theme-orange', 'theme-brown',
+      'theme-dark-green', 'theme-dark-blue', 'theme-maroon', 'theme-red'
     );
 
     // Add new theme class if not green (green is default)
@@ -167,7 +175,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
 
     // Remove theme classes
     document.documentElement.classList.remove(
-      'theme-blue', 'theme-purple', 'theme-gold-rose', 'theme-orange', 'theme-brown', 'theme-black', 'dark'
+      'theme-blue', 'theme-purple', 'theme-gold-rose', 'theme-orange', 'theme-brown',
+      'theme-dark-green', 'theme-dark-blue', 'theme-maroon', 'theme-red', 'dark'
     );
 
     toast({
