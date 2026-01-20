@@ -435,6 +435,78 @@
     --ornament-color: 0 67% 55%;
   }
 
+  /* Teal Theme */
+  .theme-teal {
+    --background: 170 30% 97%;
+    --foreground: 170 50% 12%;
+
+    --card: 170 25% 99%;
+    --card-foreground: 170 50% 12%;
+
+    --popover: 170 25% 99%;
+    --popover-foreground: 170 50% 12%;
+
+    --primary: 175 80% 35%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 170 35% 92%;
+    --secondary-foreground: 175 80% 30%;
+
+    --muted: 170 20% 94%;
+    --muted-foreground: 170 15% 44%;
+
+    --accent: 170 40% 90%;
+    --accent-foreground: 175 80% 30%;
+
+    --border: 170 25% 88%;
+    --input: 170 25% 88%;
+    --ring: 175 80% 40%;
+
+    --verse-bg: 170 30% 96%;
+    --verse-border: 170 30% 85%;
+    --arabic-color: 175 80% 20%;
+    --translation-color: 170 30% 25%;
+    --header-gradient-start: 175 80% 35%;
+    --header-gradient-end: 185 70% 45%;
+    --ornament-color: 175 70% 45%;
+  }
+
+  /* Indigo Theme */
+  .theme-indigo {
+    --background: 230 30% 98%;
+    --foreground: 230 50% 12%;
+
+    --card: 230 25% 99%;
+    --card-foreground: 230 50% 12%;
+
+    --popover: 230 25% 99%;
+    --popover-foreground: 230 50% 12%;
+
+    --primary: 235 80% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 230 35% 92%;
+    --secondary-foreground: 235 80% 35%;
+
+    --muted: 230 20% 94%;
+    --muted-foreground: 230 15% 45%;
+
+    --accent: 230 40% 90%;
+    --accent-foreground: 235 80% 35%;
+
+    --border: 230 25% 88%;
+    --input: 230 25% 88%;
+    --ring: 235 80% 60%;
+
+    --verse-bg: 230 30% 96%;
+    --verse-border: 230 30% 85%;
+    --arabic-color: 235 60% 25%;
+    --translation-color: 230 30% 30%;
+    --header-gradient-start: 235 80% 60%;
+    --header-gradient-end: 250 70% 65%;
+    --ornament-color: 235 70% 60%;
+  }
+
   /* Dark Mode (Night Mode) */
   .dark {
     --background: 160 15% 8%;

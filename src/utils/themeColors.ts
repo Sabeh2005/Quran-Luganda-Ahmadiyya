@@ -12,6 +12,8 @@ export const THEME_COLORS: Record<ThemeColor, string> = {
     'gold-rose': '#f59e0b',     // amber-500
     orange: '#ea580c',          // orange-600
     brown: '#92400e',           // amber-800
+    teal: '#0d9488',            // teal-600
+    indigo: '#4f46e5',          // indigo-600
 };
 
 /**

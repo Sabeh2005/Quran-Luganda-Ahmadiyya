@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => ({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: { enabled: true },
-      includeAssets: ['favicon.ico', 'apple-icon-180.png', 'manifest-icon-192.maskable.png', 'manifest-icon-512.maskable.png'],
+      includeAssets: ['favicon.ico', 'apple-icon-180.png', 'app-icon-192.maskable.png', 'app-icon-512.maskable.png'],
       manifest: {
         name: 'Quran Luganda Ahmadiyya',
         short_name: 'Quran Luganda',
@@ -31,13 +31,13 @@ export default defineConfig(({ mode }) => ({
         scope: '/',
         icons: [
           {
-            src: '/manifest-icon-192.maskable.png',
+            src: '/app-icon-192.maskable.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: '/manifest-icon-512.maskable.png',
+            src: '/app-icon-512.maskable.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
