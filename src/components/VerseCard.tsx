@@ -189,17 +189,18 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
 
       <div className="space-y-4">
         {/* Arabic text with verse number */}
-        <div className="flex items-start gap-4">
-          <div className="verse-number-ornament flex-shrink-0">
+        {/* Arabic text with verse number - Stacked layout */}
+        <div className="flex flex-col gap-2 w-full">
+          <div className="verse-number-ornament self-start">
             {verse.verseNumber}
           </div>
           <p
-            className={cn("arabic-text flex-1 text-right leading-loose", getArabicFontClass())}
+            className={cn("arabic-text w-full text-right leading-normal", getArabicFontClass())}
             style={{
               fontSize: `${settings.arabicFontSize}px`,
               color: settings.arabicFontColor,
               fontWeight: settings.arabicFontBold ? 'bold' : 'normal',
-              wordBreak: 'break-word',
+              wordBreak: 'normal',
               overflowWrap: 'anywhere',
               whiteSpace: 'pre-wrap',
             }}
@@ -218,7 +219,8 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
               color: settings.translationFontColor,
               fontFamily: getTranslationFontFamily(settings.translationFont),
               ...translationStyles,
-              wordBreak: 'break-word',
+              lineHeight: '1.5',
+              wordBreak: 'normal',
               overflowWrap: 'anywhere',
               whiteSpace: 'pre-wrap',
             }}
@@ -239,7 +241,8 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
               color: settings.translationFontColor,
               fontFamily: getTranslationFontFamily(settings.translationFont),
               ...translationStyles,
-              wordBreak: 'break-word',
+              lineHeight: '1.5',
+              wordBreak: 'normal',
               overflowWrap: 'anywhere',
               whiteSpace: 'pre-wrap',
             }}
