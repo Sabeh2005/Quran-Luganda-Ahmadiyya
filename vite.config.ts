@@ -30,12 +30,7 @@ export default defineConfig(({ mode }) => ({
         start_url: '/',
         scope: '/',
         icons: [
-          {
-            src: '/app-icon-192.maskable.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'any maskable'
-          },
+
           {
             src: '/app-icon-512.maskable.png',
             sizes: '512x512',
