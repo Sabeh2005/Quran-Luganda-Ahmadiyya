@@ -31,9 +31,9 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="sticky top-0 z-40 w-full">
       <div className={`header-gradient px-6 shadow-lg transition-all duration-300 ${isHomePage ? 'py-4' : 'py-6'}`}>
-        <div className="container mx-auto grid grid-cols-[1fr_auto_1fr] items-center relative">
+        <div className={`container mx-auto ${isHomePage ? 'flex justify-center items-center relative min-h-[50px]' : 'grid grid-cols-[1fr_auto_1fr] items-center'}`}>
           {/* Left Side: Back Button or Menu Icon */}
-          <div className="col-start-1 flex justify-start items-center gap-3 z-10 text-left min-w-0">
+          <div className={`${isHomePage ? 'absolute left-0 top-1/2 -translate-y-1/2' : 'col-start-1'} flex justify-start items-center gap-3 z-20 text-left min-w-0`}>
             {showBack ? (
               <Button
                 variant="ghost"
@@ -67,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Center: Calligraphy */}
           {isHomePage && (
-            <div className="col-start-2 flex flex-col items-center justify-center text-center z-10 shrink-0 mx-2 justify-self-center">
+            <div className="flex flex-col items-center justify-center text-center z-10 w-full px-12">
               <img
                 src={alQuranCalligraphy}
                 alt="Al-Quran Al-Kareem"
@@ -85,7 +85,7 @@ export const Header: React.FC<HeaderProps> = ({
           )}
 
           {/* Right Side: Settings and Install */}
-          <div className="col-start-3 flex justify-end items-center gap-2 z-10 text-right">
+          <div className={`${isHomePage ? 'absolute right-0 top-1/2 -translate-y-1/2' : 'col-start-3'} flex justify-end items-center gap-2 z-20 text-right`}>
             {isHomePage && (
               <Button
                 variant="ghost"
