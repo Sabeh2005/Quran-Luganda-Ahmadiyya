@@ -598,13 +598,18 @@
 @layer components {
   .verse-card {
     @apply rounded-xl p-5 transition-all duration-300;
-    background: hsl(var(--verse-bg));
-    border: 1px solid hsl(var(--verse-border));
   }
 
+
+
   .verse-card:hover {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    transform: translateY(-2px);
+  }
+
+  .dark .verse-card:hover {
     box-shadow: 0 4px 20px hsl(var(--primary) / 0.1);
-    border-color: hsl(var(--primary) / 0.3);
+    transform: none;
   }
 
   .header-gradient {

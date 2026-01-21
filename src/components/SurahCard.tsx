@@ -18,8 +18,8 @@ export const SurahCard: React.FC<SurahCardProps> = ({ surah, index }) => {
     <button
       onClick={() => navigate(`/surah/${surah.number}`)}
       className={cn(
-        "w-full p-4 rounded-xl bg-card border border-border hover:border-primary/50",
-        "transition-all duration-300 hover:shadow-lg hover:shadow-primary/10",
+        "w-full p-4 rounded-xl bg-card hover:border-primary/50",
+        "transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-primary/10",
         "flex items-center gap-4 text-left group animate-fade-in"
       )}
       style={{ animationDelay: `${index * 30}ms` }}
