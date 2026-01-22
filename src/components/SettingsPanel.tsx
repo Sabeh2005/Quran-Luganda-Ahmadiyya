@@ -274,7 +274,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
                       "flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all",
                       settings.themeColor === theme.value
                         ? "border-primary bg-primary/10"
-                        : "border-border hover:border-primary/50"
+                        : "border-border"
                     )}
                   >
                     <div className={cn("w-8 h-8 rounded-full", theme.className)} />
@@ -302,7 +302,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
                       "flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all",
                       settings.translationDisplay === option.value
                         ? "border-primary bg-primary/10"
-                        : "border-border hover:border-primary/50"
+                        : "border-border"
                     )}
                   >
                     <RadioGroupItem value={option.value} />
@@ -330,7 +330,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
                       "flex items-center justify-between p-3 rounded-lg border-2 cursor-pointer transition-all",
                       settings.arabicFont === font.value
                         ? "border-primary bg-primary/10"
-                        : "border-border hover:border-primary/50"
+                        : "border-border"
                     )}
                   >
                     <div className="flex items-center gap-3">
@@ -408,7 +408,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
                       "flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all",
                       settings.translationFont === font.value
                         ? "border-primary bg-primary/10"
-                        : "border-border hover:border-primary/50"
+                        : "border-border"
                     )}
                   >
                     <RadioGroupItem value={font.value} />
@@ -481,7 +481,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
                       "flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all",
                       settings.translationFontStyle === style.value
                         ? "border-primary bg-primary/10"
-                        : "border-border hover:border-primary/50"
+                        : "border-border"
                     )}
                   >
                     <span className="text-lg">{style.icon}</span>

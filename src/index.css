@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -43,8 +45,6 @@
   font-display: swap;
 }
 
-/* Translation Fonts - Using Google Fonts CSS Import */
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
 @layer base {
   :root {
@@ -78,6 +78,7 @@
     --ring: 142 64% 34%;
 
     --radius: 0.75rem;
+
 
     /* Custom Quran App Variables */
     --verse-bg: 142 30% 96%;
@@ -596,30 +597,9 @@
 }
 
 @layer components {
-  .shadow-spread {
-    box-shadow: 0 0 15px 3px rgba(0, 0, 0, 0.30);
-  }
-
-  .dark .shadow-spread {
-    box-shadow: 0 0 15px 3px rgba(0, 0, 0, 0.8);
-  }
-
   .verse-card {
-    @apply rounded-xl p-5 transition-all duration-300 shadow-spread;
+    @apply rounded-xl p-5 transition-all duration-300;
   }
-
-
-
-  .verse-card:hover {
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    transform: translateY(-2px);
-  }
-
-  .dark .verse-card:hover {
-    box-shadow: 0 4px 20px hsl(var(--primary) / 0.1);
-    transform: none;
-  }
-
   .header-gradient {
     background-color: hsl(var(--primary));
   }

@@ -3,6 +3,7 @@ import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { Loader2, BookOpen, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
 import { VerseCard } from '@/components/VerseCard';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 import { useQuranData } from '@/hooks/useQuranData';
 import { useQuranStore } from '@/store/quranStore';
@@ -151,7 +152,10 @@ const SurahPage = () => {
         {/* Surah header */}
         {/* Surah header */}
         <div
-          className="text-center mb-8 p-6 rounded-xl bg-primary text-primary-foreground relative !border-none transition-all duration-300 z-10 shadow-spread"
+          className={cn(
+            "verse-card text-center mb-8 p-6 rounded-xl bg-primary text-primary-foreground relative !border-none transition-all duration-300 z-10",
+            "shadow-[0_8px_24px_rgba(0,0,0,0.18)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.75)]"
+          )}
         >
           <p className="text-4xl font-noorehuda mb-2 text-primary-foreground" dir="rtl">
             {surahInfo.arabic}

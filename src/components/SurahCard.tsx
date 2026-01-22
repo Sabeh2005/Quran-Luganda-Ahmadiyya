@@ -18,14 +18,15 @@ export const SurahCard: React.FC<SurahCardProps> = ({ surah, index }) => {
     <button
       onClick={() => navigate(`/surah/${surah.number}`)}
       className={cn(
-        "w-full p-4 rounded-xl bg-card hover:border-primary/50",
-        "transition-all duration-300 shadow-spread hover:shadow-lg hover:shadow-primary/10",
-        "flex items-center gap-4 text-left group animate-fade-in"
+        "w-full p-4 rounded-xl bg-card border border-border",
+        "transition-all duration-300",
+        "shadow-[0_8px_24px_rgba(0,0,0,0.18)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.75)]",
+        "flex items-center gap-4 text-left animate-fade-in"
       )}
       style={{ animationDelay: `${index * 30}ms` }}
     >
       {/* Surah number */}
-      <div className="verse-number-ornament flex-shrink-0 group-hover:scale-110 transition-transform">
+      <div className="verse-number-ornament flex-shrink-0">
         {surah.number}
       </div>
 
@@ -46,7 +47,7 @@ export const SurahCard: React.FC<SurahCardProps> = ({ surah, index }) => {
         </p>
       </div>
 
-      <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+      <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
     </button>
   );
 };

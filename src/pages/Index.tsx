@@ -81,7 +81,7 @@ const Index = () => {
         {lastReadPosition && (
           <button
             onClick={() => navigate(`/surah/${lastReadPosition.surahNumber}?verse=${lastReadPosition.verseNumber}`)}
-            className="w-full mb-6 p-4 rounded-xl bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-all group"
+            className="w-full mb-6 p-4 rounded-xl bg-primary/10 border border-primary/20 transition-all"
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
@@ -143,7 +143,7 @@ const Index = () => {
                           <button
                             key={`${bookmark.surahNumber}-${bookmark.verseNumber}`}
                             onClick={() => navigate(`/surah/${bookmark.surahNumber}?verse=${bookmark.verseNumber}`)}
-                            className="w-full p-3 rounded-lg bg-card border border-border hover:border-primary/50 transition-all flex items-center gap-3"
+                            className="w-full p-3 rounded-lg bg-card border border-border transition-all flex items-center gap-3"
                           >
                             <div
                               className={`w-3 h-8 rounded-full ${bookmark.color === 'red' ? 'bg-bookmark-red' :
