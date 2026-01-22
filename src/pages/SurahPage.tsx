@@ -149,7 +149,10 @@ const SurahPage = () => {
       <main className="container mx-auto py-6 px-4">
         {/* Surah header */}
         {/* Surah header */}
-        <div className="text-center mb-8 p-6 rounded-2xl bg-primary text-primary-foreground shadow-lg">
+        {/* Surah header */}
+        <div
+          className="text-center mb-8 p-6 rounded-xl bg-primary text-primary-foreground relative !border-none transition-all duration-300 z-10 shadow-spread"
+        >
           <p className="text-4xl font-noorehuda mb-2 text-primary-foreground" dir="rtl">
             {surahInfo.arabic}
           </p>

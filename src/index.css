@@ -596,8 +596,16 @@
 }
 
 @layer components {
+  .shadow-spread {
+    box-shadow: 0 0 15px 3px rgba(0, 0, 0, 0.30);
+  }
+
+  .dark .shadow-spread {
+    box-shadow: 0 0 15px 3px rgba(0, 0, 0, 0.8);
+  }
+
   .verse-card {
-    @apply rounded-xl p-5 transition-all duration-300;
+    @apply rounded-xl p-5 transition-all duration-300 shadow-spread;
   }
 
 
