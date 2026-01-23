@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { Loader2, BookOpen, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
+import { Loader2, BookOpen, ChevronLeft, ChevronRight, ArrowLeft, Settings } from 'lucide-react';
 import { VerseCard } from '@/components/VerseCard';
+import { SettingsPanel } from '@/components/SettingsPanel';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -12,6 +13,7 @@ import { getSurahInfo, getSurahDisplayName } from '@/data/surahNames';
 const SurahPage = () => {
   const { surahNumber } = useParams<{ surahNumber: string }>();
   const [searchParams] = useSearchParams();
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const navigate = useNavigate();
   const { getSurah, loading, error } = useQuranData();
   const { settings, setLastReadPosition } = useQuranStore();
@@ -48,7 +50,17 @@ const SurahPage = () => {
     }
 
     document.documentElement.classList.remove(
-      'theme-blue', 'theme-purple', 'theme-gold-rose', 'theme-orange', 'theme-brown', 'theme-black'
+      'theme-blue',
+      'theme-purple',
+      'theme-gold-rose',
+      'theme-orange',
+      'theme-brown',
+      'theme-dark-green',
+      'theme-dark-blue',
+      'theme-maroon',
+      'theme-red',
+      'theme-teal',
+      'theme-indigo'
     );
     if (settings.themeColor !== 'green') {
       document.documentElement.classList.add(`theme-${settings.themeColor}`);
@@ -124,10 +136,10 @@ const SurahPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Simple Header for Surah Page - No settings icon */}
+      {/* Header for Surah Page with back button and settings */}
       <header className="sticky top-0 z-40 w-full">
         <div className="header-gradient px-4 py-4 shadow-lg">
-          <div className="container mx-auto flex items-center gap-3">
+          <div className="container mx-auto flex items-center justify-between">
             <Button
               variant="ghost"
               size="icon"
@@ -136,12 +148,20 @@ const SurahPage = () => {
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <div>
+            <div className="text-center">
               <h1 className="text-lg font-bold text-primary-foreground">{surahDisplayName}</h1>
               <p className="text-sm text-primary-foreground/80">
                 {surah.totalVerses} verses • {surah.revelationType}
               </p>
             </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSettingsOpen(true)}
+              className="text-primary-foreground hover:bg-primary-foreground/20"
+            >
+              <Settings className="h-5 w-5" />
+            </Button>
           </div>
         </div>
 
@@ -153,8 +173,8 @@ const SurahPage = () => {
         {/* Surah header */}
         <div
           className={cn(
-            "verse-card text-center mb-8 p-6 rounded-xl bg-primary text-primary-foreground relative !border-none transition-all duration-300 z-10",
-            "shadow-[0_8px_24px_rgba(0,0,0,0.18)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.75)]"
+            "verse-card surah-header-shadow text-center mb-8 p-6 rounded-xl relative transition-all duration-300",
+            "bg-primary text-primary-foreground"
           )}
         >
           <p className="text-4xl font-noorehuda mb-2 text-primary-foreground" dir="rtl">
@@ -163,7 +183,7 @@ const SurahPage = () => {
           <h2 className="text-2xl font-semibold text-primary-foreground">
             {surahInfo.transliteration}
           </h2>
-          <div className="flex items-center justify-center gap-4 mt-3 text-sm text-primary-foreground/90 font-medium">
+          <div className="flex items-center justify-center gap-4 mt-3 text-sm text-primary-foreground/80 font-medium">
             <span>{surah.totalVerses} Verses</span>
             <span>•</span>
             <span>{surah.revelationType}</span>
@@ -213,6 +233,8 @@ const SurahPage = () => {
           )}
         </div>
       </main>
+      
+      <SettingsPanel isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </div>
   );
 };

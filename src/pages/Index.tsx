@@ -29,7 +29,17 @@ const Index = () => {
 
     // Apply theme color
     document.documentElement.classList.remove(
-      'theme-blue', 'theme-purple', 'theme-gold-rose', 'theme-orange', 'theme-brown', 'theme-black'
+      'theme-blue',
+      'theme-purple',
+      'theme-gold-rose',
+      'theme-orange',
+      'theme-brown',
+      'theme-dark-green',
+      'theme-dark-blue',
+      'theme-maroon',
+      'theme-red',
+      'theme-teal',
+      'theme-indigo'
     );
     if (settings.themeColor !== 'green') {
       document.documentElement.classList.add(`theme-${settings.themeColor}`);

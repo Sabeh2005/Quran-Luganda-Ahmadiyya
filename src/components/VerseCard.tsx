@@ -172,10 +172,9 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
   return (
     <div
       className={cn(
-        "verse-card animate-fade-in relative overflow-hidden",
+        "verse-card app-card-shadow animate-fade-in relative overflow-hidden",
         "bg-white !border-none",
         "dark:bg-[hsl(var(--verse-bg))] dark:!border-none",
-        "shadow-[0_8px_24px_rgba(0,0,0,0.18)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.75)]",
         getHighlightClass()
       )}
       style={{ animationDelay: `${(verse.verseNumber % 10) * 50}ms` }}

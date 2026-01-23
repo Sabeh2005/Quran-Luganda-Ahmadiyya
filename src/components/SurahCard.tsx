@@ -20,7 +20,7 @@ export const SurahCard: React.FC<SurahCardProps> = ({ surah, index }) => {
       className={cn(
         "w-full p-4 rounded-xl bg-card border border-border",
         "transition-all duration-300",
-        "shadow-[0_8px_24px_rgba(0,0,0,0.18)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.75)]",
+        "app-card-shadow",
         "flex items-center gap-4 text-left animate-fade-in"
       )}
       style={{ animationDelay: `${index * 30}ms` }}
