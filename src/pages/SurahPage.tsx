@@ -177,13 +177,13 @@ const SurahPage = () => {
             "bg-primary text-primary-foreground"
           )}
         >
-          <p className="text-4xl font-noorehuda mb-2 text-primary-foreground" dir="rtl">
+          <p className="text-5xl font-noorehuda mb-2 text-primary-foreground" dir="rtl">
             {surahInfo.arabic}
           </p>
-          <h2 className="text-2xl font-semibold text-primary-foreground">
+          <h2 className="text-3xl font-semibold text-primary-foreground">
             {surahInfo.transliteration}
           </h2>
-          <div className="flex items-center justify-center gap-4 mt-3 text-sm text-primary-foreground/80 font-medium">
+          <div className="flex items-center justify-center gap-4 mt-3 text-base text-primary-foreground/80 font-medium">
             <span>{surah.totalVerses} Verses</span>
             <span>•</span>
             <span>{surah.revelationType}</span>
@@ -233,7 +233,7 @@ const SurahPage = () => {
           )}
         </div>
       </main>
-      
+
       <SettingsPanel isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </div>
   );
