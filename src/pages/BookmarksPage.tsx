@@ -179,16 +179,6 @@ const BookmarksPage = () => {
                                         collection={c}
                                         onClick={() => setViewingCollection(c)}
                                         onEdit={() => handleEditCollection(c.id)}
-                                        onDelete={() => {
-                                            /* Directly delete or confirm? Dialog handled by Menu logic? 
-                                               Actually CollectionItem dropdown triggers onDelete.
-                                               I should show confirmation/edit dialog.
-                                            */
-                                            // For simplicity, let's reuse CreateDialog for Edit.
-                                            // For Delete, I might want a specific confirmation, but store has deleteCollection.
-                                            // I'll just delete for now or wrap in alert.
-                                            useQuranStore.getState().deleteCollection(c.id);
-                                        }}
                                     />
                                 ))
                             )}

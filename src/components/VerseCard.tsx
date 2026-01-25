@@ -169,13 +169,12 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
       style={{ animationDelay: `${(verse.verseNumber % 10) * 50}ms` }}
     >
       {/* Bookmark indicator */}
-      {bookmark && (
-        <div
-          className={cn(
-            "absolute top-0 right-4 w-4 h-8 rounded-b-sm",
-            getBookmarkColorClass()
-          )}
-        />
+      {isBookmarked && (
+        <div className="absolute top-2 right-4">
+          <Bookmark
+            className="h-6 w-6 fill-current text-primary"
+          />
+        </div>
       )}
 
       <div className="space-y-4">

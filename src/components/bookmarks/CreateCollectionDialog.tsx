@@ -127,7 +127,7 @@ export const CreateCollectionDialog: React.FC<CreateCollectionDialogProps> = ({
                         <Button
                             variant="ghost"
                             onClick={handleDelete}
-                            className="w-full text-lg font-normal hover:bg-transparent hover:text-destructive"
+                            className="w-full text-lg font-bold hover:bg-transparent hover:text-destructive text-foreground"
                         >
                             Delete
                         </Button>

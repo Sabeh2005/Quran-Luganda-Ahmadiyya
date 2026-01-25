@@ -2,18 +2,12 @@ import React from 'react';
 import { BookmarkCollection, CollectionColor } from '@/types/quran';
 import { ChevronRight, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 
 interface CollectionItemProps {
     collection: BookmarkCollection;
     onClick: () => void;
     onEdit: () => void;
-    onDelete: () => void;
 }
 
 const getColorClass = (color: CollectionColor) => {
@@ -35,8 +29,7 @@ const getColorClass = (color: CollectionColor) => {
 export const CollectionItem: React.FC<CollectionItemProps> = ({
     collection,
     onClick,
-    onEdit,
-    onDelete
+    onEdit
 }) => {
     return (
         <div
@@ -54,21 +47,15 @@ export const CollectionItem: React.FC<CollectionItemProps> = ({
             <div className="flex items-center gap-2">
                 <ChevronRight className="w-5 h-5 text-muted-foreground" />
 
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                        <button className="p-2 hover:bg-gray-100 rounded-full">
-                            <MoreHorizontal className="w-5 h-5 text-muted-foreground" />
-                        </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onEdit(); }}>
-                            Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onDelete(); }} className="text-destructive">
-                            Delete
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <button
+                    className="p-2 hover:bg-gray-100 rounded-full"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onEdit();
+                    }}
+                >
+                    <MoreHorizontal className="w-5 h-5 text-muted-foreground" />
+                </button>
             </div>
         </div>
     );

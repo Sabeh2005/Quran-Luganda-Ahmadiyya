@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { Loader2, BookOpen, ChevronLeft, ChevronRight, ArrowLeft, Settings } from 'lucide-react';
+import { Loader2, BookOpen, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
 import { VerseCard } from '@/components/VerseCard';
 import { SettingsPanel } from '@/components/SettingsPanel';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import settingsIcon from '@/assets/settings-icon.svg';
 
 import { useQuranData } from '@/hooks/useQuranData';
 import { useQuranStore } from '@/store/quranStore';
@@ -160,7 +161,7 @@ const SurahPage = () => {
               onClick={() => setSettingsOpen(true)}
               className="text-primary-foreground hover:bg-primary-foreground/20"
             >
-              <Settings className="h-5 w-5" />
+              <img src={settingsIcon} alt="Settings" className="h-6 w-6 brightness-0 invert" />
             </Button>
           </div>
         </div>

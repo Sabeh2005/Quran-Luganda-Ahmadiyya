@@ -84,21 +84,24 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
     const handleDone = () => {
         // Logic:
         // If Mode is SINGLE:
-        // - Add to Single Bookmarks (if not there)
-        // - OPTIONAL: Remove from ALL collections? 
-        //   If the UI implies exclusivity (Radio buttons), then selecting "Single" usually implies "Only Single".
-        //   I will enforce exclusivity to match the strict Radio UI.
+        // - If bookmark exists in Single, remove it (toggle off)
+        // - If bookmark doesn't exist in Single, add it
+        // - Remove from ALL collections in both cases
 
         // If Mode is COLLECTION:
-        // - Remove from Single Bookmarks? (Again, strict Radio implies yes)
+        // - Remove from Single Bookmarks (strict Radio implies exclusivity)
         // - Update Collections based on selection.
 
         if (mode === 'single') {
-            // Ensure is in Single
             const currentlyInSingle = bookmarks.some(
                 (b) => b.surahNumber === surahNumber && b.verseNumber === verseNumber
             );
-            if (!currentlyInSingle) {
+
+            if (currentlyInSingle) {
+                // Remove the bookmark
+                removeBookmark(surahNumber, verseNumber);
+            } else {
+                // Add the bookmark
                 addBookmark(surahNumber, verseNumber, 'green');
             }
 
@@ -177,7 +180,11 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
                             )}>
                                 {mode === 'single' && <Check className="w-4 h-4 text-white" />}
                             </div>
-                            <span className="font-semibold text-lg">Single Bookmark</span>
+                            <span className="font-semibold text-lg">
+                                {bookmarks.some(b => b.surahNumber === surahNumber && b.verseNumber === verseNumber)
+                                    ? "Remove Single Bookmark"
+                                    : "Single Bookmark"}
+                            </span>
                         </div>
 
                         {/* Collections Section */}
