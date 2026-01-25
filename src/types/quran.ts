@@ -40,7 +40,7 @@ export type TranslationDisplay = 'all' | 'luganda' | 'english' | 'off';
 export type ThemeColor = 'green' | 'blue' | 'purple' | 'gold-rose' | 'orange' | 'brown' | 'dark-green' | 'dark-blue' | 'maroon' | 'red' | 'teal' | 'indigo';
 export type HighlightColor = 'yellow' | 'green' | 'blue' | 'pink' | 'orange' | 'purple' | 'red' | 'teal' | 'lime' | 'rose' | null;
 export type BookmarkColor = 'red' | 'blue' | 'yellow' | 'purple' | 'green' | 'orange' | 'pink' | 'teal' | 'lime' | 'brown' | null;
-export type CollectionColor = 'green' | 'blue' | 'orange' | 'purple' | 'yellow' | 'peach';
+export type CollectionColor = 'green' | 'blue' | 'orange' | 'purple' | 'yellow' | 'peach' | 'red' | 'teal' | 'brown' | 'pink';
 export type TranslationFontStyle = 'normal' | 'italic' | 'bold-italic';
 
 export interface VerseBookmark {

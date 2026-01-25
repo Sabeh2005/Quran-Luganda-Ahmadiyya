@@ -25,7 +25,11 @@ const colors: { color: CollectionColor; className: string }[] = [
     { color: 'orange', className: 'bg-orange-500' },
     { color: 'purple', className: 'bg-purple-500' },
     { color: 'yellow', className: 'bg-yellow-500' },
-    { color: 'peach', className: 'bg-[#ff9e80]' }, // Custom hex for peach/salmon color
+    { color: 'peach', className: 'bg-[#ff9e80]' },
+    { color: 'red', className: 'bg-red-500' },
+    { color: 'teal', className: 'bg-teal-500' },
+    { color: 'brown', className: 'bg-amber-800' },
+    { color: 'pink', className: 'bg-pink-500' },
 ];
 
 export const CreateCollectionDialog: React.FC<CreateCollectionDialogProps> = ({

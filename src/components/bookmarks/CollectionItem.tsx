@@ -24,6 +24,10 @@ const getColorClass = (color: CollectionColor) => {
         case 'orange': return 'bg-orange-500';
         case 'yellow': return 'bg-yellow-500';
         case 'peach': return 'bg-[#ff9e80]';
+        case 'red': return 'bg-red-500';
+        case 'teal': return 'bg-teal-500';
+        case 'brown': return 'bg-amber-800';
+        case 'pink': return 'bg-pink-500';
         default: return 'bg-gray-500';
     }
 };

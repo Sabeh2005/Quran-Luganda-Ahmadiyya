@@ -33,7 +33,7 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
         toggleBookmarkInCollection,
     } = useQuranStore();
 
-    const [isSingle, setIsSingle] = useState(false);
+    const [mode, setMode] = useState<'single' | 'collection'>('single');
     const [selectedCollectionIds, setSelectedCollectionIds] = useState<Set<string>>(new Set());
     const [showCreateCollection, setShowCreateCollection] = useState(false);
 
@@ -44,7 +44,6 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
             const singleExists = bookmarks.some(
                 (b) => b.surahNumber === surahNumber && b.verseNumber === verseNumber
             );
-            setIsSingle(singleExists);
 
             // Check which collections contain this verse
             const inCollections = new Set<string>();
@@ -54,10 +53,25 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
                 }
             });
             setSelectedCollectionIds(inCollections);
+
+            // Determine initial mode
+            // If in any collection, default to collection mode. 
+            // Else if single exists, single mode.
+            // Else default to single.
+            if (inCollections.size > 0) {
+                setMode('collection');
+            } else {
+                setMode('single');
+            }
         }
     }, [isOpen, surahNumber, verseNumber, bookmarks, collections]);
 
     const handleToggleCollection = (id: string) => {
+        // Automatically switch execution mode to collection if user clicks a collection
+        if (mode !== 'collection') {
+            setMode('collection');
+        }
+
         const newSet = new Set(selectedCollectionIds);
         if (newSet.has(id)) {
             newSet.delete(id);
@@ -68,33 +82,60 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
     };
 
     const handleDone = () => {
-        // Update Single Bookmark State
-        const currentlyInSingle = bookmarks.some(
-            (b) => b.surahNumber === surahNumber && b.verseNumber === verseNumber
-        );
+        // Logic:
+        // If Mode is SINGLE:
+        // - Add to Single Bookmarks (if not there)
+        // - OPTIONAL: Remove from ALL collections? 
+        //   If the UI implies exclusivity (Radio buttons), then selecting "Single" usually implies "Only Single".
+        //   I will enforce exclusivity to match the strict Radio UI.
 
-        if (isSingle && !currentlyInSingle) {
-            addBookmark(surahNumber, verseNumber, 'green'); // Default to green
-        } else if (!isSingle && currentlyInSingle) {
-            removeBookmark(surahNumber, verseNumber);
-        }
+        // If Mode is COLLECTION:
+        // - Remove from Single Bookmarks? (Again, strict Radio implies yes)
+        // - Update Collections based on selection.
 
-        // Update Collections State
-        collections.forEach((c) => {
-            const isSelected = selectedCollectionIds.has(c.id);
-            const currentlyInCollection = c.bookmarks.some(
+        if (mode === 'single') {
+            // Ensure is in Single
+            const currentlyInSingle = bookmarks.some(
                 (b) => b.surahNumber === surahNumber && b.verseNumber === verseNumber
             );
-
-            if (isSelected !== currentlyInCollection) {
-                toggleBookmarkInCollection(c.id, surahNumber, verseNumber);
+            if (!currentlyInSingle) {
+                addBookmark(surahNumber, verseNumber, 'green');
             }
-        });
+
+            // Remove from ALL Collections
+            collections.forEach(c => {
+                if (c.bookmarks.some(b => b.surahNumber === surahNumber && b.verseNumber === verseNumber)) {
+                    toggleBookmarkInCollection(c.id, surahNumber, verseNumber);
+                }
+            });
+        } else {
+            // Mode is COLLECTION
+
+            // Remove from Single Bookmarks (if strict exclusivity desired)
+            const currentlyInSingle = bookmarks.some(
+                (b) => b.surahNumber === surahNumber && b.verseNumber === verseNumber
+            );
+            if (currentlyInSingle) {
+                removeBookmark(surahNumber, verseNumber);
+            }
+
+            // Update Collections
+            collections.forEach((c) => {
+                const isSelected = selectedCollectionIds.has(c.id);
+                const currentlyInCollection = c.bookmarks.some(
+                    (b) => b.surahNumber === surahNumber && b.verseNumber === verseNumber
+                );
+
+                if (isSelected !== currentlyInCollection) {
+                    toggleBookmarkInCollection(c.id, surahNumber, verseNumber);
+                }
+            });
+        }
 
         onClose();
     };
 
-    // Determine title based on initial state (simplified to check if any bookmark exists)
+    // Determine title based on initial state
     const isUpdate = bookmarks.some(b => b.surahNumber === surahNumber && b.verseNumber === verseNumber) ||
         collections.some(c => c.bookmarks.some(b => b.surahNumber === surahNumber && b.verseNumber === verseNumber));
 
@@ -106,6 +147,10 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
             case 'orange': return 'bg-orange-500';
             case 'yellow': return 'bg-yellow-500';
             case 'peach': return 'bg-[#ff9e80]';
+            case 'red': return 'bg-red-500';
+            case 'teal': return 'bg-teal-500';
+            case 'brown': return 'bg-amber-800';
+            case 'pink': return 'bg-pink-500';
             default: return 'bg-gray-500';
         }
     };
@@ -124,33 +169,36 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
                         {/* Single Bookmark Option */}
                         <div
                             className="flex items-center gap-3 cursor-pointer"
-                            onClick={() => setIsSingle(!isSingle)}
+                            onClick={() => setMode('single')}
                         >
                             <div className={cn(
                                 "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
-                                isSingle ? "bg-green-600 border-green-600" : "border-muted-foreground"
+                                mode === 'single' ? "bg-green-600 border-green-600" : "border-muted-foreground"
                             )}>
-                                {isSingle && <Check className="w-4 h-4 text-white" />}
+                                {mode === 'single' && <Check className="w-4 h-4 text-white" />}
                             </div>
                             <span className="font-semibold text-lg">Single Bookmark</span>
                         </div>
 
                         {/* Collections Section */}
                         <div className="space-y-3">
-                            <div className="flex items-center gap-3">
+                            <div
+                                className="flex items-center gap-3 cursor-pointer"
+                                onClick={() => setMode('collection')}
+                            >
                                 <div className={cn(
-                                    "w-6 h-6 rounded-full border-2 border-muted-foreground flex items-center justify-center",
-                                    // Only show active style if at least one collection is selected? 
-                                    // Or just keep it as a section header icon as per screenshot 7?
-                                    // Screenshot 7 has an empty circle. Let's keep it empty to represent the group?
-                                    selectedCollectionIds.size > 0 ? "border-green-600" : ""
+                                    "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
+                                    mode === 'collection' ? "bg-green-600 border-green-600" : "border-muted-foreground"
                                 )}>
-                                    {/* Maybe show partial check? For now keep empty/border logic */}
+                                    {mode === 'collection' && <Check className="w-4 h-4 text-white" />}
                                 </div>
                                 <span className="font-semibold text-lg">Bookmarks Collection</span>
                             </div>
 
-                            <div className="pl-9 space-y-3">
+                            <div className={cn(
+                                "pl-9 space-y-3 transition-opacity",
+                                mode === 'collection' ? "opacity-100" : "opacity-50 pointer-events-none"
+                            )}>
                                 {collections.map((collection) => (
                                     <div
                                         key={collection.id}
