@@ -96,13 +96,13 @@ export const CreateCollectionDialog: React.FC<CreateCollectionDialogProps> = ({
 
                     <div className="space-y-3">
                         <label className="text-sm font-medium">Choose a color</label>
-                        <div className="flex gap-4">
+                        <div className="grid grid-cols-5 gap-3 justify-items-center">
                             {colors.map(({ color, className }) => (
                                 <button
                                     key={color}
                                     onClick={() => setSelectedColor(color)}
                                     className={cn(
-                                        "w-8 h-8 rounded-full flex items-center justify-center transition-transform hover:scale-110",
+                                        "w-10 h-10 rounded-full flex items-center justify-center transition-transform hover:scale-110",
                                         className
                                     )}
                                 >
