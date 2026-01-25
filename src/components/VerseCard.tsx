@@ -10,6 +10,7 @@ import { useQuranStore } from '@/store/quranStore';
 import type { CombinedVerse, BookmarkColor, HighlightColor, TranslationFont } from '@/types/quran';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { AddBookmarkDialog } from './bookmarks/AddBookmarkDialog';
 
 interface VerseCardProps {
   verse: CombinedVerse;
@@ -45,10 +46,14 @@ const highlightColors: { color: HighlightColor; className: string; label: string
 
 export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahName }) => {
   const [copied, setCopied] = useState(false);
-  const { settings, getBookmark, addBookmark, removeBookmark, getHighlight, addHighlight, removeHighlight } = useQuranStore();
+  const [showBookmarkDialog, setShowBookmarkDialog] = useState(false);
+  const { settings, getBookmark, removeBookmark, getHighlight, addHighlight, removeHighlight, collections } = useQuranStore();
 
   const bookmark = getBookmark(surahNumber, verse.verseNumber);
   const highlight = getHighlight(surahNumber, verse.verseNumber);
+
+  const isInCollection = collections.some(c => c.bookmarks.some(b => b.surahNumber === surahNumber && b.verseNumber === verse.verseNumber));
+  const isBookmarked = !!bookmark || isInCollection;
 
   const getHighlightClass = () => {
     if (!highlight?.color) return '';
@@ -130,22 +135,6 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
       }
     } else {
       handleCopy();
-    }
-  };
-
-  const handleBookmark = (color: BookmarkColor) => {
-    if (bookmark?.color === color) {
-      removeBookmark(surahNumber, verse.verseNumber);
-      toast({
-        title: "Bookmark removed",
-        description: `Removed bookmark from verse ${verse.verseNumber}`,
-      });
-    } else {
-      addBookmark(surahNumber, verse.verseNumber, color);
-      toast({
-        title: "Bookmarked!",
-        description: `Added ${color} bookmark to verse ${verse.verseNumber}`,
-      });
     }
   };
 
@@ -260,38 +249,24 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
       {/* Action buttons */}
       <div className="flex items-center justify-end gap-1 mt-4 pt-3 border-t border-border/50">
         {/* Bookmark button */}
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              className={cn(
-                "h-8 px-2",
-                bookmark && "text-primary"
-              )}
-            >
-              <Bookmark className={cn("h-4 w-4", bookmark && "fill-current")} />
-              <span className="sr-only">Bookmark</span>
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-3 bg-popover" align="end">
-            <p className="text-xs font-medium mb-2 text-muted-foreground">Select bookmark color</p>
-            <div className="grid grid-cols-5 gap-2">
-              {bookmarkColors.map((bc) => (
-                <button
-                  key={bc.color}
-                  onClick={() => handleBookmark(bc.color)}
-                  className={cn(
-                    "w-6 h-6 rounded-full transition-transform hover:scale-110",
-                    bc.className,
-                    bookmark?.color === bc.color && "ring-2 ring-offset-2 ring-foreground"
-                  )}
-                  title={bc.label}
-                />
-              ))}
-            </div>
-          </PopoverContent>
-        </Popover>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowBookmarkDialog(true)}
+          className={cn(
+            "h-8 px-2",
+            isBookmarked && "text-primary"
+          )}
+        >
+          <Bookmark className={cn("h-4 w-4", isBookmarked && "fill-current")} />
+          <span className="sr-only">Bookmark</span>
+        </Button>
+        <AddBookmarkDialog
+          isOpen={showBookmarkDialog}
+          onClose={() => setShowBookmarkDialog(false)}
+          surahNumber={surahNumber}
+          verseNumber={verse.verseNumber}
+        />
 
         {/* Highlight button */}
         <Popover>

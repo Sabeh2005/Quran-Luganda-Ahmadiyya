@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { v4 as uuidv4 } from 'uuid';
 import type {
   AppSettings,
   VerseBookmark,
@@ -7,7 +8,9 @@ import type {
   ArabicFont,
   ThemeColor,
   BookmarkColor,
-  HighlightColor
+  HighlightColor,
+  BookmarkCollection,
+  CollectionColor
 } from '@/types/quran';
 
 interface QuranStore {
@@ -15,11 +18,23 @@ interface QuranStore {
   settings: AppSettings;
   updateSettings: (settings: Partial<AppSettings>) => void;
 
-  // Bookmarks
+  // Bookmarks (Single)
   bookmarks: VerseBookmark[];
-  addBookmark: (surahNumber: number, verseNumber: number, color: BookmarkColor) => void;
+  addBookmark: (surahNumber: number, verseNumber: number, color?: BookmarkColor) => void;
   removeBookmark: (surahNumber: number, verseNumber: number) => void;
   getBookmark: (surahNumber: number, verseNumber: number) => VerseBookmark | undefined;
+  clearAllBookmarks: () => void;
+
+  // Collections
+  collections: BookmarkCollection[];
+  createCollection: (name: string, color: CollectionColor) => void;
+  editCollection: (id: string, name: string, color: CollectionColor) => void;
+  deleteCollection: (id: string) => void;
+  clearAllCollections: () => void;
+
+  // Collection Bookmarks
+  toggleBookmarkInCollection: (collectionId: string, surahNumber: number, verseNumber: number) => void;
+  isBookmarkedInCollection: (collectionId: string, surahNumber: number, verseNumber: number) => boolean;
 
   // Highlights
   highlights: VerseHighlight[];
@@ -64,15 +79,12 @@ export const useQuranStore = create<QuranStore>()(
 
       bookmarks: [],
 
-      addBookmark: (surahNumber, verseNumber, color) => {
+      addBookmark: (surahNumber, verseNumber, color = 'green') => {
         set((state) => {
           const filtered = state.bookmarks.filter(
             (b) => !(b.surahNumber === surahNumber && b.verseNumber === verseNumber)
           );
-          if (color) {
-            return { bookmarks: [...filtered, { surahNumber, verseNumber, color }] };
-          }
-          return { bookmarks: filtered };
+          return { bookmarks: [...filtered, { surahNumber, verseNumber, color: color || 'green', timestamp: Date.now() }] };
         });
       },
 
@@ -86,6 +98,78 @@ export const useQuranStore = create<QuranStore>()(
 
       getBookmark: (surahNumber, verseNumber) => {
         return get().bookmarks.find(
+          (b) => b.surahNumber === surahNumber && b.verseNumber === verseNumber
+        );
+      },
+
+      clearAllBookmarks: () => {
+        set({ bookmarks: [] });
+      },
+
+      collections: [],
+
+      createCollection: (name, color) => {
+        set((state) => ({
+          collections: [
+            ...state.collections,
+            {
+              id: uuidv4(),
+              name,
+              color,
+              bookmarks: [],
+            },
+          ],
+        }));
+      },
+
+      editCollection: (id, name, color) => {
+        set((state) => ({
+          collections: state.collections.map((c) =>
+            c.id === id ? { ...c, name, color } : c
+          ),
+        }));
+      },
+
+      deleteCollection: (id) => {
+        set((state) => ({
+          collections: state.collections.filter((c) => c.id !== id),
+        }));
+      },
+
+      clearAllCollections: () => {
+        set({ collections: [] });
+      },
+
+      toggleBookmarkInCollection: (collectionId, surahNumber, verseNumber) => {
+        set((state) => ({
+          collections: state.collections.map((c) => {
+            if (c.id !== collectionId) return c;
+
+            const exists = c.bookmarks.some(
+              (b) => b.surahNumber === surahNumber && b.verseNumber === verseNumber
+            );
+
+            if (exists) {
+              return {
+                ...c,
+                bookmarks: c.bookmarks.filter(
+                  (b) => !(b.surahNumber === surahNumber && b.verseNumber === verseNumber)
+                ),
+              };
+            } else {
+              return {
+                ...c,
+                bookmarks: [...c.bookmarks, { surahNumber, verseNumber }],
+              };
+            }
+          }),
+        }));
+      },
+
+      isBookmarkedInCollection: (collectionId, surahNumber, verseNumber) => {
+        const collection = get().collections.find((c) => c.id === collectionId);
+        if (!collection) return false;
+        return collection.bookmarks.some(
           (b) => b.surahNumber === surahNumber && b.verseNumber === verseNumber
         );
       },

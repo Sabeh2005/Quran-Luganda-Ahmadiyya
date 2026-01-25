@@ -115,7 +115,11 @@ const Index = () => {
             <TabsTrigger value="surahs" className="gap-2">
               <BookOpen className="h-4 w-4" /> Surahs
             </TabsTrigger>
-            <TabsTrigger value="bookmarks" className="gap-2">
+            <TabsTrigger
+              value="bookmarks"
+              className="gap-2"
+              onClick={() => navigate('/bookmarks')}
+            >
               <Bookmark className="h-4 w-4" /> Bookmarks ({bookmarks.length})
             </TabsTrigger>
           </TabsList>
@@ -126,53 +130,6 @@ const Index = () => {
                 <SurahCard key={surah.number} surah={surah} index={index} />
               ))}
             </div>
-          </TabsContent>
-
-          <TabsContent value="bookmarks" className="mt-0">
-            {bookmarks.length === 0 ? (
-              <div className="text-center py-12 space-y-4">
-                <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto">
-                  <Bookmark className="h-8 w-8 text-muted-foreground" />
-                </div>
-                <p className="text-muted-foreground">No bookmarks yet</p>
-                <p className="text-sm text-muted-foreground">
-                  Tap the bookmark icon on any verse to save it
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {Object.entries(bookmarksBySurah).map(([surahNum, surahBookmarks]) => {
-                  const surahInfo = getSurahInfo(Number(surahNum));
-                  return (
-                    <div key={surahNum} className="space-y-2">
-                      <h3 className="font-semibold text-foreground px-2">
-                        {surahInfo.transliteration} — {surahInfo.arabic}
-                      </h3>
-                      <div className="space-y-2">
-                        {surahBookmarks.map((bookmark) => (
-                          <button
-                            key={`${bookmark.surahNumber}-${bookmark.verseNumber}`}
-                            onClick={() => navigate(`/surah/${bookmark.surahNumber}?verse=${bookmark.verseNumber}`)}
-                            className="w-full p-3 rounded-lg bg-card border border-border transition-all flex items-center gap-3"
-                          >
-                            <div
-                              className={`w-3 h-8 rounded-full ${bookmark.color === 'red' ? 'bg-bookmark-red' :
-                                  bookmark.color === 'blue' ? 'bg-bookmark-blue' :
-                                    bookmark.color === 'yellow' ? 'bg-bookmark-yellow' :
-                                      'bg-bookmark-purple'
-                                }`}
-                            />
-                            <span className="text-sm text-muted-foreground">
-                              Verse {bookmark.verseNumber}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
           </TabsContent>
         </Tabs>
       </main>

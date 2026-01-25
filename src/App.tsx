@@ -8,6 +8,7 @@ import { useQuranStore } from "@/store/quranStore";
 import { updateMetaThemeColor } from "@/utils/themeColors";
 import Index from "./pages/Index";
 import SurahPage from "./pages/SurahPage";
+import BookmarksPage from "./pages/BookmarksPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/bookmarks" element={<BookmarksPage />} />
             <Route path="/surah/:surahNumber" element={<SurahPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

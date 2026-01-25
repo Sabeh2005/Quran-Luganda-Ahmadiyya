@@ -40,12 +40,21 @@ export type TranslationDisplay = 'all' | 'luganda' | 'english' | 'off';
 export type ThemeColor = 'green' | 'blue' | 'purple' | 'gold-rose' | 'orange' | 'brown' | 'dark-green' | 'dark-blue' | 'maroon' | 'red' | 'teal' | 'indigo';
 export type HighlightColor = 'yellow' | 'green' | 'blue' | 'pink' | 'orange' | 'purple' | 'red' | 'teal' | 'lime' | 'rose' | null;
 export type BookmarkColor = 'red' | 'blue' | 'yellow' | 'purple' | 'green' | 'orange' | 'pink' | 'teal' | 'lime' | 'brown' | null;
+export type CollectionColor = 'green' | 'blue' | 'orange' | 'purple' | 'yellow' | 'peach';
 export type TranslationFontStyle = 'normal' | 'italic' | 'bold-italic';
 
 export interface VerseBookmark {
   surahNumber: number;
   verseNumber: number;
   color: BookmarkColor;
+  timestamp?: number; // Add timestamp for sorting
+}
+
+export interface BookmarkCollection {
+  id: string;
+  name: string;
+  color: CollectionColor;
+  bookmarks: { surahNumber: number; verseNumber: number }[];
 }
 
 export interface VerseHighlight {
