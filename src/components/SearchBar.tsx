@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 export const SearchBar: React.FC = () => {
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState<'all' | 'arabic' | 'luganda' | 'english'>('all');
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { searchVerses, loading } = useQuranData();
@@ -37,8 +38,8 @@ export const SearchBar: React.FC = () => {
 
   const results = useMemo(() => {
     if (!debouncedQuery.trim()) return [];
-    return searchVerses(debouncedQuery);
-  }, [debouncedQuery, searchVerses]);
+    return searchVerses(debouncedQuery, selectedLanguage);
+  }, [debouncedQuery, searchVerses, selectedLanguage]);
 
   const handleResultClick = (surahNumber: number, verseNumber: number) => {
     navigate(`/surah/${surahNumber}?verse=${verseNumber}`);
@@ -60,7 +61,7 @@ export const SearchBar: React.FC = () => {
     if (!searchQuery.trim()) return text;
     const regex = new RegExp(`(${searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
     const parts = text.split(regex);
-    return parts.map((part, i) => 
+    return parts.map((part, i) =>
       regex.test(part) ? (
         <mark key={i} className="bg-yellow-200 dark:bg-yellow-800 rounded px-0.5">
           {part}
@@ -97,9 +98,36 @@ export const SearchBar: React.FC = () => {
       </div>
 
       {/* Search Results Dropdown */}
-      {isOpen && (query.trim() || results.length > 0) && (
+      {isOpen && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-lg z-50 overflow-hidden">
-          <ScrollArea className="max-h-80">
+          <div className="border-b border-border bg-muted/50">
+            {/* Language Selector */}
+            <div className="flex p-2 gap-2 overflow-x-auto">
+              {(['all', 'arabic', 'luganda', 'english'] as const).map((lang) => (
+                <button
+                  key={lang}
+                  onClick={() => setSelectedLanguage(lang)}
+                  className={cn(
+                    "px-3 py-1.5 text-xs font-medium rounded-full transition-colors whitespace-nowrap",
+                    selectedLanguage === lang
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  )}
+                >
+                  {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                </button>
+              ))}
+            </div>
+
+            {/* Result Count - Only show if there are results */}
+            {results.length > 0 && (
+              <div className="px-3 pb-2 text-xs text-muted-foreground text-center">
+                {results.length.toLocaleString()} result{results.length !== 1 ? 's' : ''} found
+              </div>
+            )}
+          </div>
+
+          <div className="max-h-[60vh] overflow-y-auto custom-scrollbar">
             {loading ? (
               <div className="flex items-center justify-center p-6">
                 <Loader2 className="h-5 w-5 animate-spin text-primary" />
@@ -123,7 +151,7 @@ export const SearchBar: React.FC = () => {
                         Verse {result.verseNumber}
                       </span>
                     </div>
-                    
+
                     {result.matchType === 'arabic' ? (
                       <p className="text-base font-noorehuda text-right" dir="rtl">
                         {highlightMatch(result.arabic, debouncedQuery)}
@@ -145,7 +173,7 @@ export const SearchBar: React.FC = () => {
                 No results found for "{debouncedQuery}"
               </div>
             ) : null}
-          </ScrollArea>
+          </div>
         </div>
       )}
     </div>

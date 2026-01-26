@@ -11,7 +11,7 @@ interface UseQuranDataReturn {
   loading: boolean;
   error: string | null;
   getSurah: (surahNumber: number) => CombinedSurah | undefined;
-  searchVerses: (query: string) => SearchResult[];
+  searchVerses: (query: string, language?: 'all' | 'arabic' | 'luganda' | 'english') => SearchResult[];
 }
 
 interface SearchResult {
@@ -23,6 +23,13 @@ interface SearchResult {
   english: string;
   matchType: 'arabic' | 'luganda' | 'english';
 }
+
+const normalizeArabic = (text: string): string => {
+  return text
+    .replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E8\u06EA-\u06ED]/g, '')
+    .replace(/[\u0622\u0623\u0625\u0671\u0672\u0673\u0675]/g, '\u0627'); // Normalize Alif variants to bare Alif
+};
+
 
 export const useQuranData = (): UseQuranDataReturn => {
   const [surahs, setSurahs] = useState<CombinedSurah[]>([]);
@@ -92,25 +99,43 @@ export const useQuranData = (): UseQuranDataReturn => {
     return surahs.find((s) => s.number === surahNumber);
   };
 
-  const searchVerses = (query: string): SearchResult[] => {
+  const searchVerses = (query: string, language: 'all' | 'arabic' | 'luganda' | 'english' = 'all'): SearchResult[] => {
     if (!query.trim()) return [];
 
     const results: SearchResult[] = [];
     const lowerQuery = query.toLowerCase();
+    const normalizedQuery = normalizeArabic(query);
 
     surahs.forEach((surah) => {
       surah.verses.forEach((verse) => {
         let matchType: 'arabic' | 'luganda' | 'english' | null = null;
+        let isMatch = false;
 
-        if (verse.arabic.includes(query)) {
+        // Check Arabic
+        if ((language === 'all' || language === 'arabic') &&
+          normalizeArabic(verse.arabic).includes(normalizedQuery)) {
           matchType = 'arabic';
-        } else if (verse.luganda.toLowerCase().includes(lowerQuery)) {
-          matchType = 'luganda';
-        } else if (verse.english.toLowerCase().includes(lowerQuery)) {
-          matchType = 'english';
+          isMatch = true;
         }
 
-        if (matchType) {
+        // Check Luganda
+        // If specific language is selected, prioritize it or check it exclusively if we haven't found a match yet (or just check filtered list)
+        // With 'let matchType', we need to be careful. The previous logic prioritized in order: Arabic > Luganda > English.
+        // If we want to support explicit search, we should respect the filter.
+
+        if (!isMatch && (language === 'all' || language === 'luganda') &&
+          verse.luganda.toLowerCase().includes(lowerQuery)) {
+          matchType = 'luganda';
+          isMatch = true;
+        }
+
+        if (!isMatch && (language === 'all' || language === 'english') &&
+          verse.english.toLowerCase().includes(lowerQuery)) {
+          matchType = 'english';
+          isMatch = true;
+        }
+
+        if (isMatch && matchType) {
           results.push({
             surahNumber: surah.number,
             surahName: `${surah.englishName} — ${surah.arabicName}`,
@@ -124,8 +149,9 @@ export const useQuranData = (): UseQuranDataReturn => {
       });
     });
 
-    return results.slice(0, 50); // Limit results
+    return results;
   };
 
   return { surahs, loading, error, getSurah, searchVerses };
 };
+
