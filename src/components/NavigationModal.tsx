@@ -1,20 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useQuranData } from "@/hooks/useQuranData";
+import { cn } from "@/lib/utils";
 
 interface NavigationModalProps {
   isOpen: boolean;
@@ -31,6 +25,10 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
   const [selectedVerse, setSelectedVerse] = useState<string>("1");
   const [verseCount, setVerseCount] = useState<number>(7); // Default Fatiha
 
+  // Refs for scrolling to selected items
+  const surahListRef = useRef<HTMLDivElement>(null);
+  const verseListRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (surahs.length > 0) {
       const surah = surahs.find((s) => s.number === parseInt(selectedSurah));
@@ -41,71 +39,93 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
           setSelectedVerse("1");
         }
       }
-    } else {
-      // Fallback or loading state if surahs not loaded yet (though hook handles it)
     }
-  }, [selectedSurah, surahs, selectedVerse]);
+  }, [selectedSurah, surahs]); // Removed selectedVerse from dependency to avoid loop resetting
 
   const handleGo = () => {
     navigate(`/surah/${selectedSurah}?verse=${selectedVerse}`);
     onClose();
   };
 
+  const handleSurahSelect = (number: string) => {
+    setSelectedSurah(number);
+    setSelectedVerse("1"); // Reset verse when surah changes
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="text-center text-xl font-bold text-primary">
+      <DialogContent className="sm:max-w-xl p-0 overflow-hidden bg-background">
+        <DialogHeader className="p-6 pb-2 border-b">
+          <DialogTitle className="text-center text-2xl font-bold text-primary">
             Quick Navigation
           </DialogTitle>
         </DialogHeader>
-        <div className="grid gap-6 py-4">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium">Select Surah</label>
-            <Select
-              value={selectedSurah}
-              onValueChange={setSelectedSurah}
+
+        <div className="grid grid-cols-2 h-[400px] divide-x">
+          {/* Surah Selection Column */}
+          <div className="flex flex-col h-full overflow-hidden">
+            <h3 className="p-3 text-sm font-semibold text-center border-b bg-muted/30 sticky top-0 z-10">
+              Select Surah
+            </h3>
+            <div
+              ref={surahListRef}
+              className="flex-1 overflow-y-auto p-2 space-y-1"
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Surah" />
-              </SelectTrigger>
-              <SelectContent className="max-h-[300px]">
-                {surahs.length > 0 ? (
-                  surahs.map((surah) => (
-                    <SelectItem key={surah.number} value={surah.number.toString()}>
-                      {surah.number}. {surah.englishName}
-                    </SelectItem>
-                  ))
-                ) : (
-                  // Fallback if data loading
-                  <SelectItem value="1">Loading...</SelectItem>
-                )}
-              </SelectContent>
-            </Select>
+              {surahs.length > 0 ? (
+                surahs.map((surah) => (
+                  <button
+                    key={surah.number}
+                    onClick={() => handleSurahSelect(surah.number.toString())}
+                    className={cn(
+                      "w-full text-left px-4 py-3 rounded-lg text-sm transition-all duration-200",
+                      selectedSurah === surah.number.toString()
+                        ? "bg-primary text-primary-foreground font-bold shadow-sm"
+                        : "hover:bg-muted text-foreground/80"
+                    )}
+                  >
+                    <span className="opacity-70 mr-2 text-xs">{surah.number}.</span>
+                    {surah.englishName}
+                  </button>
+                ))
+              ) : (
+                <div className="p-4 text-center text-muted-foreground">Loading...</div>
+              )}
+            </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium">Select Verse</label>
-            <Select
-              value={selectedVerse}
-              onValueChange={setSelectedVerse}
-              disabled={surahs.length === 0}
+          {/* Verse Selection Column */}
+          <div className="flex flex-col h-full overflow-hidden">
+            <h3 className="p-3 text-sm font-semibold text-center border-b bg-muted/30 sticky top-0 z-10">
+              Select Verse
+            </h3>
+            <div
+              ref={verseListRef}
+              className="flex-1 overflow-y-auto p-2 space-y-1"
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Verse" />
-              </SelectTrigger>
-              <SelectContent className="max-h-[300px]">
-                {Array.from({ length: verseCount }, (_, i) => i + 1).map((v) => (
-                  <SelectItem key={v} value={v.toString()}>
-                    Verse {v}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              {Array.from({ length: verseCount }, (_, i) => i + 1).map((v) => (
+                <button
+                  key={v}
+                  onClick={() => setSelectedVerse(v.toString())}
+                  className={cn(
+                    "w-full text-left px-4 py-3 rounded-lg text-sm transition-all duration-200 flex items-center justify-between",
+                    selectedVerse === v.toString()
+                      ? "bg-primary text-primary-foreground font-bold shadow-sm"
+                      : "hover:bg-muted text-foreground/80"
+                  )}
+                >
+                  <span>Verse {v}</span>
+                  {selectedVerse === v.toString() && (
+                    <span className="w-2 h-2 rounded-full bg-white opacity-80" />
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
+        </div>
 
-          <Button onClick={handleGo} className="w-full mt-2 text-lg">
-            Go to Verse
+        <div className="p-4 border-t bg-muted/10">
+          <Button onClick={handleGo} className="w-full text-lg h-12 shadow-md">
+            Go to Surah {selectedSurah}, Verse {selectedVerse}
           </Button>
         </div>
       </DialogContent>
