@@ -42,7 +42,7 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
         }
       }
     } else {
-        // Fallback or loading state if surahs not loaded yet (though hook handles it)
+      // Fallback or loading state if surahs not loaded yet (though hook handles it)
     }
   }, [selectedSurah, surahs, selectedVerse]);
 
@@ -71,14 +71,14 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
               </SelectTrigger>
               <SelectContent className="max-h-[300px]">
                 {surahs.length > 0 ? (
-                    surahs.map((surah) => (
+                  surahs.map((surah) => (
                     <SelectItem key={surah.number} value={surah.number.toString()}>
-                        {surah.number}. {surah.englishName}
+                      {surah.number}. {surah.englishName}
                     </SelectItem>
-                    ))
+                  ))
                 ) : (
-                    // Fallback if data loading
-                    <SelectItem value="1">Loading...</SelectItem>
+                  // Fallback if data loading
+                  <SelectItem value="1">Loading...</SelectItem>
                 )}
               </SelectContent>
             </Select>
