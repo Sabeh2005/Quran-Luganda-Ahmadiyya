@@ -154,8 +154,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
     }
   };
 
-  const showLuganda = settings.translationDisplay === 'all' || settings.translationDisplay === 'luganda';
-  const showEnglish = settings.translationDisplay === 'all' || settings.translationDisplay === 'english';
+  /* Removed unused variables */
   const translationStyles = getTranslationFontStyle();
 
   return (
@@ -197,52 +196,71 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
             dir="rtl"
           >
             {verse.arabic}
+
+            {/* Big Ruku Ain Marker */}
+            {verse.visualMarkers?.has_big_ruku_ain && verse.visualMarkers.big_ruku_stack && (
+              <span className="inline-flex relative mx-3 align-middle ruku-ain-marker" style={{ fontSize: '1.5em', fontFamily: 'serif' }}>
+                <span className="text-primary font-bold">ع</span>
+                <span className="absolute flex flex-col items-center justify-center inset-0 text-[0.4em] leading-[0.9] font-sans text-foreground" style={{ transform: 'translateY(10%)' }}>
+                  <span className="block">{verse.visualMarkers.big_ruku_stack.top}</span>
+                  <span className="block font-bold">{verse.visualMarkers.big_ruku_stack.mid}</span>
+                  <span className="block">{verse.visualMarkers.big_ruku_stack.bot}</span>
+                </span>
+              </span>
+            )}
           </p>
         </div>
 
-        {/* Luganda translation - full width from left */}
-        {showLuganda && (
-          <p
-            className="translation-text text-left w-full"
-            style={{
-              fontSize: `${settings.translationFontSize}px`,
-              color: settings.translationFontColor,
-              fontFamily: getTranslationFontFamily(settings.translationFont),
-              ...translationStyles,
-              lineHeight: '1.5',
-              wordBreak: 'normal',
-              overflowWrap: 'anywhere',
-              whiteSpace: 'pre-wrap',
-            }}
-          >
-            <span className="text-xs font-semibold text-primary uppercase tracking-wide block mb-1" style={{ fontStyle: 'normal' }}>
-              Luganda
-            </span>
-            {verse.luganda}
-          </p>
-        )}
+        {/* Translations Container */}
+        <div className="space-y-4">
+          {/* Luganda translation */}
+          {(settings.translationDisplay === 'all' || settings.translationDisplay === 'luganda') && (
+            <p
+              className="translation-text text-left w-full"
+              style={{
+                fontSize: `${settings.translationFontSize}px`,
+                color: settings.translationFontColor,
+                fontFamily: getTranslationFontFamily(settings.translationFont),
+                ...translationStyles,
+                lineHeight: '1.5',
+                wordBreak: 'normal',
+                overflowWrap: 'anywhere',
+                whiteSpace: 'pre-wrap',
+              }}
+            >
+              {(settings.translationDisplay === 'all') && (
+                <span className="text-xs font-semibold text-primary uppercase tracking-wide block mb-1" style={{ fontStyle: 'normal' }}>
+                  Luganda
+                </span>
+              )}
+              {verse.luganda}
+            </p>
+          )}
 
-        {/* English translation - full width from left */}
-        {showEnglish && (
-          <p
-            className="translation-text text-left w-full"
-            style={{
-              fontSize: `${settings.translationFontSize}px`,
-              color: settings.translationFontColor,
-              fontFamily: getTranslationFontFamily(settings.translationFont),
-              ...translationStyles,
-              lineHeight: '1.5',
-              wordBreak: 'normal',
-              overflowWrap: 'anywhere',
-              whiteSpace: 'pre-wrap',
-            }}
-          >
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide block mb-1" style={{ fontStyle: 'normal' }}>
-              English
-            </span>
-            {verse.english}
-          </p>
-        )}
+          {/* English translation */}
+          {(settings.translationDisplay === 'all' || settings.translationDisplay === 'english') && (
+            <p
+              className="translation-text text-left w-full"
+              style={{
+                fontSize: `${settings.translationFontSize}px`,
+                color: settings.translationFontColor,
+                fontFamily: getTranslationFontFamily(settings.translationFont),
+                ...translationStyles,
+                lineHeight: '1.5',
+                wordBreak: 'normal',
+                overflowWrap: 'anywhere',
+                whiteSpace: 'pre-wrap',
+              }}
+            >
+              {(settings.translationDisplay === 'all') && (
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide block mb-1" style={{ fontStyle: 'normal' }}>
+                  English
+                </span>
+              )}
+              {verse.english}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Action buttons */}

@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import type { CombinedSurah } from '@/types/quran';
-import { getSurahInfo } from '@/data/surahNames';
 import { cn } from '@/lib/utils';
 
 interface SurahCardProps {
@@ -12,7 +11,7 @@ interface SurahCardProps {
 
 export const SurahCard: React.FC<SurahCardProps> = ({ surah, index }) => {
   const navigate = useNavigate();
-  const surahInfo = getSurahInfo(surah.number);
+  // const surahInfo = getSurahInfo(surah.number); // Removed
 
   return (
     <button
@@ -33,7 +32,7 @@ export const SurahCard: React.FC<SurahCardProps> = ({ surah, index }) => {
       {/* Surah info - only transliteration name */}
       <div className="flex-1 min-w-0">
         <h3 className="font-semibold text-foreground text-lg truncate">
-          {surahInfo.transliteration}
+          {surah.englishName}
         </h3>
         <p className="text-sm text-muted-foreground mt-1">
           {surah.totalVerses} verses • {surah.revelationType}
@@ -43,7 +42,7 @@ export const SurahCard: React.FC<SurahCardProps> = ({ surah, index }) => {
       {/* Arabic name - larger */}
       <div className="text-right flex-shrink-0">
         <p className="text-2xl font-noorehuda text-primary" dir="rtl">
-          {surahInfo.arabic}
+          {surah.arabicName}
         </p>
       </div>
 

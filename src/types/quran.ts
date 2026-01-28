@@ -16,11 +16,23 @@ export interface QuranData {
   quran: JsonSurah[];
 }
 
+export interface BigRukuStack {
+  top: number;
+  mid: number;
+  bot: number;
+}
+
+export interface VisualMarkers {
+  has_big_ruku_ain: boolean;
+  big_ruku_stack: BigRukuStack | null;
+}
+
 export interface CombinedVerse {
   verseNumber: number;
   arabic: string;
   luganda: string;
   english: string;
+  visualMarkers?: VisualMarkers;
 }
 
 export interface CombinedSurah {

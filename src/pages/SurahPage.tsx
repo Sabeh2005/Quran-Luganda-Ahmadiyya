@@ -9,7 +9,6 @@ import settingsIcon from '@/assets/settings-icon.svg';
 
 import { useQuranData } from '@/hooks/useQuranData';
 import { useQuranStore } from '@/store/quranStore';
-import { getSurahInfo, getSurahDisplayName } from '@/data/surahNames';
 
 const SurahPage = () => {
   const { surahNumber } = useParams<{ surahNumber: string }>();
@@ -22,11 +21,14 @@ const SurahPage = () => {
 
   const surahNum = parseInt(surahNumber || '1', 10);
   const surah = getSurah(surahNum);
-  const surahInfo = getSurahInfo(surahNum);
   const targetVerse = searchParams.get('verse');
 
   const hasPreviousSurah = surahNum > 1;
   const hasNextSurah = surahNum < 114;
+  // ... (omitting navigation functions for brevity in replacement if unchanged, but ReplaceFileContent requires contiguous block. Checking best approach)
+  // Since I need to remove import at top AND usage in middle, I should perhaps use MultiReplace? 
+  // Or just 2 replace calls. The file is small enough.
+  // Actually, I will use MultiReplace to be safe and clean.
 
   const goToPreviousSurah = () => {
     if (hasPreviousSurah) {
@@ -133,7 +135,7 @@ const SurahPage = () => {
     );
   }
 
-  const surahDisplayName = getSurahDisplayName(surahNum);
+  const surahDisplayName = surah.englishName;
 
   return (
     <div className="min-h-screen bg-background">
@@ -179,10 +181,10 @@ const SurahPage = () => {
           )}
         >
           <p className="text-5xl font-noorehuda mb-2 text-primary-foreground" dir="rtl">
-            {surahInfo.arabic}
+            {surah.arabicName}
           </p>
           <h2 className="text-3xl font-semibold text-primary-foreground">
-            {surahInfo.transliteration}
+            {surah.englishName}
           </h2>
           <div className="flex items-center justify-center gap-4 mt-3 text-base text-primary-foreground/80 font-medium">
             <span>{surah.totalVerses} Verses</span>

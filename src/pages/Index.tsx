@@ -9,7 +9,6 @@ import { useQuranData } from '@/hooks/useQuranData';
 import { useQuranStore } from '@/store/quranStore';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from 'react-router-dom';
-import { getSurahInfo } from '@/data/surahNames';
 
 const Index = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -100,7 +99,7 @@ const Index = () => {
               <div className="text-left flex-1">
                 <p className="text-sm text-muted-foreground">Continue Reading</p>
                 <p className="font-semibold text-foreground">
-                  {getSurahInfo(lastReadPosition.surahNumber).transliteration} — Verse {lastReadPosition.verseNumber}
+                  {surahs.find(s => s.number === lastReadPosition.surahNumber)?.englishName || `Surah ${lastReadPosition.surahNumber}`} — Verse {lastReadPosition.verseNumber}
                 </p>
               </div>
             </div>
