@@ -3,8 +3,24 @@ import type { QuranData, CombinedSurah, CombinedVerse } from '@/types/quran';
 import { getSurahInfo } from '@/data/surahNames';
 
 const ARABIC_URL = '/data/quran_arabic.json';
-const LUGANDA_URL = '/data/quran_luganda.json';
-const ENGLISH_URL = '/data/quran_english.json';
+const LUGANDA_URL = '/data/quran_luganda_ahmadiyya.json';
+const ENGLISH_URL = '/data/quran_english_ahmadiyya.json';
+
+interface FlatVerse {
+  surah_number: number;
+  surah_name: string;
+  ayah_number: number;
+  text: string;
+}
+
+// Helper to index flat verses by surah and ayah for O(1) lookup
+const createVerseMap = (verses: FlatVerse[]) => {
+  const map = new Map<string, string>();
+  verses.forEach(v => {
+    map.set(`${v.surah_number}:${v.ayah_number}`, v.text);
+  });
+  return map;
+};
 
 interface UseQuranDataReturn {
   surahs: CombinedSurah[];
@@ -52,25 +68,29 @@ export const useQuranData = (): UseQuranDataReturn => {
           throw new Error('Failed to fetch Quran data');
         }
 
-        const [arabicData, lugandaData, englishData]: [QuranData, QuranData, QuranData] = await Promise.all([
+        const [arabicData, lugandaData, englishData]: [QuranData, FlatVerse[], FlatVerse[]] = await Promise.all([
           arabicRes.json(),
           lugandaRes.json(),
           englishRes.json(),
         ]);
 
+        const lugandaMap = createVerseMap(lugandaData);
+        const englishMap = createVerseMap(englishData);
+
         // Combine the data from the quran array
-        const combinedSurahs: CombinedSurah[] = arabicData.quran.map((arabicSurah, index) => {
-          const lugandaSurah = lugandaData.quran[index];
-          const englishSurah = englishData.quran[index];
+        const combinedSurahs: CombinedSurah[] = arabicData.quran.map((arabicSurah) => {
           const surahInfo = getSurahInfo(arabicSurah.surahNumber);
 
           // Map verses preserving exact numbering from JSON
-          const combinedVerses: CombinedVerse[] = arabicSurah.verses.map((arabicVerse, vIndex) => ({
-            verseNumber: arabicVerse.verseNumber,
-            arabic: arabicVerse.text,
-            luganda: lugandaSurah?.verses[vIndex]?.text || '',
-            english: englishSurah?.verses[vIndex]?.text || '',
-          }));
+          const combinedVerses: CombinedVerse[] = arabicSurah.verses.map((arabicVerse) => {
+            const verseKey = `${arabicSurah.surahNumber}:${arabicVerse.verseNumber}`;
+            return {
+              verseNumber: arabicVerse.verseNumber,
+              arabic: arabicVerse.text,
+              luganda: lugandaMap.get(verseKey) || '',
+              english: englishMap.get(verseKey) || '',
+            };
+          });
 
           return {
             id: arabicSurah.surahNumber,
@@ -119,16 +139,13 @@ export const useQuranData = (): UseQuranDataReturn => {
         }
 
         // Check Luganda
-        // If specific language is selected, prioritize it or check it exclusively if we haven't found a match yet (or just check filtered list)
-        // With 'let matchType', we need to be careful. The previous logic prioritized in order: Arabic > Luganda > English.
-        // If we want to support explicit search, we should respect the filter.
-
         if (!isMatch && (language === 'all' || language === 'luganda') &&
           verse.luganda.toLowerCase().includes(lowerQuery)) {
           matchType = 'luganda';
           isMatch = true;
         }
 
+        // Check English
         if (!isMatch && (language === 'all' || language === 'english') &&
           verse.english.toLowerCase().includes(lowerQuery)) {
           matchType = 'english';
