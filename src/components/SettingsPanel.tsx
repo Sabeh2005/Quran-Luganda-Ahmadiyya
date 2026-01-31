@@ -358,7 +358,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
                 value={[settings.arabicFontSize]}
                 onValueChange={([value]) => updateSettings({ arabicFontSize: value })}
                 min={18}
-                max={70}
+                max={100}
                 step={1}
                 className="w-full"
               />
@@ -433,7 +433,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
                 value={[settings.translationFontSize]}
                 onValueChange={([value]) => updateSettings({ translationFontSize: value })}
                 min={12}
-                max={70}
+                max={100}
                 step={1}
                 className="w-full"
               />
