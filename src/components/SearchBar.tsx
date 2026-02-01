@@ -73,7 +73,7 @@ export const SearchBar: React.FC = () => {
   };
 
   return (
-    <div ref={containerRef} className="relative w-full mb-4">
+    <div ref={containerRef} className="relative w-full mb-2">
       <div className="relative flex items-center">
         <Search className="absolute left-3 h-4 w-4 text-muted-foreground" />
         <Input

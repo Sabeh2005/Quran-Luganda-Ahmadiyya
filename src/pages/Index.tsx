@@ -86,12 +86,12 @@ const Index = () => {
         onMenuClick={() => setNavigationOpen(true)}
       />
 
-      <main className="container mx-auto py-6 px-4">
+      <main className="container mx-auto pt-2 pb-6 px-2">
         {/* Continue Reading */}
         {lastReadPosition && (
           <button
             onClick={() => navigate(`/surah/${lastReadPosition.surahNumber}?verse=${lastReadPosition.verseNumber}`)}
-            className="w-full mb-6 p-4 rounded-xl bg-primary/10 border border-primary/20 transition-all"
+            className="w-full mb-2 p-4 rounded-xl bg-primary/10 border border-primary/20 transition-all"
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
@@ -111,7 +111,7 @@ const Index = () => {
         <SearchBar />
 
         <Tabs defaultValue="surahs" className="w-full">
-          <TabsList className="w-full grid grid-cols-2 mb-6">
+          <TabsList className="w-full grid grid-cols-2 mb-2">
             <TabsTrigger value="surahs" className="gap-2">
               <BookOpen className="h-4 w-4" /> Surahs
             </TabsTrigger>
@@ -125,7 +125,7 @@ const Index = () => {
           </TabsList>
 
           <TabsContent value="surahs" className="mt-0">
-            <div className="space-y-3">
+            <div className="space-y-2">
               {surahs.map((surah, index) => (
                 <SurahCard key={surah.number} surah={surah} index={index} />
               ))}

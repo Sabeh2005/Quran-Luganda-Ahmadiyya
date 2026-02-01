@@ -176,13 +176,13 @@ const SurahPage = () => {
 
       </header>
 
-      <main className="container mx-auto pt-4 pb-6 px-4">
+      <main className="container mx-auto pt-2 pb-6 px-2">
         {/* Surah header */}
         {/* Surah header */}
         {/* Surah header */}
         <div
           className={cn(
-            "verse-card surah-header-shadow text-center mb-4 p-6 rounded-xl relative transition-all duration-300",
+            "verse-card surah-header-shadow text-center mb-2 p-6 rounded-xl relative transition-all duration-300",
             "bg-primary text-primary-foreground"
           )}
         >
@@ -203,7 +203,7 @@ const SurahPage = () => {
         </div>
 
         {/* Verses */}
-        <div className="space-y-4">
+        <div className="space-y-2">
           {surah.verses.map((verse) => (
             <div
               key={verse.verseNumber}
