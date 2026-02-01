@@ -75,22 +75,22 @@ export const SearchBar: React.FC = () => {
   return (
     <div ref={containerRef} className="relative w-full mb-2">
       <div className="relative flex items-center">
-        <Search className="absolute left-3 h-4 w-4 text-muted-foreground" />
+        <Search className="absolute left-3 h-4 w-4 text-white" />
         <Input
           ref={inputRef}
           type="text"
-          placeholder="Search in Quran (Arabic, Luganda, or English)..."
+          placeholder="Search engine"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={handleFocus}
-          className="pl-9 pr-9 h-11 bg-card border-border"
+          className="pl-9 pr-9 h-11 bg-primary border-none text-white placeholder:text-white focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-0"
         />
         {query && (
           <Button
             variant="ghost"
             size="icon"
             onClick={handleClear}
-            className="absolute right-1 h-8 w-8"
+            className="absolute right-1 h-8 w-8 text-white hover:bg-white/10 hover:text-white"
           >
             <X className="h-4 w-4" />
           </Button>
