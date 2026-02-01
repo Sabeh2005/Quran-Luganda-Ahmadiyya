@@ -9,6 +9,7 @@ import settingsIcon from '@/assets/settings-icon.svg';
 
 import { useQuranData } from '@/hooks/useQuranData';
 import { useQuranStore } from '@/store/quranStore';
+import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { getSurahInfo, getSurahDisplayName } from '@/data/surahNames';
 
 const SurahPage = () => {
@@ -19,6 +20,7 @@ const SurahPage = () => {
   const { getSurah, loading, error } = useQuranData();
   const { settings, setLastReadPosition } = useQuranStore();
   const verseRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+  const scrollDirection = useScrollDirection();
 
   const surahNum = parseInt(surahNumber || '1', 10);
   const surah = getSurah(surahNum);
@@ -135,10 +137,16 @@ const SurahPage = () => {
 
   const surahDisplayName = getSurahDisplayName(surahNum);
 
+  // Determine if header should be hidden based on scroll direction
+  const isHeaderHidden = scrollDirection === 'down';
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header for Surah Page with back button and settings */}
-      <header className="sticky top-0 z-40 w-full">
+      <header
+        className={`sticky top-0 z-40 w-full transition-transform duration-300 ${isHeaderHidden ? '-translate-y-full' : 'translate-y-0'
+          }`}
+      >
         <div className="header-gradient px-4 py-4 shadow-lg">
           <div className="container mx-auto flex items-center justify-between">
             <Button

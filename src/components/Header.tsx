@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePWAInstall } from '@/hooks/usePWAInstall';
+import { useScrollDirection } from '@/hooks/useScrollDirection';
 import alQuranCalligraphy from '@/assets/al-quran-calligraphy.svg';
 import settingsIcon from '@/assets/settings-icon.svg';
 import menuIcon from '@/assets/menu-icon.svg';
@@ -25,11 +26,18 @@ export const Header: React.FC<HeaderProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const scrollDirection = useScrollDirection();
 
   const { canInstall, install } = usePWAInstall();
 
+  // Determine if header should be hidden based on scroll direction
+  const isHeaderHidden = scrollDirection === 'down';
+
   return (
-    <header className="sticky top-0 z-40 w-full">
+    <header
+      className={`sticky top-0 z-40 w-full transition-transform duration-300 ${isHeaderHidden ? '-translate-y-full' : 'translate-y-0'
+        }`}
+    >
       <div className={`header-gradient px-6 shadow-lg transition-all duration-300 ${isHomePage ? 'py-4' : 'py-6'}`}>
         <div className={`container mx-auto ${isHomePage ? 'flex justify-center items-center relative min-h-[50px]' : 'grid grid-cols-[1fr_auto_1fr] items-center'}`}>
           {/* Left Side: Back Button or Menu Icon */}
