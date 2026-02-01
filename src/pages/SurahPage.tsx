@@ -192,7 +192,10 @@ const SurahPage = () => {
           <h2 className="text-3xl font-semibold text-primary-foreground">
             {surahInfo.transliteration}
           </h2>
-          <div className="flex items-center justify-center gap-4 mt-3 text-base text-primary-foreground/80 font-medium">
+          <p className="text-xl text-primary-foreground mt-2">
+            Chapter No: {surahNum}
+          </p>
+          <div className="flex items-center justify-center gap-4 mt-3 text-base text-primary-foreground font-medium">
             <span>{surah.totalVerses} Verses</span>
             <span>•</span>
             <span>{surah.revelationType}</span>
