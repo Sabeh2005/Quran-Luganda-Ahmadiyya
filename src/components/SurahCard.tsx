@@ -1,6 +1,4 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
 import type { CombinedSurah } from '@/types/quran';
 import { getSurahInfo } from '@/data/surahNames';
 import { cn } from '@/lib/utils';
@@ -42,12 +40,10 @@ export const SurahCard: React.FC<SurahCardProps> = ({ surah, index }) => {
 
       {/* Arabic name - larger */}
       <div className="text-right flex-shrink-0">
-        <p className="text-2xl font-noorehuda text-primary" dir="rtl">
+        <p className="text-4xl font-noorehuda text-primary" dir="rtl">
           {surahInfo.arabic}
         </p>
       </div>
-
-      <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0" />
     </button>
   );
 };
