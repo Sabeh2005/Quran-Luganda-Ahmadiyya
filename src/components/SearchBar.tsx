@@ -79,7 +79,7 @@ export const SearchBar: React.FC = () => {
         <Input
           ref={inputRef}
           type="text"
-          placeholder="Search engine"
+          placeholder="Search (Arabic, English & Luganda)"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={handleFocus}
