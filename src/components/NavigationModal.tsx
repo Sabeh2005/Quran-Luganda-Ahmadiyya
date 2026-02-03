@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useQuranData } from "@/hooks/useQuranData";
 import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface NavigationModalProps {
   isOpen: boolean;
@@ -40,7 +41,21 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
         }
       }
     }
-  }, [selectedSurah, surahs]); // Removed selectedVerse from dependency to avoid loop resetting
+  }, [selectedSurah, surahs]);
+
+  // Scroll to selected items when modal opens or selections change
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        const selectedSurahEl = document.querySelector('[data-selected-surah="true"]');
+        const selectedVerseEl = document.querySelector('[data-selected-verse="true"]');
+
+        selectedSurahEl?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        selectedVerseEl?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, selectedSurah, selectedVerse]);
 
   const handleGo = () => {
     navigate(`/surah/${selectedSurah}?verse=${selectedVerse}`);
@@ -64,67 +79,70 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
         <div className="grid grid-cols-2 h-[400px] divide-x">
           {/* Surah Selection Column */}
           <div className="flex flex-col h-full overflow-hidden">
-            <h3 className="p-3 text-sm font-semibold text-center border-b bg-muted/30 sticky top-0 z-10">
+            <h3 className="p-3 text-lg font-bold text-center border-b bg-muted/30 sticky top-0 z-10 text-black">
               Select Surah
             </h3>
-            <div
-              ref={surahListRef}
-              className="flex-1 overflow-y-auto p-2 space-y-1"
-            >
-              {surahs.length > 0 ? (
-                surahs.map((surah) => (
-                  <button
-                    key={surah.number}
-                    onClick={() => handleSurahSelect(surah.number.toString())}
-                    className={cn(
-                      "w-full text-left px-4 py-3 rounded-lg text-sm transition-all duration-200",
-                      selectedSurah === surah.number.toString()
-                        ? "bg-primary text-primary-foreground font-bold shadow-sm"
-                        : "hover:bg-muted text-foreground/80"
-                    )}
-                  >
-                    <span className="opacity-70 mr-2 text-xs">{surah.number}.</span>
-                    {surah.englishName}
-                  </button>
-                ))
-              ) : (
-                <div className="p-4 text-center text-muted-foreground">Loading...</div>
-              )}
-            </div>
+            <ScrollArea className="flex-1">
+              <div
+                ref={surahListRef}
+                className="p-2 space-y-1"
+              >
+                {surahs.length > 0 ? (
+                  surahs.map((surah) => (
+                    <button
+                      key={surah.number}
+                      data-selected-surah={selectedSurah === surah.number.toString()}
+                      onClick={() => handleSurahSelect(surah.number.toString())}
+                      className={cn(
+                        "w-full text-left px-4 py-3 rounded-lg text-base transition-all duration-200 font-bold",
+                        selectedSurah === surah.number.toString()
+                          ? "bg-primary text-primary-foreground shadow-sm"
+                          : "hover:bg-muted text-black"
+                      )}
+                    >
+                      <span className="mr-2 text-sm font-bold">{surah.number}.</span>
+                      {surah.englishName}
+                    </button>
+                  ))
+                ) : (
+                  <div className="p-4 text-center text-muted-foreground">Loading...</div>
+                )}
+              </div>
+            </ScrollArea>
           </div>
 
           {/* Verse Selection Column */}
           <div className="flex flex-col h-full overflow-hidden">
-            <h3 className="p-3 text-sm font-semibold text-center border-b bg-muted/30 sticky top-0 z-10">
+            <h3 className="p-3 text-lg font-bold text-center border-b bg-muted/30 sticky top-0 z-10 text-black">
               Select Verse
             </h3>
-            <div
-              ref={verseListRef}
-              className="flex-1 overflow-y-auto p-2 space-y-1"
-            >
-              {Array.from({ length: verseCount }, (_, i) => i + 1).map((v) => (
-                <button
-                  key={v}
-                  onClick={() => setSelectedVerse(v.toString())}
-                  className={cn(
-                    "w-full text-left px-4 py-3 rounded-lg text-sm transition-all duration-200 flex items-center justify-between",
-                    selectedVerse === v.toString()
-                      ? "bg-primary text-primary-foreground font-bold shadow-sm"
-                      : "hover:bg-muted text-foreground/80"
-                  )}
-                >
-                  <span>Verse {v}</span>
-                  {selectedVerse === v.toString() && (
-                    <span className="w-2 h-2 rounded-full bg-white opacity-80" />
-                  )}
-                </button>
-              ))}
-            </div>
+            <ScrollArea className="flex-1">
+              <div
+                ref={verseListRef}
+                className="p-2 space-y-1"
+              >
+                {Array.from({ length: verseCount }, (_, i) => i + 1).map((v) => (
+                  <button
+                    key={v}
+                    data-selected-verse={selectedVerse === v.toString()}
+                    onClick={() => setSelectedVerse(v.toString())}
+                    className={cn(
+                      "w-full text-left px-4 py-3 rounded-lg text-base transition-all duration-200 flex items-center justify-between font-bold",
+                      selectedVerse === v.toString()
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "hover:bg-muted text-black"
+                    )}
+                  >
+                    <span>Verse {v}</span>
+                  </button>
+                ))}
+              </div>
+            </ScrollArea>
           </div>
         </div>
 
         <div className="p-4 border-t bg-muted/10">
-          <Button onClick={handleGo} className="w-full text-lg h-12 shadow-md">
+          <Button onClick={handleGo} className="w-full text-lg h-12 shadow-md font-bold">
             Go to Surah {selectedSurah}, Verse {selectedVerse}
           </Button>
         </div>
