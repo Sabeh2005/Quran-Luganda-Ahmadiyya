@@ -78,10 +78,10 @@ export default {
         },
       },
       fontFamily: {
-        arabic: ['var(--arabic-font)', 'Noorehuda', 'Traditional Arabic', 'serif'],
-        noorehuda: ['Noorehuda', 'Traditional Arabic', 'serif'],
-        uthmani: ['UthmanicHafs', 'Traditional Arabic', 'serif'],
-        indopak: ['IndoPak', 'Traditional Arabic', 'serif'],
+        arabic: ['var(--arabic-font)', 'Noorehuda', 'serif'],
+        noorehuda: ['Noorehuda', 'serif'],
+        uthmani: ['UthmanicHafs', 'serif'],
+        indopak: ['IndoPak', 'serif'],
       },
       borderRadius: {
         lg: "var(--radius)",

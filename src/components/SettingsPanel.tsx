@@ -21,7 +21,7 @@ const arabicFonts: { value: ArabicFont; label: string; sample: string }[] = [
   { value: 'noorehuda', label: 'Noorehuda', sample: 'بِسۡمِ ٱللَّهِ' },
   { value: 'uthmani', label: 'Usmani (Uthmanic)', sample: 'بِسۡمِ ٱللَّهِ' },
   { value: 'indopak', label: 'Indo-Pak', sample: 'بِسۡمِ ٱللَّهِ' },
-  { value: 'khat-e-manzoor', label: 'Khat-e-Manzoor', sample: 'بِسۡمِ ٱللَّهِ' },
+  // { value: 'khat-e-manzoor', label: 'Khat-e-Manzoor', sample: 'بِسۡمِ ٱللَّهِ' },
 ];
 
 const translationFonts: { value: TranslationFont; label: string }[] = [
