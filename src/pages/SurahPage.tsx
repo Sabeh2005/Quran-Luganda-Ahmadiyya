@@ -10,7 +10,6 @@ import settingsIcon from '@/assets/settings-icon.svg';
 import { useQuranData } from '@/hooks/useQuranData';
 import { useQuranStore } from '@/store/quranStore';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
-import { getSurahInfo, getSurahDisplayName } from '@/data/surahNames';
 
 const SurahPage = () => {
   const { surahNumber } = useParams<{ surahNumber: string }>();
@@ -24,7 +23,6 @@ const SurahPage = () => {
 
   const surahNum = parseInt(surahNumber || '1', 10);
   const surah = getSurah(surahNum);
-  const surahInfo = getSurahInfo(surahNum);
   const targetVerse = searchParams.get('verse');
 
   const hasPreviousSurah = surahNum > 1;
@@ -135,7 +133,7 @@ const SurahPage = () => {
     );
   }
 
-  const surahDisplayName = getSurahDisplayName(surahNum);
+  const surahDisplayName = `${surah.englishName} — ${surah.arabicName}`;
 
   // Determine if header should be hidden based on scroll direction
   const isHeaderHidden = scrollDirection === 'down';
@@ -187,10 +185,10 @@ const SurahPage = () => {
           )}
         >
           <p className="text-5xl font-noorehuda mb-2 text-primary-foreground" dir="rtl">
-            {surahInfo.arabic}
+            {surah.arabicName}
           </p>
           <h2 className="text-3xl font-semibold text-primary-foreground">
-            {surahInfo.transliteration}
+            {surah.englishName}
           </h2>
           <p className="text-xl text-primary-foreground mt-2">
             Chapter No: {surahNum}

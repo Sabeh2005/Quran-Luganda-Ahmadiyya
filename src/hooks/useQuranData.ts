@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import type { QuranData, CombinedSurah, CombinedVerse } from '@/types/quran';
-import { getSurahInfo } from '@/data/surahNames';
+import type { CombinedSurah, CombinedVerse } from '@/types/quran';
 
-const ARABIC_URL = '/data/quran_arabic.json';
+
+const ARABIC_URL = '/data/quran_arabic_ahmadiyya.json';
 const LUGANDA_URL = '/data/quran_luganda_ahmadiyya.json';
 const ENGLISH_URL = '/data/quran_english_ahmadiyya.json';
 
@@ -13,6 +13,15 @@ interface FlatVerse {
   text: string;
 }
 
+// New flat Arabic verse structure from the updated JSON
+interface FlatArabicVerse {
+  surah_number: number;
+  surah_name_arabic: string;
+  ayah_number: number;
+  text_content: string;
+  ruku_indo_pak_data: { ruku_number_arabic: string } | null;
+}
+
 // Helper to index flat verses by surah and ayah for O(1) lookup
 const createVerseMap = (verses: FlatVerse[]) => {
   const map = new Map<string, string>();
@@ -20,6 +29,28 @@ const createVerseMap = (verses: FlatVerse[]) => {
     map.set(`${v.surah_number}:${v.ayah_number}`, v.text);
   });
   return map;
+};
+
+// Helper to extract Surah names from English data
+const extractEnglishSurahNames = (verses: FlatVerse[]) => {
+  const map = new Map<number, string>();
+  verses.forEach(v => {
+    if (!map.has(v.surah_number)) {
+      map.set(v.surah_number, v.surah_name);
+    }
+  });
+  return map;
+};
+
+// Group flat Arabic verses by surah number
+const groupArabicVersesBySurah = (verses: FlatArabicVerse[]): Map<number, FlatArabicVerse[]> => {
+  const grouped = new Map<number, FlatArabicVerse[]>();
+  verses.forEach(v => {
+    const existing = grouped.get(v.surah_number) || [];
+    existing.push(v);
+    grouped.set(v.surah_number, existing);
+  });
+  return grouped;
 };
 
 interface UseQuranDataReturn {
@@ -68,7 +99,7 @@ export const useQuranData = (): UseQuranDataReturn => {
           throw new Error('Failed to fetch Quran data');
         }
 
-        const [arabicData, lugandaData, englishData]: [QuranData, FlatVerse[], FlatVerse[]] = await Promise.all([
+        const [arabicData, lugandaData, englishData]: [FlatArabicVerse[], FlatVerse[], FlatVerse[]] = await Promise.all([
           arabicRes.json(),
           lugandaRes.json(),
           englishRes.json(),
@@ -76,33 +107,50 @@ export const useQuranData = (): UseQuranDataReturn => {
 
         const lugandaMap = createVerseMap(lugandaData);
         const englishMap = createVerseMap(englishData);
+        const englishSurahNames = extractEnglishSurahNames(englishData);
 
-        // Combine the data from the quran array
-        const combinedSurahs: CombinedSurah[] = arabicData.quran.map((arabicSurah) => {
-          const surahInfo = getSurahInfo(arabicSurah.surahNumber);
+        // Group Arabic verses by surah
+        const arabicBySurah = groupArabicVersesBySurah(arabicData);
 
-          // Map verses preserving exact numbering from JSON
-          const combinedVerses: CombinedVerse[] = arabicSurah.verses.map((arabicVerse) => {
-            const verseKey = `${arabicSurah.surahNumber}:${arabicVerse.verseNumber}`;
+        // Build combined surahs from grouped Arabic data
+        const combinedSurahs: CombinedSurah[] = [];
+
+        // Sort surah numbers to ensure correct order
+        const surahNumbers = Array.from(arabicBySurah.keys()).sort((a, b) => a - b);
+
+        for (const surahNumber of surahNumbers) {
+          const arabicVerses = arabicBySurah.get(surahNumber) || [];
+          if (arabicVerses.length === 0) continue;
+
+          // const surahInfo = getSurahInfo(surahNumber); // No longer using hardcoded info for names
+          const firstVerse = arabicVerses[0];
+          const englishName = englishSurahNames.get(surahNumber) || `Surah ${surahNumber}`;
+
+          // Sort verses by ayah number
+          arabicVerses.sort((a, b) => a.ayah_number - b.ayah_number);
+
+          const combinedVerses: CombinedVerse[] = arabicVerses.map((arabicVerse) => {
+            const verseKey = `${surahNumber}:${arabicVerse.ayah_number}`;
             return {
-              verseNumber: arabicVerse.verseNumber,
-              arabic: arabicVerse.text,
+              verseNumber: arabicVerse.ayah_number,
+              arabic: arabicVerse.text_content,
               luganda: lugandaMap.get(verseKey) || '',
               english: englishMap.get(verseKey) || '',
+              rukuMarker: arabicVerse.ruku_indo_pak_data?.ruku_number_arabic || null,
             };
           });
 
-          return {
-            id: arabicSurah.surahNumber,
-            number: arabicSurah.surahNumber,
-            arabicName: arabicSurah.surahName,
-            englishName: surahInfo.transliteration,
-            englishTranslation: surahInfo.english,
-            revelationType: arabicSurah.type,
-            totalVerses: arabicSurah.totalVerses,
+          combinedSurahs.push({
+            id: surahNumber,
+            number: surahNumber,
+            arabicName: firstVerse.surah_name_arabic,
+            englishName: englishName,
+            englishTranslation: '', // Removed transliteration dependence, maybe use englishName or empty if not provided separately
+            revelationType: surahNumber <= 86 ? 'Meccan' : 'Medinan', // Simplified
+            totalVerses: combinedVerses.length,
             verses: combinedVerses,
-          };
-        });
+          });
+        }
 
         setSurahs(combinedSurahs);
       } catch (err) {
@@ -114,6 +162,7 @@ export const useQuranData = (): UseQuranDataReturn => {
 
     fetchData();
   }, []);
+
 
   const getSurah = (surahNumber: number): CombinedSurah | undefined => {
     return surahs.find((s) => s.number === surahNumber);

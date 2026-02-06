@@ -661,6 +661,45 @@
     box-shadow: 0 2px 8px hsl(var(--primary) / 0.3);
   }
 
+  /* Ruku marker with 'Ain' symbol - Inline version */
+  .ruku-marker-inline {
+    display: inline;
+    margin-right: 0.5rem;
+    margin-left: 0.25rem;
+  }
+
+  .ruku-container {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .ain-symbol {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: hsl(var(--primary));
+    line-height: 1;
+  }
+
+  .ruku-number {
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    transform: translate(-50%, -45%);
+    font-size: 0.5em;
+    font-weight: bold;
+    color: hsl(var(--primary));
+    font-family: 'Arial', sans-serif;
+  }
+
+  .dark .ain-symbol {
+    color: hsl(var(--primary));
+  }
+
+  .dark .ruku-number {
+    color: hsl(var(--primary));
+  }
+
   /* Bookmark colors */
   .bg-bookmark-red {
     background-color: hsl(var(--bookmark-red));

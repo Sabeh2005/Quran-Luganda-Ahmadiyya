@@ -51,6 +51,8 @@ export default defineConfig(({ mode }) => ({
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: true,
+        // Allow larger files (3MB) to be precached - needed for Arabic JSON data
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
       }
     })
   ].filter(Boolean),
