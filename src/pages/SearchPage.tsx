@@ -70,7 +70,7 @@ export default function SearchPage() {
                     <ArrowLeft className="h-6 w-6" />
                 </Button>
                 <h1 className="text-3xl font-[1000] flex-1 text-center pr-8">
-                    {results.length > 0 ? `${results.length} Records found` : 'Search Quran'}
+                    {results.length > 0 ? `${results.length} Results` : 'Search Quran'}
                 </h1>
             </div>
 
