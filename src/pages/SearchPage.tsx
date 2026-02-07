@@ -12,7 +12,7 @@ export default function SearchPage() {
     const [query, setQuery] = useState('');
     const [debouncedQuery, setDebouncedQuery] = useState('');
     const [selectedLanguage, setSelectedLanguage] = useState<'all' | 'arabic' | 'luganda' | 'english'>('all');
-    const [searchMode, setSearchMode] = useState<'similar' | 'exact'>('similar');
+    const [searchMode, setSearchMode] = useState<'similar' | 'exact'>('exact');
     const { searchVerses, loading } = useQuranData();
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -133,17 +133,6 @@ export default function SearchPage() {
                     {/* Tabs for Similar vs Exact */}
                     <div className="flex gap-[8px]">
                         <button
-                            onClick={() => setSearchMode('similar')}
-                            className={cn(
-                                "px-4 py-1.5 rounded-full text-sm font-medium transition-colors border",
-                                searchMode === 'similar'
-                                    ? "bg-primary text-primary-foreground border-primary"
-                                    : "bg-muted text-muted-foreground border-transparent hover:bg-muted/80"
-                            )}
-                        >
-                            Similar
-                        </button>
-                        <button
                             onClick={() => setSearchMode('exact')}
                             className={cn(
                                 "px-4 py-1.5 rounded-full text-sm font-medium transition-colors border",
@@ -153,6 +142,17 @@ export default function SearchPage() {
                             )}
                         >
                             Exact
+                        </button>
+                        <button
+                            onClick={() => setSearchMode('similar')}
+                            className={cn(
+                                "px-4 py-1.5 rounded-full text-sm font-medium transition-colors border",
+                                searchMode === 'similar'
+                                    ? "bg-primary text-primary-foreground border-primary"
+                                    : "bg-muted text-muted-foreground border-transparent hover:bg-muted/80"
+                            )}
+                        >
+                            Similar
                         </button>
                     </div>
                 </div>
@@ -173,7 +173,7 @@ export default function SearchPage() {
                                     className="cursor-pointer group"
                                 >
                                     <div className="flex items-baseline gap-2 mb-1">
-                                        <span className="text-primary font-medium whitespace-nowrap">
+                                        <span className="text-primary font-medium whitespace-nowrap text-3xl">
                                             {result.surahNumber}:{result.verseNumber}
                                         </span>
 
@@ -183,7 +183,7 @@ export default function SearchPage() {
                            I need to display the relevant text snippet based on the match.
                         */}
                                         <span className={cn(
-                                            "text-base leading-relaxed text-foreground/90",
+                                            "text-3xl leading-relaxed text-foreground/90",
                                             result.matchType === 'arabic' ? "font-noorehuda text-right w-full" : ""
                                         )} dir={result.matchType === 'arabic' ? "rtl" : "ltr"}>
                                             {result.matchType === 'arabic' ? (
