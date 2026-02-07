@@ -21,7 +21,6 @@ export interface CombinedVerse {
   arabic: string;
   luganda: string;
   english: string;
-  rukuMarker?: string | null; // Arabic-Indic numeral for Ruku (e.g., "١", "٢")
 }
 
 export interface CombinedSurah {

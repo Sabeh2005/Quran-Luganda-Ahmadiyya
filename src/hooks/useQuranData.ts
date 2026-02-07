@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import type { CombinedSurah, CombinedVerse } from '@/types/quran';
 
 
-const ARABIC_URL = '/data/quran_arabic_ahmadiyya.json';
+const ARABIC_URL = '/data/quran_arabic.json';
 const LUGANDA_URL = '/data/quran_luganda_ahmadiyya.json';
 const ENGLISH_URL = '/data/quran_english_ahmadiyya.json';
 
@@ -19,7 +19,6 @@ interface FlatArabicVerse {
   surah_name_arabic: string;
   ayah_number: number;
   text_content: string;
-  ruku_indo_pak_data: { ruku_number_arabic: string } | null;
 }
 
 // Helper to index flat verses by surah and ayah for O(1) lookup
@@ -136,7 +135,6 @@ export const useQuranData = (): UseQuranDataReturn => {
               arabic: arabicVerse.text_content,
               luganda: lugandaMap.get(verseKey) || '',
               english: englishMap.get(verseKey) || '',
-              rukuMarker: arabicVerse.ruku_indo_pak_data?.ruku_number_arabic || null,
             };
           });
 

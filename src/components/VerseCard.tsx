@@ -197,16 +197,8 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
             dir="rtl"
           >
             {/* Strip trailing ' ع' if there's a Ruku marker since we render it separately */}
-            {verse.rukuMarker ? verse.arabic.replace(/\s*ع\s*$/, '') : verse.arabic}
-            {/* Render styled Ruku marker inline after the Arabic text */}
-            {verse.rukuMarker && (
-              <span className="ruku-marker-inline">
-                <span className="ruku-container">
-                  <span className="ain-symbol">ع</span>
-                  <span className="ruku-number">{verse.rukuMarker}</span>
-                </span>
-              </span>
-            )}
+            {verse.arabic}
+
           </p>
         </div>
 
