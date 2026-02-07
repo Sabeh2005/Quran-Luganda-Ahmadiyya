@@ -108,7 +108,7 @@ const BookmarksPage = () => {
                     <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-white hover:bg-white/20">
                         <ArrowLeft className="w-6 h-6" />
                     </Button>
-                    <h1 className="text-xl font-bold">Bookmarks</h1>
+                    <h1 className="text-3xl font-bold">Bookmarks</h1>
                 </div>
                 <Button
                     variant="ghost"

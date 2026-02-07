@@ -9,6 +9,7 @@ import { updateMetaThemeColor } from "@/utils/themeColors";
 import Index from "./pages/Index";
 import SurahPage from "./pages/SurahPage";
 import BookmarksPage from "./pages/BookmarksPage";
+import SearchPage from "./pages/SearchPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => {
             <Route path="/" element={<Index />} />
             <Route path="/bookmarks" element={<BookmarksPage />} />
             <Route path="/surah/:surahNumber" element={<SurahPage />} />
+            <Route path="/search" element={<SearchPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
