@@ -11,11 +11,14 @@ import type { CombinedVerse, BookmarkColor, HighlightColor, TranslationFont } fr
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { AddBookmarkDialog } from './bookmarks/AddBookmarkDialog';
+import { highlightMatch } from '@/lib/highlight';
 
 interface VerseCardProps {
   verse: CombinedVerse;
   surahNumber: number;
   surahName: string;
+  searchQuery?: string;
+  searchMode?: 'similar' | 'exact';
 }
 
 const bookmarkColors: { color: BookmarkColor; className: string; label: string }[] = [
@@ -44,7 +47,13 @@ const highlightColors: { color: HighlightColor; className: string; label: string
   { color: 'rose', className: 'bg-rose-200 dark:bg-rose-800', label: 'Rose' },
 ];
 
-export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahName }) => {
+export const VerseCard: React.FC<VerseCardProps> = ({
+  verse,
+  surahNumber,
+  surahName,
+  searchQuery,
+  searchMode = 'similar'
+}) => {
   const [copied, setCopied] = useState(false);
   const [showBookmarkDialog, setShowBookmarkDialog] = useState(false);
   const { settings, getBookmark, removeBookmark, getHighlight, addHighlight, removeHighlight, collections } = useQuranStore();
@@ -96,11 +105,10 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
 
   const handleCopy = async () => {
     let text = verse.arabic;
-    if (settings.translationDisplay === 'all' || settings.translationDisplay === 'luganda') {
-      text += `\n\n${verse.luganda}`;
-    }
     if (settings.translationDisplay === 'all' || settings.translationDisplay === 'english') {
       text += `\n\n${verse.english}`;
+    } else if (settings.translationDisplay === 'luganda') {
+      text += `\n\n${verse.luganda}`;
     }
     text += `\n\n— ${surahName} \u200E(${verse.verseNumber})`;
 
@@ -115,11 +123,10 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
 
   const handleShare = async () => {
     let text = verse.arabic;
-    if (settings.translationDisplay === 'all' || settings.translationDisplay === 'luganda') {
-      text += `\n\n${verse.luganda}`;
-    }
     if (settings.translationDisplay === 'all' || settings.translationDisplay === 'english') {
       text += `\n\n${verse.english}`;
+    } else if (settings.translationDisplay === 'luganda') {
+      text += `\n\n${verse.luganda}`;
     }
     text += `\n\n— ${surahName} \u200E(${verse.verseNumber})`;
 
@@ -195,9 +202,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
             }}
             dir="rtl"
           >
-            {/* Strip trailing ' ع' if there's a Ruku marker since we render it separately */}
-            {verse.arabic}
-
+            {searchQuery ? highlightMatch(verse.arabic, searchQuery, searchMode) : verse.arabic}
           </p>
         </div>
 
@@ -219,7 +224,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
             <span className="text-[15px] font-semibold text-primary uppercase tracking-wide block mb-1" style={{ fontStyle: 'normal' }}>
               Luganda
             </span>
-            {verse.luganda}
+            {searchQuery ? highlightMatch(verse.luganda, searchQuery, searchMode) : verse.luganda}
           </p>
         )}
 
@@ -241,7 +246,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
             <span className="text-[15px] font-semibold text-primary uppercase tracking-wide block mb-1" style={{ fontStyle: 'normal' }}>
               English
             </span>
-            {verse.english}
+            {searchQuery ? highlightMatch(verse.english, searchQuery, searchMode) : verse.english}
           </p>
         )}
       </div>

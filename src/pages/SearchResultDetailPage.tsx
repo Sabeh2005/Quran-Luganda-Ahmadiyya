@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { SettingsPanel } from '@/components/SettingsPanel';
 import settingsIcon from '@/assets/settings-icon.svg';
 import backIcon from '@/assets/back-icon.svg';
+import { useScrollDirection } from '@/hooks/useScrollDirection';
 
 const SearchResultDetailPage = () => {
     const [searchParams] = useSearchParams();
@@ -16,6 +17,7 @@ const SearchResultDetailPage = () => {
     const { searchVerses } = useQuranData();
     const [settingsOpen, setSettingsOpen] = React.useState(false);
     const verseRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+    const scrollDirection = useScrollDirection();
 
     const surahNumber = parseInt(searchParams.get('surah') || '0');
     const verseNumber = parseInt(searchParams.get('verse') || '0');
@@ -47,9 +49,14 @@ const SearchResultDetailPage = () => {
         );
     }
 
+    const isHeaderHidden = scrollDirection === 'down';
+
     return (
         <div className="min-h-screen bg-background pb-10">
-            <header className="sticky top-0 z-40 w-full bg-primary px-0 py-4 shadow-sm text-primary-foreground">
+            <header className={cn(
+                "sticky top-0 z-40 w-full bg-primary px-0 py-4 shadow-sm text-primary-foreground transition-transform duration-300",
+                isHeaderHidden ? "-translate-y-full" : "translate-y-0"
+            )}>
                 <div className="flex w-full items-center justify-between">
                     <Button
                         variant="ghost"
@@ -96,6 +103,8 @@ const SearchResultDetailPage = () => {
                                 }}
                                 surahNumber={result.surahNumber}
                                 surahName={result.surahName}
+                                searchQuery={searchState.query}
+                                searchMode={searchState.mode}
                             />
                         </div>
                     );

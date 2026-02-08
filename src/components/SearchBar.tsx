@@ -11,7 +11,7 @@ export const SearchBar: React.FC = () => {
   const { setSearchState } = useQuranStore();
 
   const handleFocus = () => {
-    setSearchState({ query: '' });
+    setSearchState({ query: '', language: 'all' });
     navigate('/search');
   };
 

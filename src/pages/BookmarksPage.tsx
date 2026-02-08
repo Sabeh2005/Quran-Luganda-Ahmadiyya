@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuranStore } from '@/store/quranStore';
 import { useQuranData } from '@/hooks/useQuranData';
+import { useScrollDirection } from '@/hooks/useScrollDirection';
+import { cn } from '@/lib/utils';
 import backIcon from '@/assets/back-icon.svg';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -29,6 +31,8 @@ const BookmarksPage = () => {
         clearAllCollections,
     } = useQuranStore();
     const { surahs } = useQuranData();
+    const scrollDirection = useScrollDirection();
+    const isHeaderHidden = scrollDirection === 'down';
 
     const [activeTab, setActiveTab] = useState('single');
     const [viewingCollection, setViewingCollection] = useState<BookmarkCollection | null>(null);
@@ -77,15 +81,17 @@ const BookmarksPage = () => {
         return (
             <div className="min-h-screen bg-background">
                 {/* Collection Detail Header */}
-                <div className="sticky top-0 z-40 w-full header-gradient shadow-md px-0 py-4 flex items-center gap-4 text-white">
+                <header className={cn(
+                    "sticky top-0 z-40 w-full header-gradient shadow-md px-0 py-4 flex items-center gap-4 text-white transition-transform duration-300",
+                    isHeaderHidden ? "-translate-y-full" : "translate-y-0"
+                )}>
                     <Button variant="ghost" size="icon" onClick={() => setViewingCollection(null)} className="text-white hover:bg-white/20">
                         <img src={backIcon} alt="Back" className="w-6 h-6 brightness-0 invert" />
                     </Button>
-                    <h1 className="text-xl font-bold flex-1">{viewingCollection.name}</h1>
-                    {/* Maybe add context menu here too? */}
-                </div>
+                    <h1 className="text-[30px] font-bold flex-1">{viewingCollection.name}</h1>
+                </header>
 
-                <div className="w-full p-2 space-y-2">
+                <div className="w-full space-y-2">
                     {collectionBookmarks.length === 0 ? (
                         <div className="text-center py-10 text-muted-foreground">Empty collection</div>
                     ) : (
@@ -103,7 +109,10 @@ const BookmarksPage = () => {
     return (
         <div className="min-h-screen bg-background flex flex-col">
             {/* Main Header */}
-            <div className="sticky top-0 z-40 w-full header-gradient shadow-md px-0 py-4 flex items-center justify-between text-white">
+            <header className={cn(
+                "sticky top-0 z-40 w-full header-gradient shadow-md px-0 py-4 flex items-center justify-between text-white transition-transform duration-300",
+                isHeaderHidden ? "-translate-y-full" : "translate-y-0"
+            )}>
                 <div className="flex items-center gap-3">
                     <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-white hover:bg-white/20">
                         <img src={backIcon} alt="Back" className="w-6 h-6 brightness-0 invert" />
@@ -117,7 +126,7 @@ const BookmarksPage = () => {
                 >
                     CLEAR ALL
                 </Button>
-            </div>
+            </header>
 
             {/* Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
@@ -136,8 +145,8 @@ const BookmarksPage = () => {
                     </TabsTrigger>
                 </TabsList>
 
-                <div className="flex-1 bg-gray-50 dark:bg-background">
-                    <TabsContent value="single" className="p-2 mt-0 space-y-2">
+                <div className="flex-1 bg-background">
+                    <TabsContent value="single" className="mt-0 space-y-0">
                         {bookmarks.length === 0 ? (
                             <div className="text-center py-20 text-muted-foreground">
                                 No single bookmarks

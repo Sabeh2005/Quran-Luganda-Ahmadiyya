@@ -8,6 +8,8 @@ import { useQuranData } from '@/hooks/useQuranData';
 import { useQuranStore } from '@/store/quranStore';
 import { cn } from '@/lib/utils';
 import backIcon from '@/assets/back-icon.svg';
+import { highlightMatch } from '@/lib/highlight';
+import { useScrollDirection } from '@/hooks/useScrollDirection';
 
 export default function SearchPage() {
     const navigate = useNavigate();
@@ -18,6 +20,7 @@ export default function SearchPage() {
     const [searchMode, setSearchMode] = useState(searchState.mode);
     const { searchVerses, loading } = useQuranData();
     const inputRef = useRef<HTMLInputElement>(null);
+    const scrollDirection = useScrollDirection();
 
     useEffect(() => {
         // Focus input on mount
@@ -44,57 +47,16 @@ export default function SearchPage() {
         inputRef.current?.focus();
     };
 
-    const highlightMatch = (text: string, searchQuery: string, mode: 'similar' | 'exact') => {
-        if (!searchQuery.trim()) return text;
 
-        const escapedQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = mode === 'exact'
-            ? new RegExp(`(^|[^a-zA-Z0-9])(${escapedQuery})([^a-zA-Z0-9]|$)`, 'gi')
-            : new RegExp(`(${escapedQuery})`, 'gi');
-
-        const parts = text.split(regex);
-
-        // When using groups in split, the matched groups are included in the array.
-        // For exact mode, we have 3 groups: (prefix)(match)(suffix)
-        if (mode === 'exact') {
-            const results: (string | React.JSX.Element)[] = [];
-            let i = 0;
-            while (i < parts.length) {
-                // Because split with 3 groups returns: [pre-match, group1, group2, group3, post-match, ...]
-                // Every 4th element (starting index 0) is the text between matches
-                results.push(parts[i]);
-                if (i + 1 < parts.length) {
-                    // group1 (prefix)
-                    results.push(parts[i + 1]);
-                    // group2 (the actual match) - HIGHLIGHT THIS
-                    results.push(
-                        <mark key={i} className="bg-[#FFD700] text-black rounded px-1.5 py-0.5 mx-0.5">
-                            {parts[i + 2]}
-                        </mark>
-                    );
-                    // group3 (suffix)
-                    results.push(parts[i + 3]);
-                }
-                i += 4;
-            }
-            return results;
-        }
-
-        return parts.map((part, i) =>
-            regex.test(part) ? (
-                <mark key={i} className="bg-[#FFD700] text-black rounded px-1.5 py-0.5 mx-0.5">
-                    {part}
-                </mark>
-            ) : (
-                part
-            )
-        );
-    };
+    const isHeaderHidden = scrollDirection === 'down';
 
     return (
         <div className="min-h-screen bg-background flex flex-col">
             {/* Header */}
-            <div className="bg-primary px-0 py-4 flex items-center shadow-sm text-primary-foreground">
+            <div className={cn(
+                "bg-primary px-0 py-4 flex items-center shadow-sm text-primary-foreground sticky top-0 z-40 w-full transition-transform duration-300",
+                isHeaderHidden ? "-translate-y-full" : "translate-y-0"
+            )}>
                 <Button
                     variant="ghost"
                     size="icon"
@@ -108,7 +70,7 @@ export default function SearchPage() {
                 </h1>
             </div>
 
-            <div className="p-2 space-y-2 flex-1 overflow-hidden flex flex-col">
+            <div className="p-2 space-y-2 flex-1 flex flex-col">
                 {/* Search Input */}
                 <div className="relative">
                     <div className="relative flex items-center">
@@ -202,7 +164,7 @@ export default function SearchPage() {
 
 
                 {/* Results List */}
-                <div className="flex-1 overflow-y-auto custom-scrollbar -mr-2 pr-2">
+                <div className="flex-1 -mr-2 pr-2">
                     {loading ? (
                         <div className="flex items-center justify-center py-10">
                             <Loader2 className="h-8 w-8 animate-spin text-green-600" />

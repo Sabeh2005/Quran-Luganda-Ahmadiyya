@@ -72,8 +72,11 @@ interface SearchResult {
 
 const normalizeArabic = (text: string): string => {
   return text
-    .replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E8\u06EA-\u06ED]/g, '')
-    .replace(/[\u0622\u0623\u0625\u0671\u0672\u0673\u0675]/g, '\u0627'); // Normalize Alif variants to bare Alif
+    .replace(/[\u0610-\u061A\u064B-\u065F\u0670\u0640\u06D6-\u06DC\u06DF-\u06E8\u06EA-\u06ED]/g, '')
+    .replace(/[\u0622\u0623\u0625\u0627\u0671\u0672\u0673\u0675]/g, '\u0627')
+    .replace(/[\u0624]/g, '\u0648')
+    .replace(/[\u0626\u0649]/g, '\u064A')
+    .replace(/[\u0629]/g, '\u0647');
 };
 
 
@@ -176,7 +179,11 @@ export const useQuranData = (): UseQuranDataReturn => {
     // Regex for exact match (word boundary check) for non-Arabic
     // We use a more robust check for whole words that works better with various characters
     const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const exactRegex = new RegExp(`(^|[^a-zA-Z0-9])(${escapedQuery})([^a-zA-Z0-9]|$)`, 'i');
+    const exactRegex = new RegExp(`(^|[^\\p{L}\\p{M}])(${escapedQuery})([^\\p{L}\\p{M}]|$)`, 'ui');
+
+    // Arabic exact regex (on normalized text)
+    const escapedArabicQuery = normalizedQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const exactArabicRegex = new RegExp(`(^|[^\\p{L}\\p{M}])(${escapedArabicQuery})([^\\p{L}\\p{M}]|$)`, 'ui');
 
     surahs.forEach((surah) => {
       surah.verses.forEach((verse) => {
@@ -187,34 +194,9 @@ export const useQuranData = (): UseQuranDataReturn => {
         if ((language === 'all' || language === 'arabic')) {
           const normalizedVerseArabic = normalizeArabic(verse.arabic);
           if (mode === 'exact') {
-            // For exact Arabic, check if the normalized query exists as a distinct part or just exact substring?
-            // The request asked for "match exact".
-            // In Arabic, "exact" usually means the exact sequence.
-            if (normalizedVerseArabic.includes(normalizedQuery)) {
-              // Refine for "Exact" word matching if possible, but substring is safer for now given normalization
-              // Let's try to match whole words if possible?
-              // normalizedVerseArabic is space separated.
-              const words = normalizedVerseArabic.split(' ');
-              if (words.some(w => w === normalizedQuery) || normalizedVerseArabic === normalizedQuery) {
-                matchType = 'arabic';
-                isMatch = true;
-              }
-              // Fallback to substring if strict word match might fail due to prefixes/suffixes - ASK USER?
-              // Plan said: "For Arabic: Match exact sequence."
-              // Let's stick to substring for Arabic "exact sequence". 
-              // Wait, "exact" usually means "whole word".
-              // Let's use the provided screenshots as a hint?
-              // No specific hint for Arabic exactness.
-              // I will stick to "exact sequence" aka substring for Arabic for now, 
-              // OR I can try to find exact word match.
-              // Let's go with substring + space boundaries?
-              // ` ${normalizedVerseArabic} `.includes(` ${normalizedQuery} `)
-              const paddedVerse = ` ${normalizedVerseArabic} `;
-              const paddedQuery = ` ${normalizedQuery} `;
-              if (paddedVerse.includes(paddedQuery)) {
-                matchType = 'arabic';
-                isMatch = true;
-              }
+            if (exactArabicRegex.test(normalizedVerseArabic)) {
+              matchType = 'arabic';
+              isMatch = true;
             }
           } else {
             if (normalizedVerseArabic.includes(normalizedQuery)) {
