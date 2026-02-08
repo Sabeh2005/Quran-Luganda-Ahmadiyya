@@ -65,7 +65,6 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
     switch (settings.arabicFont) {
       case 'uthmani': return 'font-uthmani';
       case 'indopak': return 'font-indopak';
-      case 'khat-e-manzoor': return 'font-khat-e-manzoor';
       default: return 'font-noorehuda';
     }
   };
@@ -217,7 +216,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
               whiteSpace: 'pre-wrap',
             }}
           >
-            <span className="text-xs font-semibold text-primary uppercase tracking-wide block mb-1" style={{ fontStyle: 'normal' }}>
+            <span className="text-[15px] font-semibold text-primary uppercase tracking-wide block mb-1" style={{ fontStyle: 'normal' }}>
               Luganda
             </span>
             {verse.luganda}
@@ -239,7 +238,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
               whiteSpace: 'pre-wrap',
             }}
           >
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide block mb-1" style={{ fontStyle: 'normal' }}>
+            <span className="text-[15px] font-semibold text-primary uppercase tracking-wide block mb-1" style={{ fontStyle: 'normal' }}>
               English
             </span>
             {verse.english}

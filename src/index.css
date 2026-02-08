@@ -35,14 +35,6 @@
   font-display: swap;
 }
 
-/* Khat-e-Manzoor - Beautiful Arabic calligraphy font */
-@font-face {
-  font-family: 'KhateManzoor';
-  src: url('/Quran_Arabic_Fonts/Khat_e_Manzoor.ttf');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
 
 
 @layer base {
@@ -589,9 +581,6 @@
     font-family: 'IndoPak', serif !important;
   }
 
-  .font-khat-e-manzoor {
-    font-family: 'KhateManzoor', serif !important;
-  }
 
   .translation-text {
     color: hsl(var(--translation-color));

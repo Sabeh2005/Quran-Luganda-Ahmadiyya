@@ -21,7 +21,6 @@ const arabicFonts: { value: ArabicFont; label: string; sample: string }[] = [
   { value: 'noorehuda', label: 'Noorehuda', sample: 'بِسۡمِ ٱللَّهِ' },
   { value: 'uthmani', label: 'Usmani (Uthmanic)', sample: 'بِسۡمِ ٱللَّهِ' },
   { value: 'indopak', label: 'Indo-Pak', sample: 'بِسۡمِ ٱللَّهِ' },
-  // { value: 'khat-e-manzoor', label: 'Khat-e-Manzoor', sample: 'بِسۡمِ ٱللَّهِ' },
 ];
 
 const translationFonts: { value: TranslationFont; label: string }[] = [
@@ -203,7 +202,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
     switch (font) {
       case 'uthmani': return 'font-uthmani';
       case 'indopak': return 'font-indopak';
-      case 'khat-e-manzoor': return 'font-khat-e-manzoor';
       default: return 'font-noorehuda';
     }
   };

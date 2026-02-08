@@ -34,7 +34,7 @@ export interface CombinedSurah {
   verses: CombinedVerse[];
 }
 
-export type ArabicFont = 'noorehuda' | 'uthmani' | 'indopak' | 'khat-e-manzoor';
+export type ArabicFont = 'noorehuda' | 'uthmani' | 'indopak';
 export type TranslationFont = 'default' | 'times-new-roman' | 'georgia' | 'libre-baskerville' | 'eb-garamond';
 export type TranslationDisplay = 'all' | 'luganda' | 'english' | 'off';
 export type ThemeColor = 'green' | 'blue' | 'purple' | 'gold-rose' | 'orange' | 'brown' | 'dark-green' | 'dark-blue' | 'maroon' | 'red' | 'teal' | 'indigo';
