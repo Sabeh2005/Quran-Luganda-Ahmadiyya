@@ -37,8 +37,8 @@ export const highlightMatch = (text: string, searchQuery: string, mode: 'similar
             else if (/[\u0647\u0629]/.test(char)) pattern += he;
             else pattern += char;
 
-            // Allow diacritics between letters, but not after spaces or if at the end
-            if (i < normalizedQuery.length - 1 && char !== ' ' && /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(char)) {
+            // Allow diacritics between letters and after the last letter
+            if (char !== ' ' && /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(char)) {
                 pattern += diacritics;
             }
         }

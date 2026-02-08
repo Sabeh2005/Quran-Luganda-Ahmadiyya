@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { VerseCard } from '@/components/VerseCard';
 import { useQuranStore } from '@/store/quranStore';
@@ -14,7 +15,7 @@ const SearchResultDetailPage = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const { searchState } = useQuranStore();
-    const { searchVerses } = useQuranData();
+    const { searchVerses, loading } = useQuranData();
     const [settingsOpen, setSettingsOpen] = React.useState(false);
     const verseRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
     const scrollDirection = useScrollDirection();
@@ -39,6 +40,14 @@ const SearchResultDetailPage = () => {
             }, 300);
         }
     }, [surahNumber, verseNumber, results.length]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        );
+    }
 
     if (results.length === 0) {
         return (

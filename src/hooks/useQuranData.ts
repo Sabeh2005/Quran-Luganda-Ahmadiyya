@@ -70,98 +70,102 @@ interface SearchResult {
   matchType: 'arabic' | 'luganda' | 'english';
 }
 
-const normalizeArabic = (text: string): string => {
-  return text
-    .replace(/[\u0610-\u061A\u064B-\u065F\u0670\u0640\u06D6-\u06DC\u06DF-\u06E8\u06EA-\u06ED]/g, '')
-    .replace(/[\u0622\u0623\u0625\u0627\u0671\u0672\u0673\u0675]/g, '\u0627')
-    .replace(/[\u0624]/g, '\u0648')
-    .replace(/[\u0626\u0649]/g, '\u064A')
-    .replace(/[\u0629]/g, '\u0647');
-};
+import { normalizeArabic } from '@/lib/highlight';
 
+
+
+let cachedData: CombinedSurah[] | null = null;
+let fetchLoadingPromise: Promise<CombinedSurah[]> | null = null;
 
 export const useQuranData = (): UseQuranDataReturn => {
-  const [surahs, setSurahs] = useState<CombinedSurah[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Module-level cache
+  const [surahs, setSurahs] = useState<CombinedSurah[]>(cachedData || []);
+  const [loading, setLoading] = useState(!cachedData);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+    if (cachedData) {
+      setLoading(false);
+      return;
+    }
 
-        const [arabicRes, lugandaRes, englishRes] = await Promise.all([
-          fetch(ARABIC_URL),
-          fetch(LUGANDA_URL),
-          fetch(ENGLISH_URL),
-        ]);
+    if (!fetchLoadingPromise) {
+      fetchLoadingPromise = (async () => {
+        try {
+          const [arabicRes, lugandaRes, englishRes] = await Promise.all([
+            fetch(ARABIC_URL),
+            fetch(LUGANDA_URL),
+            fetch(ENGLISH_URL),
+          ]);
 
-        if (!arabicRes.ok || !lugandaRes.ok || !englishRes.ok) {
-          throw new Error('Failed to fetch Quran data');
+          if (!arabicRes.ok || !lugandaRes.ok || !englishRes.ok) {
+            throw new Error('Failed to fetch Quran data');
+          }
+
+          const [arabicData, lugandaData, englishData]: [FlatArabicVerse[], FlatVerse[], FlatVerse[]] = await Promise.all([
+            arabicRes.json(),
+            lugandaRes.json(),
+            englishRes.json(),
+          ]);
+
+          const lugandaMap = createVerseMap(lugandaData);
+          const englishMap = createVerseMap(englishData);
+          const englishSurahNames = extractEnglishSurahNames(englishData);
+          const arabicBySurah = groupArabicVersesBySurah(arabicData);
+
+          const combinedSurahs: CombinedSurah[] = [];
+          const surahNumbers = Array.from(arabicBySurah.keys()).sort((a, b) => a - b);
+
+          for (const surahNumber of surahNumbers) {
+            const arabicVerses = arabicBySurah.get(surahNumber) || [];
+            if (arabicVerses.length === 0) continue;
+
+            const firstVerse = arabicVerses[0];
+            const englishName = englishSurahNames.get(surahNumber) || `Surah ${surahNumber}`;
+
+            arabicVerses.sort((a, b) => a.ayah_number - b.ayah_number);
+
+            const combinedVerses: CombinedVerse[] = arabicVerses.map((arabicVerse) => {
+              const verseKey = `${surahNumber}:${arabicVerse.ayah_number}`;
+              return {
+                verseNumber: arabicVerse.ayah_number,
+                arabic: arabicVerse.text_content,
+                luganda: lugandaMap.get(verseKey) || '',
+                english: englishMap.get(verseKey) || '',
+              };
+            });
+
+            combinedSurahs.push({
+              id: surahNumber,
+              number: surahNumber,
+              arabicName: firstVerse.surah_name_arabic,
+              englishName: englishName,
+              englishTranslation: '',
+              revelationType: surahNumber <= 86 ? 'Meccan' : 'Medinan',
+              totalVerses: combinedVerses.length,
+              verses: combinedVerses,
+            });
+          }
+
+          cachedData = combinedSurahs;
+          return combinedSurahs;
+        } catch (err) {
+          throw err;
         }
+      })();
+    }
 
-        const [arabicData, lugandaData, englishData]: [FlatArabicVerse[], FlatVerse[], FlatVerse[]] = await Promise.all([
-          arabicRes.json(),
-          lugandaRes.json(),
-          englishRes.json(),
-        ]);
-
-        const lugandaMap = createVerseMap(lugandaData);
-        const englishMap = createVerseMap(englishData);
-        const englishSurahNames = extractEnglishSurahNames(englishData);
-
-        // Group Arabic verses by surah
-        const arabicBySurah = groupArabicVersesBySurah(arabicData);
-
-        // Build combined surahs from grouped Arabic data
-        const combinedSurahs: CombinedSurah[] = [];
-
-        // Sort surah numbers to ensure correct order
-        const surahNumbers = Array.from(arabicBySurah.keys()).sort((a, b) => a - b);
-
-        for (const surahNumber of surahNumbers) {
-          const arabicVerses = arabicBySurah.get(surahNumber) || [];
-          if (arabicVerses.length === 0) continue;
-
-          // const surahInfo = getSurahInfo(surahNumber); // No longer using hardcoded info for names
-          const firstVerse = arabicVerses[0];
-          const englishName = englishSurahNames.get(surahNumber) || `Surah ${surahNumber}`;
-
-          // Sort verses by ayah number
-          arabicVerses.sort((a, b) => a.ayah_number - b.ayah_number);
-
-          const combinedVerses: CombinedVerse[] = arabicVerses.map((arabicVerse) => {
-            const verseKey = `${surahNumber}:${arabicVerse.ayah_number}`;
-            return {
-              verseNumber: arabicVerse.ayah_number,
-              arabic: arabicVerse.text_content,
-              luganda: lugandaMap.get(verseKey) || '',
-              english: englishMap.get(verseKey) || '',
-            };
-          });
-
-          combinedSurahs.push({
-            id: surahNumber,
-            number: surahNumber,
-            arabicName: firstVerse.surah_name_arabic,
-            englishName: englishName,
-            englishTranslation: '', // Removed transliteration dependence, maybe use englishName or empty if not provided separately
-            revelationType: surahNumber <= 86 ? 'Meccan' : 'Medinan', // Simplified
-            totalVerses: combinedVerses.length,
-            verses: combinedVerses,
-          });
-        }
-
-        setSurahs(combinedSurahs);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
+    fetchLoadingPromise
+      .then((data) => {
+        setSurahs(data);
         setLoading(false);
-      }
-    };
+      })
+      .catch((err) => {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+        setLoading(false);
+        fetchLoadingPromise = null; // Reset promise on error so we can try again
+      });
 
-    fetchData();
   }, []);
 
 
