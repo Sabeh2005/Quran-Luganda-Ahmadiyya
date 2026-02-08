@@ -46,7 +46,10 @@ export const highlightMatch = (text: string, searchQuery: string, mode: 'similar
         if (mode === 'exact') {
             // Use Unicode property escapes for more accurate boundaries: 
             // ^ or any character that is NOT a Letter or Mark
-            pattern = `(^|[^\\p{L}\\p{M}])(${pattern})([^\\p{L}\\p{M}]|$)`;
+            // Allow diacritics/marks after the boundary character to handle cases where 
+            // a stop sign or mark appears between the previous word and the target word.
+            // e.g. "Word" + Space + "Mark" + "Target"
+            pattern = `(^|(?:[^\\p{L}\\p{M}])(?:${diacritics})*)(${pattern})(?=[^\\p{L}\\p{M}]|$)`;
         } else {
             pattern = `(${pattern})`;
         }
@@ -54,7 +57,7 @@ export const highlightMatch = (text: string, searchQuery: string, mode: 'similar
     } else {
         const escapedQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         regex = mode === 'exact'
-            ? new RegExp(`(^|[^\\p{L}\\p{M}])(${escapedQuery})([^\\p{L}\\p{M}]|$)`, 'gui')
+            ? new RegExp(`(^|[^\\p{L}\\p{M}])(${escapedQuery})(?=[^\\p{L}\\p{M}]|$)`, 'gui')
             : new RegExp(`(${escapedQuery})`, 'gi');
     }
 
@@ -63,25 +66,28 @@ export const highlightMatch = (text: string, searchQuery: string, mode: 'similar
     if (mode === 'exact') {
         const results: (string | React.JSX.Element)[] = [];
         let i = 0;
+        // Stride is 3: [segment, prefix_group, match_group, next_segment...]
+        // prefix_group is index + 1
+        // match_group is index + 2
         while (i < parts.length) {
-            // Segment before the match sequence
+            // Segment before the match sequence (or the text remaining if no match)
             if (parts[i]) results.push(parts[i]);
 
-            if (i + 1 < parts.length) {
-                // Prefix group (index 1)
+            if (i + 2 < parts.length) {
+                // Prefix group (index 1) - e.g. space or punctuation
                 if (parts[i + 1]) results.push(parts[i + 1]);
 
-                // Match group (index 2)
+                // Match group (index 2) - The actual word to highlight
                 results.push(
                     <mark key={`m-${i}`} className="bg-[#FFD700] text-black rounded px-0.5 font-bold">
                         {parts[i + 2]}
                     </mark>
                 );
 
-                // Suffix group (index 3)
-                if (parts[i + 3]) results.push(parts[i + 3]);
+                // Suffix is no longer captured because of lookahead, 
+                // it remains part of the next segment (parts[i+3] in the next iteration)
             }
-            i += 4;
+            i += 3;
         }
         return results;
     }

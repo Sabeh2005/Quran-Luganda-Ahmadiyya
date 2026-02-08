@@ -1,36 +1,63 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export type ScrollDirection = 'up' | 'down' | null;
 
-export const useScrollDirection = (threshold: number = 10) => {
+export const useScrollDirection = (threshold: number = 50, isPaused: boolean = false) => {
     const [scrollDirection, setScrollDirection] = useState<ScrollDirection>(null);
-    const [lastScrollY, setLastScrollY] = useState(0);
+    const lastScrollY = useRef(0);
+    const mountTime = useRef(Date.now());
 
     useEffect(() => {
+        // Initialize with current scroll position
+        lastScrollY.current = window.scrollY;
+        mountTime.current = Date.now();
+
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
 
-            // Don't hide header when at the very top
-            if (currentScrollY < threshold) {
-                setScrollDirection(null);
-                setLastScrollY(currentScrollY);
+            // Grace period after mount (1 second) to ignore auto-focus scrolls or layout shifts
+            if (Date.now() - mountTime.current < 1000) {
+                lastScrollY.current = currentScrollY;
                 return;
             }
 
-            // Determine scroll direction
-            if (Math.abs(currentScrollY - lastScrollY) > threshold) {
-                if (currentScrollY > lastScrollY) {
+            if (isPaused) {
+                lastScrollY.current = currentScrollY;
+                setScrollDirection('up');
+                return;
+            }
+
+            // Always show header when near the very top (within threshold)
+            if (currentScrollY < threshold) {
+                setScrollDirection(null);
+                lastScrollY.current = currentScrollY;
+                return;
+            }
+
+            // Determine scroll direction based on movement
+            const diff = currentScrollY - lastScrollY.current;
+
+            // Only update if movement exceeds threshold to avoid jitter
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
                     setScrollDirection('down');
                 } else {
                     setScrollDirection('up');
                 }
-                setLastScrollY(currentScrollY);
+                lastScrollY.current = currentScrollY;
             }
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [lastScrollY, threshold]);
+    }, [threshold, isPaused]);
+
+    // Ensure header is visible if we start paused
+    useEffect(() => {
+        if (isPaused) {
+            setScrollDirection('up');
+        }
+    }, [isPaused]);
 
     return scrollDirection;
 };

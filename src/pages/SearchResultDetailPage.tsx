@@ -17,8 +17,9 @@ const SearchResultDetailPage = () => {
     const { searchState } = useQuranStore();
     const { searchVerses, loading } = useQuranData();
     const [settingsOpen, setSettingsOpen] = React.useState(false);
+    const [isAutoScrolling, setIsAutoScrolling] = React.useState(false);
     const verseRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-    const scrollDirection = useScrollDirection();
+    const scrollDirection = useScrollDirection(10, isAutoScrolling);
 
     const surahNumber = parseInt(searchParams.get('surah') || '0');
     const verseNumber = parseInt(searchParams.get('verse') || '0');
@@ -29,14 +30,18 @@ const SearchResultDetailPage = () => {
         searchState.mode
     );
 
+
+
     useEffect(() => {
         if (surahNumber && verseNumber) {
             const key = `${surahNumber}-${verseNumber}`;
+            setIsAutoScrolling(true);
             setTimeout(() => {
                 verseRefs.current[key]?.scrollIntoView({
                     behavior: 'smooth',
-                    block: 'center',
+                    block: 'start',
                 });
+                setTimeout(() => setIsAutoScrolling(false), 2000);
             }, 300);
         }
     }, [surahNumber, verseNumber, results.length]);
@@ -57,6 +62,7 @@ const SearchResultDetailPage = () => {
             </div>
         );
     }
+
 
     const isHeaderHidden = scrollDirection === 'down';
 
@@ -99,7 +105,7 @@ const SearchResultDetailPage = () => {
                             key={key}
                             ref={(el) => { verseRefs.current[key] = el; }}
                             className={cn(
-                                "transition-all duration-500 rounded-xl",
+                                "transition-all duration-500 rounded-xl scroll-mt-20",
                                 isTarget ? "ring-4 ring-primary z-10 relative" : ""
                             )}
                         >

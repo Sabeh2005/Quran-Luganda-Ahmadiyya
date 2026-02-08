@@ -16,11 +16,12 @@ const SurahPage = () => {
   const { surahNumber } = useParams<{ surahNumber: string }>();
   const [searchParams] = useSearchParams();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
   const navigate = useNavigate();
   const { getSurah, loading, error } = useQuranData();
   const { settings, setLastReadPosition } = useQuranStore();
   const verseRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
-  const scrollDirection = useScrollDirection();
+  const scrollDirection = useScrollDirection(10, isAutoScrolling);
 
   const surahNum = parseInt(surahNumber || '1', 10);
   const surah = getSurah(surahNum);
@@ -69,14 +70,22 @@ const SurahPage = () => {
     }
   }, [settings.nightMode, settings.themeColor]);
 
+
+
   // Scroll to target verse
   useEffect(() => {
     if (targetVerse && verseRefs.current[parseInt(targetVerse)]) {
+      // Set auto-scrolling to true to keep header visible
+      setIsAutoScrolling(true);
+
       setTimeout(() => {
         verseRefs.current[parseInt(targetVerse)]?.scrollIntoView({
           behavior: 'smooth',
-          block: 'center',
+          block: 'start',
         });
+
+        // Re-enable header hiding after scroll completes
+        setTimeout(() => setIsAutoScrolling(false), 2000);
       }, 500);
     }
   }, [targetVerse, surah]);
@@ -135,6 +144,8 @@ const SurahPage = () => {
   }
 
   const surahDisplayName = `${surah.englishName} — ${surah.arabicName}`;
+
+
 
   // Determine if header should be hidden based on scroll direction
   const isHeaderHidden = scrollDirection === 'down';
@@ -207,6 +218,7 @@ const SurahPage = () => {
             <div
               key={verse.verseNumber}
               ref={(el) => { verseRefs.current[verse.verseNumber] = el; }}
+              className="scroll-mt-20"
             >
               <VerseCard
                 verse={verse}
