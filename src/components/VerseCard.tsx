@@ -103,7 +103,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
     if (settings.translationDisplay === 'all' || settings.translationDisplay === 'english') {
       text += `\n\n${verse.english}`;
     }
-    text += `\n\n— ${surahName} (${verse.verseNumber})`;
+    text += `\n\n— ${surahName} \u200E(${verse.verseNumber})`;
 
     await navigator.clipboard.writeText(text);
     setCopied(true);
@@ -122,7 +122,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({ verse, surahNumber, surahN
     if (settings.translationDisplay === 'all' || settings.translationDisplay === 'english') {
       text += `\n\n${verse.english}`;
     }
-    text += `\n\n— ${surahName} (${verse.verseNumber})`;
+    text += `\n\n— ${surahName} \u200E(${verse.verseNumber})`;
 
     if (navigator.share) {
       try {

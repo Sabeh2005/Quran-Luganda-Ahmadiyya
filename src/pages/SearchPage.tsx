@@ -41,14 +41,45 @@ export default function SearchPage() {
         inputRef.current?.focus();
     };
 
-    const highlightMatch = (text: string, searchQuery: string) => {
+    const highlightMatch = (text: string, searchQuery: string, mode: 'similar' | 'exact') => {
         if (!searchQuery.trim()) return text;
-        // Simple highlight for now, will improve with Exact match logic later
-        const regex = new RegExp(`(${searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+
+        const escapedQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = mode === 'exact'
+            ? new RegExp(`(^|[^a-zA-Z0-9])(${escapedQuery})([^a-zA-Z0-9]|$)`, 'gi')
+            : new RegExp(`(${escapedQuery})`, 'gi');
+
         const parts = text.split(regex);
+
+        // When using groups in split, the matched groups are included in the array.
+        // For exact mode, we have 3 groups: (prefix)(match)(suffix)
+        if (mode === 'exact') {
+            const results: (string | React.JSX.Element)[] = [];
+            let i = 0;
+            while (i < parts.length) {
+                // Because split with 3 groups returns: [pre-match, group1, group2, group3, post-match, ...]
+                // Every 4th element (starting index 0) is the text between matches
+                results.push(parts[i]);
+                if (i + 1 < parts.length) {
+                    // group1 (prefix)
+                    results.push(parts[i + 1]);
+                    // group2 (the actual match) - HIGHLIGHT THIS
+                    results.push(
+                        <mark key={i} className="bg-[#FFD700] text-black rounded px-1.5 py-0.5 mx-0.5">
+                            {parts[i + 2]}
+                        </mark>
+                    );
+                    // group3 (suffix)
+                    results.push(parts[i + 3]);
+                }
+                i += 4;
+            }
+            return results;
+        }
+
         return parts.map((part, i) =>
             regex.test(part) ? (
-                <mark key={i} className="bg-yellow-300 text-black rounded-sm px-0.5 mx-0.5">
+                <mark key={i} className="bg-[#FFD700] text-black rounded px-1.5 py-0.5 mx-0.5">
                     {part}
                 </mark>
             ) : (
@@ -170,30 +201,25 @@ export default function SearchPage() {
                                 <div
                                     key={`${result.surahNumber}-${result.verseNumber}-${index}`}
                                     onClick={() => navigate(`/surah/${result.surahNumber}?verse=${result.verseNumber}`)}
-                                    className="cursor-pointer group"
+                                    className="cursor-pointer group py-4 border-b last:border-none"
                                 >
-                                    <div className="flex items-baseline gap-2 mb-1">
-                                        <span className="text-primary font-medium whitespace-nowrap text-3xl">
-                                            {result.surahNumber}:{result.verseNumber}
-                                        </span>
+                                    <div className="flex flex-col gap-2">
+                                        <div className="text-[#327D3D] font-bold text-3xl">
+                                            Surah {result.surahName.split(' — ')[0]} {result.surahNumber}:{result.verseNumber}
+                                        </div>
 
-                                        {/* 
-                           The screenshot shows the text inline with the verse number.
-                           e.g. "2:214 aur unhen halla [daala] gaya..."
-                           I need to display the relevant text snippet based on the match.
-                        */}
-                                        <span className={cn(
+                                        <div className={cn(
                                             "text-3xl leading-relaxed text-foreground/90",
                                             result.matchType === 'arabic' ? "font-noorehuda text-right w-full" : ""
                                         )} dir={result.matchType === 'arabic' ? "rtl" : "ltr"}>
                                             {result.matchType === 'arabic' ? (
-                                                highlightMatch(result.arabic, debouncedQuery)
+                                                highlightMatch(result.arabic, debouncedQuery, searchMode)
                                             ) : result.matchType === 'luganda' ? (
-                                                highlightMatch(result.luganda, debouncedQuery)
+                                                highlightMatch(result.luganda, debouncedQuery, searchMode)
                                             ) : (
-                                                highlightMatch(result.english, debouncedQuery)
+                                                highlightMatch(result.english, debouncedQuery, searchMode)
                                             )}
-                                        </span>
+                                        </div>
                                     </div>
                                 </div>
                             ))}

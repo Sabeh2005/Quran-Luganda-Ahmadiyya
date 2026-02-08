@@ -174,8 +174,9 @@ export const useQuranData = (): UseQuranDataReturn => {
     const normalizedQuery = normalizeArabic(query);
 
     // Regex for exact match (word boundary check) for non-Arabic
-    // For Arabic, we'll just check for exact substring for now, as word boundaries are trickier with diacritics/morphology
-    const exactRegex = new RegExp(`\\b${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+    // We use a more robust check for whole words that works better with various characters
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const exactRegex = new RegExp(`(^|[^a-zA-Z0-9])(${escapedQuery})([^a-zA-Z0-9]|$)`, 'i');
 
     surahs.forEach((surah) => {
       surah.verses.forEach((verse) => {
