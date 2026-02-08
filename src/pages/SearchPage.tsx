@@ -1,18 +1,21 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Search, X, Loader2 } from 'lucide-react';
+import { Search, X, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useQuranData } from '@/hooks/useQuranData';
+import { useQuranStore } from '@/store/quranStore';
 import { cn } from '@/lib/utils';
+import backIcon from '@/assets/back-icon.svg';
 
 export default function SearchPage() {
     const navigate = useNavigate();
-    const [query, setQuery] = useState('');
-    const [debouncedQuery, setDebouncedQuery] = useState('');
-    const [selectedLanguage, setSelectedLanguage] = useState<'all' | 'arabic' | 'luganda' | 'english'>('all');
-    const [searchMode, setSearchMode] = useState<'similar' | 'exact'>('exact');
+    const { searchState, setSearchState } = useQuranStore();
+    const [query, setQuery] = useState(searchState.query);
+    const [debouncedQuery, setDebouncedQuery] = useState(searchState.query);
+    const [selectedLanguage, setSelectedLanguage] = useState(searchState.language);
+    const [searchMode, setSearchMode] = useState(searchState.mode);
     const { searchVerses, loading } = useQuranData();
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -25,13 +28,13 @@ export default function SearchPage() {
     useEffect(() => {
         const timer = setTimeout(() => {
             setDebouncedQuery(query);
+            setSearchState({ query, language: selectedLanguage, mode: searchMode });
         }, 300);
         return () => clearTimeout(timer);
-    }, [query]);
+    }, [query, selectedLanguage, searchMode, setSearchState]);
 
     const results = useMemo(() => {
         if (!debouncedQuery.trim()) return [];
-        // Passing searchMode will be enabled after updating the hook
         return searchVerses(debouncedQuery, selectedLanguage, searchMode);
     }, [debouncedQuery, searchVerses, selectedLanguage, searchMode]);
 
@@ -91,14 +94,14 @@ export default function SearchPage() {
     return (
         <div className="min-h-screen bg-background flex flex-col">
             {/* Header */}
-            <div className="bg-primary p-4 flex items-center shadow-sm text-primary-foreground">
+            <div className="bg-primary px-0 py-4 flex items-center shadow-sm text-primary-foreground">
                 <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => navigate(-1)}
                     className="mr-2 hover:bg-primary-foreground/20 hover:text-primary-foreground text-primary-foreground"
                 >
-                    <ArrowLeft className="h-6 w-6" />
+                    <img src={backIcon} alt="Back" className="h-6 w-6 brightness-0 invert" />
                 </Button>
                 <h1 className="text-3xl font-[1000] flex-1 text-center pr-8">
                     {results.length > 0 ? `${results.length} Results` : 'Search Quran'}
@@ -148,7 +151,10 @@ export default function SearchPage() {
                         {(['arabic', 'luganda', 'english'] as const).map((lang) => (
                             <button
                                 key={lang}
-                                onClick={() => setSelectedLanguage(lang)}
+                                onClick={() => {
+                                    setSelectedLanguage(lang);
+                                    setSearchState({ language: lang });
+                                }}
                                 className={cn(
                                     "px-4 py-1.5 rounded-full text-sm font-medium transition-colors border capitalize",
                                     selectedLanguage === lang
@@ -164,7 +170,10 @@ export default function SearchPage() {
                     {/* Tabs for Similar vs Exact */}
                     <div className="flex gap-[8px]">
                         <button
-                            onClick={() => setSearchMode('exact')}
+                            onClick={() => {
+                                setSearchMode('exact');
+                                setSearchState({ mode: 'exact' });
+                            }}
                             className={cn(
                                 "px-4 py-1.5 rounded-full text-sm font-medium transition-colors border",
                                 searchMode === 'exact'
@@ -175,7 +184,10 @@ export default function SearchPage() {
                             Exact
                         </button>
                         <button
-                            onClick={() => setSearchMode('similar')}
+                            onClick={() => {
+                                setSearchMode('similar');
+                                setSearchState({ mode: 'similar' });
+                            }}
                             className={cn(
                                 "px-4 py-1.5 rounded-full text-sm font-medium transition-colors border",
                                 searchMode === 'similar'
@@ -200,7 +212,7 @@ export default function SearchPage() {
                             {results.map((result, index) => (
                                 <div
                                     key={`${result.surahNumber}-${result.verseNumber}-${index}`}
-                                    onClick={() => navigate(`/surah/${result.surahNumber}?verse=${result.verseNumber}`)}
+                                    onClick={() => navigate(`/search/results?surah=${result.surahNumber}&verse=${result.verseNumber}`)}
                                     className="cursor-pointer group py-4 border-b last:border-none"
                                 >
                                     <div className="flex flex-col gap-2">

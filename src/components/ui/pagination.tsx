@@ -1,5 +1,6 @@
 import * as React from "react";
-import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
+import backIcon from "@/assets/back-icon.svg";
 
 import { cn } from "@/lib/utils";
 import { ButtonProps, buttonVariants } from "@/components/ui/button";
@@ -48,7 +49,7 @@ PaginationLink.displayName = "PaginationLink";
 
 const PaginationPrevious = ({ className, ...props }: React.ComponentProps<typeof PaginationLink>) => (
   <PaginationLink aria-label="Go to previous page" size="default" className={cn("gap-1 pl-2.5", className)} {...props}>
-    <ChevronLeft className="h-4 w-4" />
+    <img src={backIcon} alt="Previous" className="h-6 w-6 brightness-0 invert" />
     <span>Previous</span>
   </PaginationLink>
 );
@@ -57,7 +58,7 @@ PaginationPrevious.displayName = "PaginationPrevious";
 const PaginationNext = ({ className, ...props }: React.ComponentProps<typeof PaginationLink>) => (
   <PaginationLink aria-label="Go to next page" size="default" className={cn("gap-1 pr-2.5", className)} {...props}>
     <span>Next</span>
-    <ChevronRight className="h-4 w-4" />
+    <img src={backIcon} alt="Next" className="h-6 w-6 brightness-0 invert rotate-180" />
   </PaginationLink>
 );
 PaginationNext.displayName = "PaginationNext";

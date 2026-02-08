@@ -211,10 +211,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
   return (
     <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm">
       <div className="fixed right-0 top-0 h-full w-full max-w-md bg-card border-l border-border shadow-xl animate-slide-in-right flex flex-col">
-        <div className="sticky top-0 bg-card z-10 p-4 border-b border-border flex items-center justify-between">
-          <h2 className="text-xl font-semibold">Settings</h2>
+        <div className="sticky top-0 bg-card z-10 px-0 py-4 border-b border-border flex items-center justify-between">
+          <h2 className="text-xl font-semibold px-4">Settings</h2>
           <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="h-5 w-5" />
+            <X className="h-6 w-6" />
           </Button>
         </div>
 

@@ -1,12 +1,13 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Download } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePWAInstall } from '@/hooks/usePWAInstall';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 import alQuranCalligraphy from '@/assets/al-quran-calligraphy.svg';
 import settingsIcon from '@/assets/settings-icon.svg';
 import menuIcon from '@/assets/menu-icon.svg';
+import backIcon from '@/assets/back-icon.svg';
 
 interface HeaderProps {
   title?: string;
@@ -38,8 +39,8 @@ export const Header: React.FC<HeaderProps> = ({
       className={`sticky top-0 z-40 w-full transition-transform duration-300 ${isHeaderHidden ? '-translate-y-full' : 'translate-y-0'
         }`}
     >
-      <div className={`header-gradient px-6 shadow-lg transition-all duration-300 ${isHomePage ? 'py-4' : 'py-6'}`}>
-        <div className={`container mx-auto ${isHomePage ? 'flex justify-center items-center relative min-h-[50px]' : 'grid grid-cols-[1fr_auto_1fr] items-center'}`}>
+      <div className={`header-gradient px-0 shadow-lg transition-all duration-300 ${isHomePage ? 'py-4' : 'py-6'}`}>
+        <div className={`w-full ${isHomePage ? 'flex justify-center items-center relative min-h-[50px]' : 'grid grid-cols-[1fr_auto_1fr] items-center'}`}>
           {/* Left Side: Back Button or Menu Icon */}
           <div className={`${isHomePage ? 'absolute left-0 top-1/2 -translate-y-1/2' : 'col-start-1'} flex justify-start items-center gap-3 z-20 text-left min-w-0`}>
             {showBack ? (
@@ -49,7 +50,7 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={() => navigate(-1)}
                 className="text-primary-foreground hover:bg-primary-foreground/20"
               >
-                <ArrowLeft className="h-5 w-5" />
+                <img src={backIcon} alt="Back" className="h-6 w-6 brightness-0 invert" />
               </Button>
             ) : isHomePage && onMenuClick ? (
               <Button

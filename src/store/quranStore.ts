@@ -44,6 +44,12 @@ interface QuranStore {
 
   // Last read position
   lastReadPosition: { surahNumber: number; verseNumber: number } | null;
+  searchState: {
+    query: string;
+    language: 'all' | 'arabic' | 'luganda' | 'english';
+    mode: 'similar' | 'exact';
+  };
+  setSearchState: (state: Partial<QuranStore['searchState']>) => void;
   setLastReadPosition: (surahNumber: number, verseNumber: number) => void;
 }
 
@@ -204,6 +210,14 @@ export const useQuranStore = create<QuranStore>()(
 
       lastReadPosition: null,
 
+      searchState: {
+        query: '',
+        language: 'all',
+        mode: 'exact',
+      },
+      setSearchState: (state) => set((s) => ({
+        searchState: { ...s.searchState, ...state }
+      })),
       setLastReadPosition: (surahNumber, verseNumber) => {
         set({ lastReadPosition: { surahNumber, verseNumber } });
       },

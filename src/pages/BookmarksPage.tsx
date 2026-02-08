@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuranStore } from '@/store/quranStore';
 import { useQuranData } from '@/hooks/useQuranData';
-import { ArrowLeft } from 'lucide-react';
+import backIcon from '@/assets/back-icon.svg';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookmarkItem } from '@/components/bookmarks/BookmarkItem';
@@ -77,15 +77,15 @@ const BookmarksPage = () => {
         return (
             <div className="min-h-screen bg-background">
                 {/* Collection Detail Header */}
-                <div className="sticky top-0 z-40 w-full header-gradient shadow-md p-4 flex items-center gap-4 text-white">
+                <div className="sticky top-0 z-40 w-full header-gradient shadow-md px-0 py-4 flex items-center gap-4 text-white">
                     <Button variant="ghost" size="icon" onClick={() => setViewingCollection(null)} className="text-white hover:bg-white/20">
-                        <ArrowLeft className="w-6 h-6" />
+                        <img src={backIcon} alt="Back" className="w-6 h-6 brightness-0 invert" />
                     </Button>
                     <h1 className="text-xl font-bold flex-1">{viewingCollection.name}</h1>
                     {/* Maybe add context menu here too? */}
                 </div>
 
-                <div className="container mx-auto p-4 space-y-4">
+                <div className="w-full p-2 space-y-2">
                     {collectionBookmarks.length === 0 ? (
                         <div className="text-center py-10 text-muted-foreground">Empty collection</div>
                     ) : (
@@ -103,10 +103,10 @@ const BookmarksPage = () => {
     return (
         <div className="min-h-screen bg-background flex flex-col">
             {/* Main Header */}
-            <div className="sticky top-0 z-40 w-full header-gradient shadow-md p-4 flex items-center justify-between text-white">
+            <div className="sticky top-0 z-40 w-full header-gradient shadow-md px-0 py-4 flex items-center justify-between text-white">
                 <div className="flex items-center gap-3">
                     <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-white hover:bg-white/20">
-                        <ArrowLeft className="w-6 h-6" />
+                        <img src={backIcon} alt="Back" className="w-6 h-6 brightness-0 invert" />
                     </Button>
                     <h1 className="text-3xl font-bold">Bookmarks</h1>
                 </div>
@@ -137,7 +137,7 @@ const BookmarksPage = () => {
                 </TabsList>
 
                 <div className="flex-1 bg-gray-50 dark:bg-background">
-                    <TabsContent value="single" className="p-4 mt-0 space-y-4">
+                    <TabsContent value="single" className="p-2 mt-0 space-y-2">
                         {bookmarks.length === 0 ? (
                             <div className="text-center py-20 text-muted-foreground">
                                 No single bookmarks

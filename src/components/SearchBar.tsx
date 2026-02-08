@@ -3,11 +3,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { useQuranStore } from '@/store/quranStore';
 
 export const SearchBar: React.FC = () => {
   const navigate = useNavigate();
 
+  const { setSearchState } = useQuranStore();
+
   const handleFocus = () => {
+    setSearchState({ query: '' });
     navigate('/search');
   };
 

@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { Loader2, BookOpen, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
+import { Loader2, BookOpen } from 'lucide-react';
 import { VerseCard } from '@/components/VerseCard';
 import { SettingsPanel } from '@/components/SettingsPanel';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import settingsIcon from '@/assets/settings-icon.svg';
+import backIcon from '@/assets/back-icon.svg';
 
 import { useQuranData } from '@/hooks/useQuranData';
 import { useQuranStore } from '@/store/quranStore';
@@ -145,15 +146,15 @@ const SurahPage = () => {
         className={`sticky top-0 z-40 w-full transition-transform duration-300 ${isHeaderHidden ? '-translate-y-full' : 'translate-y-0'
           }`}
       >
-        <div className="header-gradient px-4 py-4 shadow-lg">
-          <div className="container mx-auto flex items-center justify-between">
+        <div className="header-gradient px-0 py-4 shadow-lg">
+          <div className="flex items-center justify-between px-0">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => navigate(-1)}
               className="text-primary-foreground hover:bg-primary-foreground/20"
             >
-              <ArrowLeft className="h-5 w-5" />
+              <img src={backIcon} alt="Back" className="h-6 w-6 brightness-0 invert" />
             </Button>
             <div className="text-center">
               <h1 className="text-lg font-bold text-primary-foreground">{surahDisplayName}</h1>
@@ -223,7 +224,7 @@ const SurahPage = () => {
               onClick={goToPreviousSurah}
               className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
             >
-              <ChevronLeft className="h-5 w-5" />
+              <img src={backIcon} alt="Previous" className="h-6 w-6 brightness-0 invert" />
               <span>Previous Surah</span>
             </Button>
           ) : (
@@ -236,7 +237,7 @@ const SurahPage = () => {
               className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
             >
               <span>Next Surah</span>
-              <ChevronRight className="h-5 w-5" />
+              <img src={backIcon} alt="Next" className="h-6 w-6 brightness-0 invert rotate-180" />
             </Button>
           ) : (
             <div></div>
