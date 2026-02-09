@@ -82,13 +82,17 @@ const BookmarksPage = () => {
             <div className="min-h-screen bg-background">
                 {/* Collection Detail Header */}
                 <header className={cn(
-                    "sticky top-0 z-40 w-full header-gradient shadow-md px-0 py-4 flex items-center gap-4 text-white transition-transform duration-300",
+                    "sticky top-0 z-40 w-full h-20 header-gradient shadow-md px-0 flex items-center text-white transition-transform duration-300",
                     isHeaderHidden ? "-translate-y-full" : "translate-y-0"
                 )}>
-                    <Button variant="ghost" size="icon" onClick={() => setViewingCollection(null)} className="text-white hover:bg-white/20">
-                        <img src={backIcon} alt="Back" className="w-6 h-6 brightness-0 invert" />
-                    </Button>
-                    <h1 className="text-[30px] font-bold flex-1">{viewingCollection.name}</h1>
+                    <div className="flex items-center w-full px-0 relative h-full">
+                        <Button variant="ghost" size="icon" onClick={() => setViewingCollection(null)} className="text-white hover:bg-white/20 z-10">
+                            <img src={backIcon} alt="Back" className="w-6 h-6 brightness-0 invert" />
+                        </Button>
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <h1 className="text-3xl font-bold text-center px-12">{viewingCollection.name}</h1>
+                        </div>
+                    </div>
                 </header>
 
                 <div className="w-full space-y-2">
@@ -110,22 +114,26 @@ const BookmarksPage = () => {
         <div className="min-h-screen bg-background flex flex-col">
             {/* Main Header */}
             <header className={cn(
-                "sticky top-0 z-40 w-full header-gradient shadow-md px-0 py-4 flex items-center justify-between text-white transition-transform duration-300",
+                "sticky top-0 z-40 w-full h-20 header-gradient shadow-md px-0 flex items-center text-white transition-transform duration-300",
                 isHeaderHidden ? "-translate-y-full" : "translate-y-0"
             )}>
-                <div className="flex items-center gap-3">
-                    <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-white hover:bg-white/20">
+                <div className="flex items-center justify-between w-full px-0 relative h-full">
+                    <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-white hover:bg-white/20 z-10">
                         <img src={backIcon} alt="Back" className="w-6 h-6 brightness-0 invert" />
                     </Button>
-                    <h1 className="text-3xl font-bold">Bookmarks</h1>
+
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <h1 className="text-3xl font-bold text-center">Bookmarks</h1>
+                    </div>
+
+                    <Button
+                        variant="ghost"
+                        className="text-white font-semibold uppercase hover:bg-white/20 z-10"
+                        onClick={handleClearAll}
+                    >
+                        CLEAR ALL
+                    </Button>
                 </div>
-                <Button
-                    variant="ghost"
-                    className="text-white font-semibold uppercase hover:bg-white/20"
-                    onClick={handleClearAll}
-                >
-                    CLEAR ALL
-                </Button>
             </header>
 
             {/* Tabs */}

@@ -54,20 +54,24 @@ export default function SearchPage() {
         <div className="min-h-screen bg-background flex flex-col">
             {/* Header */}
             <div className={cn(
-                "bg-primary px-0 py-4 flex items-center shadow-sm text-primary-foreground sticky top-0 z-40 w-full transition-transform duration-300",
+                "bg-primary px-0 h-20 flex items-center shadow-sm text-primary-foreground sticky top-0 z-40 w-full transition-transform duration-300",
                 isHeaderHidden ? "-translate-y-full" : "translate-y-0"
             )}>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => navigate(-1)}
-                    className="mr-2 hover:bg-primary-foreground/20 hover:text-primary-foreground text-primary-foreground"
-                >
-                    <img src={backIcon} alt="Back" className="h-6 w-6 brightness-0 invert" />
-                </Button>
-                <h1 className="text-3xl font-[1000] flex-1 text-center pr-8">
-                    {results.length > 0 ? `${results.length} Results` : 'Search Quran'}
-                </h1>
+                <div className="flex items-center w-full px-0 relative h-full">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => navigate(-1)}
+                        className="hover:bg-primary-foreground/20 hover:text-primary-foreground text-primary-foreground z-10"
+                    >
+                        <img src={backIcon} alt="Back" className="h-6 w-6 brightness-0 invert" />
+                    </Button>
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <h1 className="text-3xl font-[1000] text-center">
+                            {results.length > 0 ? `${results.length} Results` : 'Search Quran'}
+                        </h1>
+                    </div>
+                </div>
             </div>
 
             <div className="p-2 space-y-2 flex-1 flex flex-col">

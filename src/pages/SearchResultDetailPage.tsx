@@ -69,26 +69,30 @@ const SearchResultDetailPage = () => {
     return (
         <div className="min-h-screen bg-background pb-10">
             <header className={cn(
-                "sticky top-0 z-40 w-full bg-primary px-0 py-4 shadow-sm text-primary-foreground transition-transform duration-300",
+                "sticky top-0 z-40 w-full h-20 bg-primary px-0 shadow-sm text-primary-foreground transition-transform duration-300",
                 isHeaderHidden ? "-translate-y-full" : "translate-y-0"
             )}>
-                <div className="flex w-full items-center justify-between">
+                <div className="flex w-full items-center justify-between relative h-full">
                     <Button
                         variant="ghost"
                         size="icon"
                         onClick={() => navigate(-1)}
-                        className="text-primary-foreground hover:bg-primary-foreground/20"
+                        className="text-primary-foreground hover:bg-primary-foreground/20 z-10"
                     >
                         <img src={backIcon} alt="Back" className="h-6 w-6 brightness-0 invert" />
                     </Button>
-                    <h1 className="text-3xl font-[1000] text-primary-foreground flex-1 text-center">
-                        {results.length} Results
-                    </h1>
+
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <h1 className="text-3xl font-[1000] text-primary-foreground text-center">
+                            {results.length} Results
+                        </h1>
+                    </div>
+
                     <Button
                         variant="ghost"
                         size="icon"
                         onClick={() => setSettingsOpen(true)}
-                        className="text-primary-foreground hover:bg-primary-foreground/20"
+                        className="text-primary-foreground hover:bg-primary-foreground/20 z-10"
                     >
                         <img src={settingsIcon} alt="Settings" className="h-6 w-6 brightness-0 invert" />
                     </Button>
@@ -105,7 +109,7 @@ const SearchResultDetailPage = () => {
                             key={key}
                             ref={(el) => { verseRefs.current[key] = el; }}
                             className={cn(
-                                "transition-all duration-500 rounded-xl scroll-mt-20",
+                                "transition-all duration-500 rounded-xl scroll-mt-[88px]",
                                 isTarget ? "ring-4 ring-primary z-10 relative" : ""
                             )}
                         >

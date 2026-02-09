@@ -218,7 +218,7 @@ const SurahPage = () => {
             <div
               key={verse.verseNumber}
               ref={(el) => { verseRefs.current[verse.verseNumber] = el; }}
-              className="scroll-mt-20"
+              className="scroll-mt-[88px]"
             >
               <VerseCard
                 verse={verse}
