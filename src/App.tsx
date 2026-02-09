@@ -43,10 +43,6 @@ const App = () => {
       'theme-red',
       'theme-teal',
       'theme-indigo',
-      'theme-pure-black',
-      'theme-pure-white',
-      'theme-ivory-creme',
-      'theme-bright-creme',
       'theme-deep-sea-green',
       'theme-forest'
     );
