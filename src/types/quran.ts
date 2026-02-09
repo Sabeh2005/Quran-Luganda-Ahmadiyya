@@ -21,9 +21,7 @@ export interface CombinedVerse {
   arabic: string;
   normalizedArabic: string;
   luganda: string;
-  lowercasedLuganda: string;
   english: string;
-  lowercasedEnglish: string;
 }
 
 export interface CombinedSurah {

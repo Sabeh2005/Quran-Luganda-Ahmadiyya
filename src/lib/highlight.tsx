@@ -10,13 +10,6 @@ export const normalizeArabic = (text: string): string => {
         .replace(/[\u0629]/g, '\u0647'); // Te Marbuta -> He
 };
 
-export const normalizeText = (text: string): string => {
-    return text
-        .toLowerCase()
-        .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'") // Apostrophes
-        .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"'); // Quotes
-};
-
 export const highlightMatch = (text: string, searchQuery: string, mode: 'similar' | 'exact') => {
     if (!searchQuery.trim()) return text;
 
@@ -62,13 +55,7 @@ export const highlightMatch = (text: string, searchQuery: string, mode: 'similar
         }
         regex = new RegExp(pattern, 'gui');
     } else {
-        // Non-Arabic: handle quotes/apostrophes gracefully in search
-        const normalizedQuery = normalizeText(searchQuery);
-        const escapedQuery = normalizedQuery
-            .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-            .replace(/'/g, "['\u2018\u2019\u201A\u201B\u2032\u2035]")
-            .replace(/"/g, '["\u201C\u201D\u201E\u201F\u2033\u2036]');
-
+        const escapedQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         regex = mode === 'exact'
             ? new RegExp(`(^|[^\\p{L}\\p{M}])(${escapedQuery})(?=[^\\p{L}\\p{M}]|$)`, 'gui')
             : new RegExp(`(${escapedQuery})`, 'gi');
