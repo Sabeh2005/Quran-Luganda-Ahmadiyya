@@ -10,6 +10,54 @@ export const normalizeArabic = (text: string): string => {
         .replace(/[\u0629]/g, '\u0647'); // Te Marbuta -> He
 };
 
+/**
+ * Normalizes English and Luganda text for fuzzy searching:
+ * 1. Converts to lowercase
+ * 2. Removes diacritics (e.g., ó -> o, ñ -> n)
+ * 3. Maps Luganda 'ŋ' to 'n' for easier searching
+ */
+/**
+ * Normalizes English and Luganda text for fuzzy searching:
+ * 1. Converts to lowercase
+ * 2. Removes diacritics (e.g., ó -> o, ñ -> n)
+ * 3. Maps Luganda 'ŋ' to 'n' for easier searching
+ */
+export const normalizeText = (text: string): string => {
+    return text
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+        .replace(/ŋ/g, 'n') // Map Luganda specialized character
+        .replace(/[^a-z0-9 ]/g, ' ') // Replace punctuation with space
+        .replace(/\s+/g, ' ') // Collapse spaces
+        .trim();
+};
+
+/**
+ * Generates an accent-insensitive and 'ŋ'-aware regex pattern for a Latin string
+ */
+const getFuzzyLatinPattern = (text: string): string => {
+    const chars: { [key: string]: string } = {
+        'a': '[aàáâãäå]',
+        'e': '[eèéêë]',
+        'i': '[iìíîï]',
+        'o': '[oòóôõöø]',
+        'u': '[uùúûü]',
+        'n': '[nñŋ]',
+        'c': '[cç]',
+        's': '[sśš]',
+        'z': '[zźž]',
+    };
+
+    return text
+        .split('')
+        .map(char => {
+            const lower = char.toLowerCase();
+            return chars[lower] || lower.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        })
+        .join('');
+};
+
 export const highlightMatch = (text: string, searchQuery: string, mode: 'similar' | 'exact') => {
     if (!searchQuery.trim()) return text;
 
@@ -55,10 +103,22 @@ export const highlightMatch = (text: string, searchQuery: string, mode: 'similar
         }
         regex = new RegExp(pattern, 'gui');
     } else {
-        const escapedQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        regex = mode === 'exact'
-            ? new RegExp(`(^|[^\\p{L}\\p{M}])(${escapedQuery})(?=[^\\p{L}\\p{M}]|$)`, 'gui')
-            : new RegExp(`(${escapedQuery})`, 'gi');
+        const normalizedQuery = normalizeText(searchQuery);
+        const words = normalizedQuery.split(' ').filter(w => w.length > 0);
+
+        if (words.length === 0) return text;
+
+        const patterns = words.map(word => getFuzzyLatinPattern(word));
+
+        if (mode === 'exact') {
+            // Unify all words into a single match group to prevent stride-3 logic errors
+            const combinedPattern = patterns.join('|');
+            const pattern = `(^|[^\\p{L}\\p{M}])(${combinedPattern})(?=[^\\p{L}\\p{M}]|$)`;
+            regex = new RegExp(pattern, 'gui');
+        } else {
+            const pattern = `(${patterns.join('|')})`;
+            regex = new RegExp(pattern, 'gi');
+        }
     }
 
     const parts = text.split(regex);
@@ -66,26 +126,21 @@ export const highlightMatch = (text: string, searchQuery: string, mode: 'similar
     if (mode === 'exact') {
         const results: (string | React.JSX.Element)[] = [];
         let i = 0;
-        // Stride is 3: [segment, prefix_group, match_group, next_segment...]
-        // prefix_group is index + 1
-        // match_group is index + 2
+        // Stride is exactly 3: [segmentBefore, prefixBoundary, match, segmentAfter...]
         while (i < parts.length) {
-            // Segment before the match sequence (or the text remaining if no match)
+            // Segment before the match sequence
             if (parts[i]) results.push(parts[i]);
 
             if (i + 2 < parts.length) {
-                // Prefix group (index 1) - e.g. space or punctuation
+                // Prefix group (e.g. space or punctuation) - keep it unhighlighted
                 if (parts[i + 1]) results.push(parts[i + 1]);
 
-                // Match group (index 2) - The actual word to highlight
+                // Match group - apply highlight
                 results.push(
                     <mark key={`m-${i}`} className="bg-[#FFD700] text-black rounded px-0.5 font-bold">
                         {parts[i + 2]}
                     </mark>
                 );
-
-                // Suffix is no longer captured because of lookahead, 
-                // it remains part of the next segment (parts[i+3] in the next iteration)
             }
             i += 3;
         }

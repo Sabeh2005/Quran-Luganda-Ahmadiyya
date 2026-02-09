@@ -198,20 +198,23 @@ export default function SearchPage() {
                                 <div
                                     key={`${result.surahNumber}-${result.verseNumber}-${index}`}
                                     onClick={() => navigate(`/search/results?surah=${result.surahNumber}&verse=${result.verseNumber}`)}
-                                    className="cursor-pointer group py-4 border-b last:border-none"
+                                    className="cursor-pointer group py-3 border-b border-border/40 last:border-none"
                                 >
-                                    <div className="flex flex-col gap-2">
-                                        <div className="text-[#327D3D] font-bold text-3xl">
-                                            Surah {result.surahName.split(' — ')[0]} {result.surahNumber}:{result.verseNumber}
+                                    <div className="flex flex-col gap-1">
+                                        <div className="text-primary font-bold text-xl">
+                                            {result.surahName.split(' — ')[0]} {result.surahNumber}:{result.verseNumber}
                                         </div>
 
                                         <div className={cn(
-                                            "text-3xl leading-relaxed text-foreground/90",
+                                            "text-2xl leading-relaxed text-foreground/90",
                                             result.matchType === 'arabic' ? "font-noorehuda text-right w-full" : ""
                                         )} dir={result.matchType === 'arabic' ? "rtl" : "ltr"}>
+                                            {result.matchType === 'surah' && (
+                                                <span className="text-xs font-bold bg-primary/10 text-primary px-2 py-0.5 rounded mr-2 uppercase tracking-wider">Chapter</span>
+                                            )}
                                             {result.matchType === 'arabic' ? (
                                                 highlightMatch(result.arabic, debouncedQuery, searchMode)
-                                            ) : result.matchType === 'luganda' ? (
+                                            ) : (result.matchType === 'luganda' || result.matchType === 'surah' && selectedLanguage === 'luganda') ? (
                                                 highlightMatch(result.luganda, debouncedQuery, searchMode)
                                             ) : (
                                                 highlightMatch(result.english, debouncedQuery, searchMode)

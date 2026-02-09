@@ -17,11 +17,13 @@ export interface QuranData {
 }
 
 export interface CombinedVerse {
-  verseNumber: number;
+  verseNumber: number,
   arabic: string;
   normalizedArabic: string;
   luganda: string;
+  normalizedLuganda: string;
   english: string;
+  normalizedEnglish: string;
 }
 
 export interface CombinedSurah {
@@ -87,5 +89,5 @@ export interface SearchResult {
   arabic: string;
   luganda: string;
   english: string;
-  matchType: 'arabic' | 'luganda' | 'english';
+  matchType: 'arabic' | 'luganda' | 'english' | 'surah';
 }

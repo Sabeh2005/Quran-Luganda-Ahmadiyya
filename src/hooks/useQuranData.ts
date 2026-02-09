@@ -65,12 +65,15 @@ interface SearchResult {
   surahName: string;
   verseNumber: number;
   arabic: string;
+  normalizedArabic: string;
   luganda: string;
+  normalizedLuganda: string;
   english: string;
-  matchType: 'arabic' | 'luganda' | 'english';
+  normalizedEnglish: string;
+  matchType: 'arabic' | 'luganda' | 'english' | 'surah';
 }
 
-import { normalizeArabic } from '@/lib/highlight';
+import { normalizeArabic, normalizeText } from '@/lib/highlight';
 
 
 
@@ -128,12 +131,17 @@ export const useQuranData = (): UseQuranDataReturn => {
             const combinedVerses: CombinedVerse[] = arabicVerses.map((arabicVerse) => {
               const verseKey = `${surahNumber}:${arabicVerse.ayah_number}`;
               const arabicText = arabicVerse.text_content;
+              const lugandaText = lugandaMap.get(verseKey) || '';
+              const englishText = englishMap.get(verseKey) || '';
+
               return {
                 verseNumber: arabicVerse.ayah_number,
                 arabic: arabicText,
                 normalizedArabic: normalizeArabic(arabicText),
-                luganda: lugandaMap.get(verseKey) || '',
-                english: englishMap.get(verseKey) || '',
+                luganda: lugandaText,
+                normalizedLuganda: normalizeText(lugandaText),
+                english: englishText,
+                normalizedEnglish: normalizeText(englishText),
               };
             });
 
@@ -176,28 +184,46 @@ export const useQuranData = (): UseQuranDataReturn => {
   };
 
   const searchVerses = (query: string, language: 'all' | 'arabic' | 'luganda' | 'english' = 'all', mode: 'similar' | 'exact' = 'similar'): SearchResult[] => {
-    if (!query.trim()) return [];
+    const trimmedQuery = query.trim();
+    if (!trimmedQuery) return [];
 
     const results: SearchResult[] = [];
-    const lowerQuery = query.toLowerCase();
-    const normalizedQuery = normalizeArabic(query);
 
-    // Regex for exact match (word boundary check) for non-Arabic
-    // We use a more robust check for whole words that works better with various characters
-    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const exactRegex = new RegExp(`(^|[^\\p{L}\\p{M}])(${escapedQuery})([^\\p{L}\\p{M}]|$)`, 'ui');
+    // 1. Prepare normalized query versions
+    const normalizedArabicQuery = normalizeArabic(trimmedQuery);
+    const normalizedTextQuery = normalizeText(trimmedQuery);
+    const queryWords = normalizedTextQuery.split(' ').filter(word => word.length > 0);
 
-    // Arabic exact regex (on normalized text)
-    const escapedArabicQuery = normalizedQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // 2. Exact match regexes for when 'exact' mode is on
+    const escapedArabicQuery = normalizedArabicQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const exactArabicRegex = new RegExp(`(^|[^\\p{L}\\p{M}])(${escapedArabicQuery})([^\\p{L}\\p{M}]|$)`, 'ui');
 
+    // English/Luganda exact regexes (one for each word)
+    const exactWordRegexes = queryWords.map(word => {
+      const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return new RegExp(`(^|[^\\p{L}\\p{M}])(${escaped})([^\\p{L}\\p{M}]|$)`, 'ui');
+    });
+
     surahs.forEach((surah) => {
+      // Check if Surah name matches (Surah Jump improvement)
+      let surahMatches = false;
+      if (language === 'all') {
+        const normSurahEng = normalizeText(surah.englishName);
+        if (normSurahEng.includes(normalizedTextQuery)) surahMatches = true;
+      }
+
       surah.verses.forEach((verse) => {
-        let matchType: 'arabic' | 'luganda' | 'english' | null = null;
+        let matchType: 'arabic' | 'luganda' | 'english' | 'surah' | null = null;
         let isMatch = false;
 
-        // Check Arabic
-        if ((language === 'all' || language === 'arabic')) {
+        // A. Surah Name Priority
+        if (surahMatches && verse.verseNumber === 1) {
+          matchType = 'surah';
+          isMatch = true;
+        }
+
+        // B. Check Arabic
+        if (!isMatch && (language === 'all' || language === 'arabic')) {
           const normalizedVerseArabic = verse.normalizedArabic;
           if (mode === 'exact') {
             if (exactArabicRegex.test(normalizedVerseArabic)) {
@@ -205,52 +231,62 @@ export const useQuranData = (): UseQuranDataReturn => {
               isMatch = true;
             }
           } else {
-            if (normalizedVerseArabic.includes(normalizedQuery)) {
+            if (normalizedVerseArabic.includes(normalizedArabicQuery)) {
               matchType = 'arabic';
               isMatch = true;
             }
           }
         }
 
-        // Check Luganda
+        // C. Check Luganda
         if (!isMatch && (language === 'all' || language === 'luganda')) {
+          const target = verse.normalizedLuganda;
           if (mode === 'exact') {
-            if (exactRegex.test(verse.luganda)) {
+            // ALl words must match exactly
+            const allWordsMatch = exactWordRegexes.every(re => re.test(target));
+            if (allWordsMatch && queryWords.length > 0) {
               matchType = 'luganda';
               isMatch = true;
             }
           } else {
-            if (verse.luganda.toLowerCase().includes(lowerQuery)) {
+            // All words must be present in any order (Multi-word search improvement)
+            const allWordsPresent = queryWords.every(word => target.includes(word));
+            if (allWordsPresent && queryWords.length > 0) {
               matchType = 'luganda';
               isMatch = true;
             }
           }
         }
 
-        // Check English
+        // D. Check English
         if (!isMatch && (language === 'all' || language === 'english')) {
+          const target = verse.normalizedEnglish;
           if (mode === 'exact') {
-            if (exactRegex.test(verse.english)) {
+            const allWordsMatch = exactWordRegexes.every(re => re.test(target));
+            if (allWordsMatch && queryWords.length > 0) {
               matchType = 'english';
               isMatch = true;
             }
           } else {
-            if (verse.english.toLowerCase().includes(lowerQuery)) {
+            const allWordsPresent = queryWords.every(word => target.includes(word));
+            if (allWordsPresent && queryWords.length > 0) {
               matchType = 'english';
               isMatch = true;
             }
           }
         }
 
-        // Double check to prioritize correct match type if found
         if (isMatch && matchType) {
           results.push({
             surahNumber: surah.number,
             surahName: `${surah.englishName} — ${surah.arabicName}`,
             verseNumber: verse.verseNumber,
             arabic: verse.arabic,
+            normalizedArabic: verse.normalizedArabic,
             luganda: verse.luganda,
+            normalizedLuganda: verse.normalizedLuganda,
             english: verse.english,
+            normalizedEnglish: verse.normalizedEnglish,
             matchType,
           });
         }
