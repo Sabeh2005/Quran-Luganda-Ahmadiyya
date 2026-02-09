@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import backIcon from '@/assets/back-icon.svg';
 import { highlightMatch } from '@/lib/highlight';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
+import { SearchResult } from '@/types/quran';
 
 export default function SearchPage() {
     const navigate = useNavigate();
@@ -30,15 +31,12 @@ export default function SearchPage() {
         inputRef.current?.focus();
     }, []);
 
-    // Debounce search - only trigger when not composing
+    // Debounce search
     useEffect(() => {
-        // Don't debounce during IME composition
-        if (isComposingRef.current) return;
-
         const timer = setTimeout(() => {
             setDebouncedQuery(query);
             setSearchState({ query, language: selectedLanguage, mode: searchMode });
-        }, 200); // Reduced debounce time for faster response
+        }, 150); // Snappier response
         return () => clearTimeout(timer);
     }, [query, selectedLanguage, searchMode, setSearchState]);
 
