@@ -105,11 +105,21 @@ export const VerseCard: React.FC<VerseCardProps> = ({
 
   const handleCopy = async () => {
     let text = verse.arabic;
-    if (settings.translationDisplay === 'all' || settings.translationDisplay === 'english') {
-      text += `\n\n${verse.english}`;
+
+    // Add translations based on settings
+    if (settings.translationDisplay === 'all') {
+      // Show All Translations: Include both Luganda and English
+      text += `\n\nLuganda:\n${verse.luganda}`;
+      text += `\n\nEnglish:\n${verse.english}`;
     } else if (settings.translationDisplay === 'luganda') {
+      // Luganda Only
       text += `\n\n${verse.luganda}`;
+    } else if (settings.translationDisplay === 'english') {
+      // English Only
+      text += `\n\n${verse.english}`;
     }
+    // When 'off', only Arabic is included (no translations)
+
     text += `\n\n— ${surahName} \u200E(${verse.verseNumber})`;
 
     await navigator.clipboard.writeText(text);
@@ -123,11 +133,21 @@ export const VerseCard: React.FC<VerseCardProps> = ({
 
   const handleShare = async () => {
     let text = verse.arabic;
-    if (settings.translationDisplay === 'all' || settings.translationDisplay === 'english') {
-      text += `\n\n${verse.english}`;
+
+    // Add translations based on settings
+    if (settings.translationDisplay === 'all') {
+      // Show All Translations: Include both Luganda and English
+      text += `\n\nLuganda:\n${verse.luganda}`;
+      text += `\n\nEnglish:\n${verse.english}`;
     } else if (settings.translationDisplay === 'luganda') {
+      // Luganda Only
       text += `\n\n${verse.luganda}`;
+    } else if (settings.translationDisplay === 'english') {
+      // English Only
+      text += `\n\n${verse.english}`;
     }
+    // When 'off', only Arabic is included (no translations)
+
     text += `\n\n— ${surahName} \u200E(${verse.verseNumber})`;
 
     if (navigator.share) {
