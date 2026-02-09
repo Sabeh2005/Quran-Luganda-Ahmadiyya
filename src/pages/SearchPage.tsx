@@ -93,7 +93,7 @@ export default function SearchPage() {
                 {/* Search Input */}
                 <div className="relative">
                     <div className="relative flex items-center">
-                        <Search className="absolute left-3 h-5 w-5 text-white" />
+                        <Search className="absolute left-3 h-5 w-5 text-primary-foreground" />
                         <Input
                             ref={inputRef}
                             type="text"
@@ -102,14 +102,14 @@ export default function SearchPage() {
                             onChange={(e) => setQuery(e.target.value)}
                             onCompositionStart={handleCompositionStart}
                             onCompositionEnd={handleCompositionEnd}
-                            className="pl-10 pr-10 h-12 bg-primary border-none text-white placeholder:text-white rounded-lg text-base shadow-inner focus-visible:ring-2 focus-visible:ring-white/50"
+                            className="pl-10 pr-10 h-12 bg-primary border-none text-primary-foreground placeholder:text-primary-foreground/70 rounded-lg text-base shadow-inner focus-visible:ring-2 focus-visible:ring-primary-foreground/50"
                         />
                         {query && (
                             <Button
                                 variant="ghost"
                                 size="icon"
                                 onClick={handleClear}
-                                className="absolute right-1 h-10 w-10 text-white hover:bg-white/10 hover:text-white"
+                                className="absolute right-1 h-10 w-10 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
                             >
                                 <X className="h-5 w-5" />
                             </Button>

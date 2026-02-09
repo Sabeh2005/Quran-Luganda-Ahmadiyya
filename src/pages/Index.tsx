@@ -38,7 +38,13 @@ const Index = () => {
       'theme-maroon',
       'theme-red',
       'theme-teal',
-      'theme-indigo'
+      'theme-indigo',
+      'theme-pure-black',
+      'theme-pure-white',
+      'theme-ivory-creme',
+      'theme-bright-creme',
+      'theme-deep-sea-green',
+      'theme-forest'
     );
     if (settings.themeColor !== 'green') {
       document.documentElement.classList.add(`theme-${settings.themeColor}`);

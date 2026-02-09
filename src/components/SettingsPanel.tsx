@@ -57,6 +57,12 @@ const themeColors: { value: ThemeColor; label: string; className: string }[] = [
   { value: 'brown', label: 'Brown', className: 'bg-amber-800' },
   { value: 'teal', label: 'Teal', className: 'bg-teal-600' },
   { value: 'indigo', label: 'Indigo', className: 'bg-indigo-600' },
+  { value: 'pure-black', label: 'Pure Black', className: 'bg-black border border-white/20' },
+  { value: 'pure-white', label: 'Pure White', className: 'bg-white border border-gray-200' },
+  { value: 'ivory-creme', label: 'Ivory Creme', className: 'bg-[#DAC0A7]' },
+  { value: 'bright-creme', label: 'Bright Creme', className: 'bg-[#FFFCD8] border border-gray-200' },
+  { value: 'deep-sea-green', label: 'Deep Sea', className: 'bg-[#095859]' },
+  { value: 'forest', label: 'Forest', className: 'bg-[#0B6623]' },
 ];
 
 // Light mode font colors - 10 colors
@@ -103,7 +109,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
     document.documentElement.classList.remove(
       'theme-blue', 'theme-purple', 'theme-gold-rose', 'theme-orange', 'theme-brown',
       'theme-dark-green', 'theme-dark-blue', 'theme-maroon', 'theme-red',
-      'theme-teal', 'theme-indigo'
+      'theme-teal', 'theme-indigo', 'theme-pure-black', 'theme-pure-white',
+      'theme-ivory-creme', 'theme-bright-creme', 'theme-deep-sea-green', 'theme-forest'
     );
 
     // Add new theme class if not green (green is default)
@@ -179,7 +186,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
     document.documentElement.classList.remove(
       'theme-blue', 'theme-purple', 'theme-gold-rose', 'theme-orange', 'theme-brown',
       'theme-dark-green', 'theme-dark-blue', 'theme-maroon', 'theme-red',
-      'theme-teal', 'theme-indigo', 'dark'
+      'theme-teal', 'theme-indigo', 'theme-pure-black', 'theme-pure-white',
+      'theme-ivory-creme', 'theme-bright-creme', 'theme-deep-sea-green', 'theme-forest', 'dark'
     );
 
     toast({

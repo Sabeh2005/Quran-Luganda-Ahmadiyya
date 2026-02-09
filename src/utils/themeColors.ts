@@ -14,6 +14,12 @@ export const THEME_COLORS: Record<ThemeColor, string> = {
     brown: '#92400e',           // amber-800
     teal: '#0d9488',            // teal-600
     indigo: '#4f46e5',          // indigo-600
+    'pure-black': '#000000',
+    'pure-white': '#FFFFFF',
+    'ivory-creme': '#dac0a7',
+    'bright-creme': '#fffcd8',
+    'deep-sea-green': '#095859',
+    'forest': '#0b6623',
 };
 
 /**

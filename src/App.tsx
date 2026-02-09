@@ -19,9 +19,41 @@ const App = () => {
   const { settings } = useQuranStore();
 
   // Initialize theme color on app load
+  // Apply theme and night mode globally
   useEffect(() => {
     updateMetaThemeColor(settings.themeColor);
-  }, []);
+
+    // Apply night mode
+    if (settings.nightMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+
+    // Apply theme color
+    document.documentElement.classList.remove(
+      'theme-blue',
+      'theme-purple',
+      'theme-gold-rose',
+      'theme-orange',
+      'theme-brown',
+      'theme-dark-green',
+      'theme-dark-blue',
+      'theme-maroon',
+      'theme-red',
+      'theme-teal',
+      'theme-indigo',
+      'theme-pure-black',
+      'theme-pure-white',
+      'theme-ivory-creme',
+      'theme-bright-creme',
+      'theme-deep-sea-green',
+      'theme-forest'
+    );
+    if (settings.themeColor !== 'green') {
+      document.documentElement.classList.add(`theme-${settings.themeColor}`);
+    }
+  }, [settings.themeColor, settings.nightMode]);
 
   return (
     <QueryClientProvider client={queryClient}>
