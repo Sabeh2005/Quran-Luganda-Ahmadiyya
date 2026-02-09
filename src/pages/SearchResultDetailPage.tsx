@@ -117,6 +117,7 @@ const SearchResultDetailPage = () => {
                                 verse={{
                                     verseNumber: result.verseNumber,
                                     arabic: result.arabic,
+                                    normalizedArabic: result.arabic, // Fallback to arabic for display card, or I should update SearchResult too
                                     luganda: result.luganda,
                                     english: result.english
                                 }}

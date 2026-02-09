@@ -70,7 +70,7 @@ interface SearchResult {
   matchType: 'arabic' | 'luganda' | 'english';
 }
 
-import { normalizeArabic } from '@/lib/highlight';
+import { normalizeArabic, normalizeText } from '@/lib/highlight';
 
 
 
@@ -127,11 +127,18 @@ export const useQuranData = (): UseQuranDataReturn => {
 
             const combinedVerses: CombinedVerse[] = arabicVerses.map((arabicVerse) => {
               const verseKey = `${surahNumber}:${arabicVerse.ayah_number}`;
+              const arabicText = arabicVerse.text_content;
+              const lugandaText = lugandaMap.get(verseKey) || '';
+              const englishText = englishMap.get(verseKey) || '';
+
               return {
                 verseNumber: arabicVerse.ayah_number,
-                arabic: arabicVerse.text_content,
-                luganda: lugandaMap.get(verseKey) || '',
-                english: englishMap.get(verseKey) || '',
+                arabic: arabicText,
+                normalizedArabic: normalizeArabic(arabicText),
+                luganda: lugandaText,
+                lowercasedLuganda: normalizeText(lugandaText),
+                english: englishText,
+                lowercasedEnglish: normalizeText(englishText),
               };
             });
 
@@ -177,13 +184,17 @@ export const useQuranData = (): UseQuranDataReturn => {
     if (!query.trim()) return [];
 
     const results: SearchResult[] = [];
-    const lowerQuery = query.toLowerCase();
     const normalizedQuery = normalizeArabic(query);
+    const normalizedTextQuery = normalizeText(query);
+    const escapedTextQuery = normalizedTextQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-    // Regex for exact match (word boundary check) for non-Arabic
-    // We use a more robust check for whole words that works better with various characters
-    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const exactRegex = new RegExp(`(^|[^\\p{L}\\p{M}])(${escapedQuery})([^\\p{L}\\p{M}]|$)`, 'ui');
+    // Regexp for exact match (word boundary check) for non-Arabic
+    // We handle quotes/apostrophes by allowing both curly and straight versions
+    const escapedTextQueryWithQuotes = escapedTextQuery
+      .replace(/'/g, "['\u2018\u2019\u201A\u201B\u2032\u2035]")
+      .replace(/"/g, '["\u201C\u201D\u201E\u201F\u2033\u2036]');
+
+    const exactRegex = new RegExp(`(^|[^\\p{L}\\p{M}])(${escapedTextQueryWithQuotes})([^\\p{L}\\p{M}]|$)`, 'ui');
 
     // Arabic exact regex (on normalized text)
     const escapedArabicQuery = normalizedQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -196,7 +207,7 @@ export const useQuranData = (): UseQuranDataReturn => {
 
         // Check Arabic
         if ((language === 'all' || language === 'arabic')) {
-          const normalizedVerseArabic = normalizeArabic(verse.arabic);
+          const normalizedVerseArabic = verse.normalizedArabic;
           if (mode === 'exact') {
             if (exactArabicRegex.test(normalizedVerseArabic)) {
               matchType = 'arabic';
@@ -212,13 +223,14 @@ export const useQuranData = (): UseQuranDataReturn => {
 
         // Check Luganda
         if (!isMatch && (language === 'all' || language === 'luganda')) {
+          const lowerLuganda = verse.lowercasedLuganda;
           if (mode === 'exact') {
-            if (exactRegex.test(verse.luganda)) {
+            if (exactRegex.test(lowerLuganda)) {
               matchType = 'luganda';
               isMatch = true;
             }
           } else {
-            if (verse.luganda.toLowerCase().includes(lowerQuery)) {
+            if (lowerLuganda.includes(normalizedTextQuery)) {
               matchType = 'luganda';
               isMatch = true;
             }
@@ -227,13 +239,14 @@ export const useQuranData = (): UseQuranDataReturn => {
 
         // Check English
         if (!isMatch && (language === 'all' || language === 'english')) {
+          const lowerEnglish = verse.lowercasedEnglish;
           if (mode === 'exact') {
-            if (exactRegex.test(verse.english)) {
+            if (exactRegex.test(lowerEnglish)) {
               matchType = 'english';
               isMatch = true;
             }
           } else {
-            if (verse.english.toLowerCase().includes(lowerQuery)) {
+            if (lowerEnglish.includes(normalizedTextQuery)) {
               matchType = 'english';
               isMatch = true;
             }

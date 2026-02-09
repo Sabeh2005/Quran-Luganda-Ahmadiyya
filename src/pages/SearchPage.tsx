@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -22,17 +22,23 @@ export default function SearchPage() {
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollDirection = useScrollDirection();
 
+    // Track IME composition state to fix Arabic input delay
+    const isComposingRef = useRef(false);
+
     useEffect(() => {
         // Focus input on mount
         inputRef.current?.focus();
     }, []);
 
-    // Debounce search
+    // Debounce search - only trigger when not composing
     useEffect(() => {
+        // Don't debounce during IME composition
+        if (isComposingRef.current) return;
+
         const timer = setTimeout(() => {
             setDebouncedQuery(query);
             setSearchState({ query, language: selectedLanguage, mode: searchMode });
-        }, 300);
+        }, 200); // Reduced debounce time for faster response
         return () => clearTimeout(timer);
     }, [query, selectedLanguage, searchMode, setSearchState]);
 
@@ -46,6 +52,17 @@ export default function SearchPage() {
         setDebouncedQuery('');
         inputRef.current?.focus();
     };
+
+    // IME composition handlers for Arabic/non-Latin input
+    const handleCompositionStart = useCallback(() => {
+        isComposingRef.current = true;
+    }, []);
+
+    const handleCompositionEnd = useCallback((e: React.CompositionEvent<HTMLInputElement>) => {
+        isComposingRef.current = false;
+        // Manually trigger state update with the composed value
+        setQuery(e.currentTarget.value);
+    }, []);
 
 
     const isHeaderHidden = scrollDirection === 'down';
@@ -85,6 +102,8 @@ export default function SearchPage() {
                             placeholder="Search engine"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
+                            onCompositionStart={handleCompositionStart}
+                            onCompositionEnd={handleCompositionEnd}
                             className="pl-10 pr-10 h-12 bg-primary border-none text-white placeholder:text-white rounded-lg text-base shadow-inner focus-visible:ring-2 focus-visible:ring-white/50"
                         />
                         {query && (
