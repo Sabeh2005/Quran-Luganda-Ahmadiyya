@@ -82,6 +82,7 @@ export interface AppSettings {
   coloredBackground: boolean;
   coloredAppBackground: boolean;
   fullscreen: boolean;
+  verseHighlightColor: HighlightColor;
 }
 
 export interface SearchResult {

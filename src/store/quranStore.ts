@@ -69,6 +69,7 @@ const defaultSettings: AppSettings = {
   coloredBackground: false,
   coloredAppBackground: false,
   fullscreen: false,
+  verseHighlightColor: null,
 };
 
 // Export defaultSettings for reset functionality

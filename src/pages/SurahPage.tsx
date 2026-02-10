@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { Loader2, BookOpen } from 'lucide-react';
+import { Loader2, BookOpen, ArrowLeft, ArrowRight } from 'lucide-react';
 import { VerseCard } from '@/components/VerseCard';
 import { SettingsPanel } from '@/components/SettingsPanel';
 import { Button } from '@/components/ui/button';
@@ -226,19 +226,25 @@ const SurahPage = () => {
                 verse={verse}
                 surahNumber={surahNum}
                 surahName={surahDisplayName}
+                isSurahView={true}
               />
             </div>
           ))}
         </div>
 
         {/* Surah Navigation Buttons */}
-        <div className="flex justify-between items-center mt-8 pt-6 border-t border-border">
+        <div className={cn("flex justify-between items-center mt-8 pt-6 border-t", settings.coloredAppBackground ? "border-primary-foreground/20" : "border-border")}>
           {hasPreviousSurah ? (
             <Button
               onClick={goToPreviousSurah}
-              className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+              className={cn(
+                "flex items-center gap-2 transition-all",
+                settings.coloredAppBackground
+                  ? "bg-card text-primary hover:bg-card/90 shadow-sm"
+                  : "bg-primary text-primary-foreground hover:bg-primary/90"
+              )}
             >
-              <img src={backIcon} alt="Previous" className="h-6 w-6 brightness-0 invert" />
+              <ArrowLeft className="h-4 w-4" />
               <span>Previous Surah</span>
             </Button>
           ) : (
@@ -248,10 +254,15 @@ const SurahPage = () => {
           {hasNextSurah ? (
             <Button
               onClick={goToNextSurah}
-              className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+              className={cn(
+                "flex items-center gap-2 transition-all",
+                settings.coloredAppBackground
+                  ? "bg-card text-primary hover:bg-card/90 shadow-sm"
+                  : "bg-primary text-primary-foreground hover:bg-primary/90"
+              )}
             >
               <span>Next Surah</span>
-              <img src={backIcon} alt="Next" className="h-6 w-6 brightness-0 invert rotate-180" />
+              <ArrowRight className="h-4 w-4" />
             </Button>
           ) : (
             <div></div>

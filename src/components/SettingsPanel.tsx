@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Moon, Sun, Type, Palette, Languages, RotateCcw, Bold, Italic, Maximize } from 'lucide-react';
+import { X, Moon, Sun, Type, Palette, Languages, RotateCcw, Bold, Italic, Maximize, Highlighter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
@@ -11,6 +11,7 @@ import type { ArabicFont, ThemeColor, TranslationFont, TranslationDisplay, Trans
 import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 import { updateMetaThemeColor } from '@/utils/themeColors';
+import { highlightColors } from '@/lib/colors';
 
 interface SettingsPanelProps {
   isOpen: boolean;
@@ -295,6 +296,45 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
                   checked={settings.coloredBackground}
                   onCheckedChange={(checked) => updateSettings({ coloredBackground: checked })}
                 />
+              </div>
+            </section>
+
+            {/* Verse Card Highlight */}
+            <section>
+              <div className="flex items-center gap-2 mb-4">
+                <Highlighter className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold">Verse Card Highlight (Surah View)</h3>
+              </div>
+              <div className="grid grid-cols-5 gap-3 mb-4">
+                <button
+                  onClick={() => updateSettings({ verseHighlightColor: null })}
+                  className={cn(
+                    "flex flex-col items-center gap-2 p-2 rounded-lg border-2 transition-all",
+                    settings.verseHighlightColor === null
+                      ? "border-primary bg-primary/10"
+                      : "border-border"
+                  )}
+                >
+                  <div className="w-8 h-8 rounded-full border border-dashed border-foreground/50 flex items-center justify-center">
+                    <X className="h-4 w-4 text-foreground/50" />
+                  </div>
+                  <span className="text-[10px] font-medium">None</span>
+                </button>
+                {highlightColors.map((hc) => (
+                  <button
+                    key={hc.color}
+                    onClick={() => updateSettings({ verseHighlightColor: hc.color })}
+                    className={cn(
+                      "flex flex-col items-center gap-2 p-2 rounded-lg border-2 transition-all",
+                      settings.verseHighlightColor === hc.color
+                        ? "border-primary bg-primary/10"
+                        : "border-border"
+                    )}
+                  >
+                    <div className={cn("w-8 h-8 rounded-full", hc.className)} />
+                    <span className="text-[10px] font-medium">{hc.label}</span>
+                  </button>
+                ))}
               </div>
             </section>
 

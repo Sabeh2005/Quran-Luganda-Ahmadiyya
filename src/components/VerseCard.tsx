@@ -13,12 +13,15 @@ import { cn } from '@/lib/utils';
 import { AddBookmarkDialog } from './bookmarks/AddBookmarkDialog';
 import { highlightMatch } from '@/lib/highlight';
 
+import { highlightColors } from '@/lib/colors';
+
 interface VerseCardProps {
   verse: CombinedVerse;
   surahNumber: number;
   surahName: string;
   searchQuery?: string;
   searchMode?: 'similar' | 'exact';
+  isSurahView?: boolean;
 }
 
 const bookmarkColors: { color: BookmarkColor; className: string; label: string }[] = [
@@ -34,25 +37,14 @@ const bookmarkColors: { color: BookmarkColor; className: string; label: string }
   { color: 'brown', className: 'bg-amber-800', label: 'Brown' },
 ];
 
-const highlightColors: { color: HighlightColor; className: string; label: string }[] = [
-  { color: 'yellow', className: 'bg-yellow-200 dark:bg-yellow-800', label: 'Yellow' },
-  { color: 'green', className: 'bg-green-200 dark:bg-green-800', label: 'Green' },
-  { color: 'blue', className: 'bg-blue-200 dark:bg-blue-800', label: 'Blue' },
-  { color: 'pink', className: 'bg-pink-200 dark:bg-pink-800', label: 'Pink' },
-  { color: 'orange', className: 'bg-orange-200 dark:bg-orange-800', label: 'Orange' },
-  { color: 'purple', className: 'bg-purple-200 dark:bg-purple-800', label: 'Purple' },
-  { color: 'red', className: 'bg-red-200 dark:bg-red-800', label: 'Red' },
-  { color: 'teal', className: 'bg-teal-200 dark:bg-teal-800', label: 'Teal' },
-  { color: 'lime', className: 'bg-lime-200 dark:bg-lime-800', label: 'Lime' },
-  { color: 'rose', className: 'bg-rose-200 dark:bg-rose-800', label: 'Rose' },
-];
 
 export const VerseCard: React.FC<VerseCardProps> = ({
   verse,
   surahNumber,
   surahName,
   searchQuery,
-  searchMode = 'similar'
+  searchMode = 'similar',
+  isSurahView = false
 }) => {
   const [copied, setCopied] = useState(false);
   const [showBookmarkDialog, setShowBookmarkDialog] = useState(false);
@@ -65,9 +57,19 @@ export const VerseCard: React.FC<VerseCardProps> = ({
   const isBookmarked = !!bookmark || isInCollection;
 
   const getHighlightClass = () => {
-    if (!highlight?.color) return '';
-    const found = highlightColors.find(h => h.color === highlight.color);
-    return found ? found.className : '';
+    // 1. Specific verse highlight takes precedence
+    if (highlight?.color) {
+      const found = highlightColors.find(h => h.color === highlight.color);
+      return found ? found.className : '';
+    }
+
+    // 2. Global Verse Highlight (only on Surah View and if no colored background)
+    if (isSurahView && settings.verseHighlightColor && !settings.coloredBackground) {
+      const found = highlightColors.find(h => h.color === settings.verseHighlightColor);
+      return found ? found.className : '';
+    }
+
+    return '';
   };
 
   const getArabicFontClass = () => {
