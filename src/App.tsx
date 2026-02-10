@@ -12,6 +12,7 @@ import BookmarksPage from "./pages/BookmarksPage";
 import SearchPage from "./pages/SearchPage";
 import SearchResultDetailPage from "./pages/SearchResultDetailPage";
 import NotFound from "./pages/NotFound";
+import AboutPage from "./pages/AboutPage";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ const App = () => {
             <Route path="/surah/:surahNumber" element={<SurahPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/search/results" element={<SearchResultDetailPage />} />
+            <Route path="/about" element={<AboutPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

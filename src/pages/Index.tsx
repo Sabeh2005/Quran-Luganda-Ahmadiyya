@@ -110,6 +110,20 @@ const Index = () => {
                   {getSurah(lastReadPosition.surahNumber)?.englishName} — Verse {lastReadPosition.verseNumber}
                 </p>
               </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate('/about');
+                }}
+                className="p-2 -mr-2 rounded-full hover:bg-black/10 transition-colors text-black"
+                title="About"
+              >
+                <svg stroke="black" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-6 w-6">
+                  <circle cx="12" cy="11.9999" r="9" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <rect x="12" y="8" width="0.01" height="0.01" stroke="black" stroke-width="2.25" stroke-linejoin="round" />
+                  <path d="M12 12V16" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
             </div>
           </button>
         )}

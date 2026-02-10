@@ -39,19 +39,17 @@ export const Header: React.FC<HeaderProps> = ({
       className={`sticky top-0 z-40 w-full transition-transform duration-300 ${isHeaderHidden ? '-translate-y-full' : 'translate-y-0'
         }`}
     >
-      <div className={`header-gradient px-0 shadow-lg transition-all duration-300 ${isHomePage ? 'py-4' : 'py-6'}`}>
-        <div className={`w-full ${isHomePage ? 'flex justify-center items-center relative min-h-[50px]' : 'grid grid-cols-[1fr_auto_1fr] items-center'}`}>
+      <div className={`header-gradient px-0 shadow-lg transition-all duration-300 ${isHomePage ? 'py-4' : 'h-20 flex items-center'}`}>
+        <div className={`w-full ${isHomePage ? 'flex justify-center items-center relative min-h-[50px]' : 'grid grid-cols-[1fr_auto_1fr] items-center h-full'}`}>
           {/* Left Side: Back Button or Menu Icon */}
           <div className={`${isHomePage ? 'absolute left-0 top-1/2 -translate-y-1/2' : 'col-start-1'} flex justify-start items-center gap-3 z-20 text-left min-w-0`}>
             {showBack ? (
-              <Button
-                variant="ghost"
-                size="icon"
+              <button
                 onClick={() => navigate(-1)}
-                className="text-primary-foreground hover:bg-primary-foreground/20"
+                className="p-2 rounded-full text-primary-foreground hover:bg-primary-foreground/20 transition-colors"
               >
                 <img src={backIcon} alt="Back" className="h-6 w-6 brightness-0 invert" />
-              </Button>
+              </button>
             ) : isHomePage && onMenuClick ? (
               <Button
                 variant="ghost"
@@ -63,35 +61,35 @@ export const Header: React.FC<HeaderProps> = ({
                 <img src={menuIcon} alt="Menu" className="h-6 w-6 brightness-0 invert" />
               </Button>
             ) : null}
+          </div>
 
-            {!isHomePage && (
+          {/* Center: Calligraphy (Home) or Title (Other Pages) */}
+          <div className={`${isHomePage ? 'w-full px-12' : 'col-start-2'} flex flex-col items-center justify-center text-center z-10`}>
+            {isHomePage ? (
+              <>
+                <img
+                  src={alQuranCalligraphy}
+                  alt="Al-Quran Al-Kareem"
+                  className="h-20 w-auto mb-0 filter brightness-0 invert"
+                />
+                <div className="flex flex-col items-center gap-0">
+                  <h1 className="text-2xl font-bold text-primary-foreground leading-tight whitespace-nowrap">
+                    Holy Quran
+                  </h1>
+                  <p className="text-2xl font-bold text-primary-foreground leading-tight whitespace-nowrap">
+                    Luganda and English
+                  </p>
+                </div>
+              </>
+            ) : (
               <div>
-                <h1 className="text-lg font-bold text-primary-foreground">{title}</h1>
+                <h1 className="text-[30px] font-bold text-primary-foreground leading-none">{title}</h1>
                 {subtitle && (
-                  <p className="text-sm text-primary-foreground/80">{subtitle}</p>
+                  <p className="text-sm text-primary-foreground/80 mt-1">{subtitle}</p>
                 )}
               </div>
             )}
           </div>
-
-          {/* Center: Calligraphy */}
-          {isHomePage && (
-            <div className="flex flex-col items-center justify-center text-center z-10 w-full px-12">
-              <img
-                src={alQuranCalligraphy}
-                alt="Al-Quran Al-Kareem"
-                className="h-20 w-auto mb-0 filter brightness-0 invert"
-              />
-              <div className="flex flex-col items-center gap-0">
-                <h1 className="text-2xl font-bold text-primary-foreground leading-tight whitespace-nowrap">
-                  Holy Quran
-                </h1>
-                <p className="text-2xl font-bold text-primary-foreground leading-tight whitespace-nowrap">
-                  Luganda and English
-                </p>
-              </div>
-            </div>
-          )}
 
           {/* Right Side: Settings and Install */}
           <div className={`${isHomePage ? 'absolute right-0 top-1/2 -translate-y-1/2' : 'col-start-3'} flex justify-end items-center gap-2 z-20 text-right`}>
