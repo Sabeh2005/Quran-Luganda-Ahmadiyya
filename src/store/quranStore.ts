@@ -41,6 +41,7 @@ interface QuranStore {
   addHighlight: (surahNumber: number, verseNumber: number, color: HighlightColor) => void;
   removeHighlight: (surahNumber: number, verseNumber: number) => void;
   getHighlight: (surahNumber: number, verseNumber: number) => VerseHighlight | undefined;
+  clearAllHighlights: () => void;
 
   // Last read position
   lastReadPosition: { surahNumber: number; verseNumber: number } | null;
@@ -209,6 +210,10 @@ export const useQuranStore = create<QuranStore>()(
         return get().highlights.find(
           (h) => h.surahNumber === surahNumber && h.verseNumber === verseNumber
         );
+      },
+
+      clearAllHighlights: () => {
+        set({ highlights: [] });
       },
 
       lastReadPosition: null,

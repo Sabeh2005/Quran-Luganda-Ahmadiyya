@@ -91,7 +91,7 @@ const fontColorsDark = [
 ];
 
 export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
-  const { settings, updateSettings } = useQuranStore();
+  const { settings, updateSettings, clearAllHighlights } = useQuranStore();
 
   // Get appropriate font colors based on night mode
   const fontColors = settings.nightMode ? fontColorsDark : fontColorsLight;
@@ -177,6 +177,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
   const handleResetSettings = () => {
     // Reset all settings to default
     updateSettings(defaultSettings);
+
+    // Clear all per-verse highlight colors
+    clearAllHighlights();
 
     // Remove theme classes
     document.documentElement.classList.remove(
