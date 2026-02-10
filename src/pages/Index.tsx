@@ -22,6 +22,9 @@ const Index = () => {
   // Handle hydration to prevent UI mismatch and ensure persistent data is loaded
   useEffect(() => {
     setIsHydrated(true);
+    // Force a re-render after a tiny delay for mobile browser storage engines
+    const timer = setTimeout(() => setIsHydrated(true), 100);
+    return () => clearTimeout(timer);
   }, []);
 
   // Apply theme and night mode on mount

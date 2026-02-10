@@ -8,6 +8,7 @@ import alQuranCalligraphy from '@/assets/al-quran-calligraphy.svg';
 import settingsIcon from '@/assets/settings-icon.svg';
 import menuIcon from '@/assets/menu-icon.svg';
 import backIcon from '@/assets/back-icon.svg';
+import infoIcon from '@/assets/information-icon.svg';
 
 interface HeaderProps {
   title?: string;
@@ -92,16 +93,27 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Right Side: Settings and Install */}
-          <div className={`${isHomePage ? 'absolute right-0 top-1/2 -translate-y-1/2' : 'col-start-3'} flex justify-end items-center gap-2 z-20 text-right`}>
+          <div className={`${isHomePage ? 'absolute right-0 top-1/2 -translate-y-1/2' : 'col-start-3'} flex justify-end items-center gap-1 z-20 text-right`}>
             {isHomePage && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={onSettingsClick}
-                className="text-primary-foreground hover:bg-primary-foreground/20"
-              >
-                <img src={settingsIcon} alt="Settings" className="h-6 w-6 brightness-0 invert" />
-              </Button>
+              <>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => navigate('/about')}
+                  className="text-primary-foreground hover:bg-primary-foreground/20"
+                  title="About"
+                >
+                  <img src={infoIcon} alt="About" className="h-6 w-6 brightness-0 invert" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={onSettingsClick}
+                  className="text-primary-foreground hover:bg-primary-foreground/20"
+                >
+                  <img src={settingsIcon} alt="Settings" className="h-6 w-6 brightness-0 invert" />
+                </Button>
+              </>
             )}
             {canInstall && (
               <Button
