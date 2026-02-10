@@ -74,17 +74,27 @@ const SurahPage = () => {
 
 
 
+  // Scroll to top when surah changes (unless verse is specified)
+  useEffect(() => {
+    if (!targetVerse) {
+      window.scrollTo(0, 0);
+    }
+  }, [surahNum, targetVerse]);
+
   // Scroll to target verse
   useEffect(() => {
-    if (targetVerse && verseRefs.current[parseInt(targetVerse)]) {
+    if (targetVerse && verseRefs.current[parseInt(targetVerse)] && surah) {
       // Set auto-scrolling to true to keep header visible
       setIsAutoScrolling(true);
 
       setTimeout(() => {
-        verseRefs.current[parseInt(targetVerse)]?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
+        const element = verseRefs.current[parseInt(targetVerse)];
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
 
         // Re-enable header hiding after scroll completes
         setTimeout(() => setIsAutoScrolling(false), 2000);
@@ -114,11 +124,6 @@ const SurahPage = () => {
 
       setLastReadPosition(surahNum, closestVerse);
     };
-
-    // Set initial position on load
-    if (surah) {
-      handleScroll();
-    }
 
     const debounced = debounce(handleScroll, 500);
     window.addEventListener('scroll', debounced);
