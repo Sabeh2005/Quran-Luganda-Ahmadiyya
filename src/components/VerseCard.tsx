@@ -188,9 +188,10 @@ export const VerseCard: React.FC<VerseCardProps> = ({
     <div
       className={cn(
         "verse-card app-card-shadow animate-fade-in relative overflow-hidden",
-        "bg-white !border-none",
-        "dark:bg-[hsl(var(--verse-bg))] dark:!border-none",
-        getHighlightClass()
+        settings.coloredBackground
+          ? "bg-primary text-primary-foreground border-none"
+          : "bg-white dark:bg-[hsl(var(--verse-bg))] !border-none",
+        !settings.coloredBackground && getHighlightClass()
       )}
       style={{ animationDelay: `${(verse.verseNumber % 10) * 50}ms` }}
     >
@@ -198,7 +199,10 @@ export const VerseCard: React.FC<VerseCardProps> = ({
       {isBookmarked && (
         <div className="absolute top-2 right-4">
           <Bookmark
-            className="h-6 w-6 fill-current text-primary"
+            className={cn(
+              "h-6 w-6 fill-current",
+              settings.coloredBackground ? "text-white/90" : "text-primary"
+            )}
           />
         </div>
       )}
@@ -207,14 +211,17 @@ export const VerseCard: React.FC<VerseCardProps> = ({
         {/* Arabic text with verse number */}
         {/* Arabic text with verse number - Stacked layout */}
         <div className="flex flex-col gap-2 w-full">
-          <div className="verse-number-ornament self-start">
+          <div className={cn(
+            "verse-number-ornament self-start",
+            settings.coloredBackground && "bg-white text-primary dark:bg-zinc-800 dark:text-primary shadow-none"
+          )}>
             {verse.verseNumber}
           </div>
           <p
             className={cn("arabic-text w-full text-right leading-normal", getArabicFontClass())}
             style={{
               fontSize: `${settings.arabicFontSize}px`,
-              color: settings.arabicFontColor,
+              color: settings.coloredBackground ? '#ffffff' : settings.arabicFontColor,
               fontWeight: settings.arabicFontBold ? 'bold' : 'normal',
               wordBreak: 'normal',
               overflowWrap: 'anywhere',
@@ -232,7 +239,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({
             className="translation-text text-left w-full"
             style={{
               fontSize: `${settings.translationFontSize}px`,
-              color: settings.translationFontColor,
+              color: settings.coloredBackground ? '#ffffff' : settings.translationFontColor,
               fontFamily: getTranslationFontFamily(settings.translationFont),
               ...translationStyles,
               lineHeight: '1.5',
@@ -241,7 +248,10 @@ export const VerseCard: React.FC<VerseCardProps> = ({
               whiteSpace: 'pre-wrap',
             }}
           >
-            <span className="text-[15px] font-semibold text-primary uppercase tracking-wide block mb-1" style={{ fontStyle: 'normal' }}>
+            <span className={cn(
+              "text-[15px] font-semibold uppercase tracking-wide block mb-1",
+              settings.coloredBackground ? "text-white/90" : "text-primary"
+            )} style={{ fontStyle: 'normal' }}>
               Luganda
             </span>
             {searchQuery ? highlightMatch(verse.luganda, searchQuery, searchMode) : verse.luganda}
@@ -254,7 +264,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({
             className="translation-text text-left w-full"
             style={{
               fontSize: `${settings.translationFontSize}px`,
-              color: settings.translationFontColor,
+              color: settings.coloredBackground ? '#ffffff' : settings.translationFontColor,
               fontFamily: getTranslationFontFamily(settings.translationFont),
               ...translationStyles,
               lineHeight: '1.5',
@@ -263,7 +273,10 @@ export const VerseCard: React.FC<VerseCardProps> = ({
               whiteSpace: 'pre-wrap',
             }}
           >
-            <span className="text-[15px] font-semibold text-primary uppercase tracking-wide block mb-1" style={{ fontStyle: 'normal' }}>
+            <span className={cn(
+              "text-[15px] font-semibold uppercase tracking-wide block mb-1",
+              settings.coloredBackground ? "text-white/90" : "text-primary"
+            )} style={{ fontStyle: 'normal' }}>
               English
             </span>
             {searchQuery ? highlightMatch(verse.english, searchQuery, searchMode) : verse.english}
@@ -280,7 +293,9 @@ export const VerseCard: React.FC<VerseCardProps> = ({
           onClick={() => setShowBookmarkDialog(true)}
           className={cn(
             "h-8 px-2",
-            isBookmarked && "text-primary"
+            isBookmarked
+              ? (settings.coloredBackground ? "text-white" : "text-primary")
+              : (settings.coloredBackground ? "text-white/70 hover:text-white hover:bg-white/10" : "")
           )}
         >
           <Bookmark className={cn("h-4 w-4", isBookmarked && "fill-current")} />
@@ -301,7 +316,9 @@ export const VerseCard: React.FC<VerseCardProps> = ({
               size="sm"
               className={cn(
                 "h-8 px-2",
-                highlight && "text-primary"
+                highlight
+                  ? (settings.coloredBackground ? "text-white" : "text-primary")
+                  : (settings.coloredBackground ? "text-white/70 hover:text-white hover:bg-white/10" : "")
               )}
             >
               <Highlighter className={cn("h-4 w-4", highlight && "fill-current")} />
@@ -332,9 +349,12 @@ export const VerseCard: React.FC<VerseCardProps> = ({
           variant="ghost"
           size="sm"
           onClick={handleCopy}
-          className="h-8 px-2"
+          className={cn(
+            "h-8 px-2",
+            settings.coloredBackground ? "text-white/70 hover:text-white hover:bg-white/10" : ""
+          )}
         >
-          {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+          {copied ? <Check className={cn("h-4 w-4", settings.coloredBackground ? "text-white" : "text-green-500")} /> : <Copy className="h-4 w-4" />}
           <span className="sr-only">Copy</span>
         </Button>
 
@@ -343,7 +363,10 @@ export const VerseCard: React.FC<VerseCardProps> = ({
           variant="ghost"
           size="sm"
           onClick={handleShare}
-          className="h-8 px-2"
+          className={cn(
+            "h-8 px-2",
+            settings.coloredBackground ? "text-white/70 hover:text-white hover:bg-white/10" : ""
+          )}
         >
           <Share2 className="h-4 w-4" />
           <span className="sr-only">Share</span>

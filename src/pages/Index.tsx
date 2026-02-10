@@ -9,6 +9,7 @@ import { useQuranData } from '@/hooks/useQuranData';
 import { useQuranStore } from '@/store/quranStore';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 
 const Index = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -81,7 +82,7 @@ const Index = () => {
   }, {} as Record<number, typeof bookmarks>);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className={cn("min-h-screen transition-colors duration-300", settings.coloredAppBackground ? "bg-primary" : "bg-background")}>
       <Header
         onSettingsClick={() => setSettingsOpen(true)}
         onMenuClick={() => setNavigationOpen(true)}
@@ -92,14 +93,19 @@ const Index = () => {
         {lastReadPosition && (
           <button
             onClick={() => navigate(`/surah/${lastReadPosition.surahNumber}?verse=${lastReadPosition.verseNumber}`)}
-            className="w-full mb-2 p-4 rounded-xl bg-primary/10 border border-primary/20 transition-all"
+            className={cn(
+              "w-full mb-2 p-4 rounded-xl transition-all border",
+              settings.coloredAppBackground
+                ? "bg-card border-border shadow-sm"
+                : "bg-primary/10 border-primary/20"
+            )}
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
                 <BookOpen className="h-6 w-6 text-primary-foreground" />
               </div>
               <div className="text-left flex-1">
-                <p className="text-sm text-muted-foreground">Continue Reading</p>
+                <p className={cn("text-sm", settings.coloredAppBackground ? "text-muted-foreground" : "text-muted-foreground")}>Continue Reading</p>
                 <p className="font-semibold text-foreground">
                   {getSurah(lastReadPosition.surahNumber)?.englishName} — Verse {lastReadPosition.verseNumber}
                 </p>
@@ -109,16 +115,18 @@ const Index = () => {
         )}
 
         {/* Search Bar */}
-        <SearchBar />
+        <div className={cn(settings.coloredAppBackground && "text-primary-foreground")}>
+          <SearchBar />
+        </div>
 
         <Tabs defaultValue="surahs" className="w-full">
-          <TabsList className="w-full grid grid-cols-2 mb-2">
-            <TabsTrigger value="surahs" className="gap-2">
+          <TabsList className={cn("w-full grid grid-cols-2 mb-2", settings.coloredAppBackground ? "bg-primary-foreground/10 text-primary-foreground" : "")}>
+            <TabsTrigger value="surahs" className={cn("gap-2", settings.coloredAppBackground && "data-[state=active]:bg-card data-[state=active]:text-primary")}>
               <BookOpen className="h-4 w-4" /> Surahs
             </TabsTrigger>
             <TabsTrigger
               value="bookmarks"
-              className="gap-2"
+              className={cn("gap-2", settings.coloredAppBackground && "data-[state=active]:bg-card data-[state=active]:text-primary")}
               onClick={() => navigate('/bookmarks')}
             >
               <Bookmark className="h-4 w-4" /> Bookmarks ({bookmarks.length})

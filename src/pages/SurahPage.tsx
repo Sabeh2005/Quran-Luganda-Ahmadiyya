@@ -153,7 +153,7 @@ const SurahPage = () => {
   const isHeaderHidden = scrollDirection === 'down';
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className={cn("min-h-screen transition-colors duration-300", settings.coloredAppBackground ? "bg-primary" : "bg-background")}>
       {/* Header for Surah Page with back button and settings */}
       <header
         className={`sticky top-0 z-40 w-full transition-transform duration-300 ${isHeaderHidden ? '-translate-y-full' : 'translate-y-0'

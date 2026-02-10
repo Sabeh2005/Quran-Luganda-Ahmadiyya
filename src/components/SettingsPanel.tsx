@@ -284,6 +284,34 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
               </div>
             </section>
 
+            {/* Colored Backgrounds */}
+            <section>
+              <div className="flex items-center justify-between p-3 rounded-lg border-2 border-border mb-4">
+                <div className="flex items-center gap-3">
+                  <Palette className="h-5 w-5 text-primary" />
+                  <Label className="font-semibold cursor-pointer">Colored Card Backgrounds</Label>
+                </div>
+                <Switch
+                  checked={settings.coloredBackground}
+                  onCheckedChange={(checked) => updateSettings({ coloredBackground: checked })}
+                />
+              </div>
+            </section>
+
+            {/* Colored App Background */}
+            <section>
+              <div className="flex items-center justify-between p-3 rounded-lg border-2 border-border mb-4">
+                <div className="flex items-center gap-3">
+                  <Palette className="h-5 w-5 text-primary" />
+                  <Label className="font-semibold cursor-pointer">Colored App Background</Label>
+                </div>
+                <Switch
+                  checked={settings.coloredAppBackground}
+                  onCheckedChange={(checked) => updateSettings({ coloredAppBackground: checked })}
+                />
+              </div>
+            </section>
+
             {/* Translation Display */}
             <section>
               <div className="flex items-center gap-2 mb-4">

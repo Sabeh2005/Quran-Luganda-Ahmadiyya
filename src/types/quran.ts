@@ -79,6 +79,8 @@ export interface AppSettings {
   arabicFontColor: string;
   translationFontColor: string;
   themeColor: ThemeColor;
+  coloredBackground: boolean;
+  coloredAppBackground: boolean;
   fullscreen: boolean;
 }
 

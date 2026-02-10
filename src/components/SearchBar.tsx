@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useQuranStore } from '@/store/quranStore';
+import { cn } from '@/lib/utils';
 
 export const SearchBar: React.FC = () => {
   const navigate = useNavigate();
 
-  const { setSearchState } = useQuranStore();
+  const { setSearchState, settings } = useQuranStore();
 
   const handleFocus = () => {
     setSearchState({ query: '', language: 'all' });
@@ -18,14 +19,22 @@ export const SearchBar: React.FC = () => {
   return (
     <div className="relative w-full mb-2">
       <div className="relative flex items-center">
-        <Search className="absolute left-3 h-4 w-4 text-white pointer-events-none" />
+        <Search className={cn(
+          "absolute left-3 h-4 w-4 pointer-events-none z-10",
+          settings.coloredAppBackground ? "text-muted-foreground" : "text-white"
+        )} />
         <Input
           type="text"
           placeholder="Search engine"
           readOnly
           onFocus={handleFocus}
           onClick={handleFocus}
-          className="pl-9 h-11 bg-primary border-none text-white placeholder:text-white focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:ring-offset-0 cursor-pointer"
+          className={cn(
+            "pl-9 h-11 border-none cursor-pointer transition-all",
+            settings.coloredAppBackground
+              ? "bg-card text-foreground placeholder:text-muted-foreground shadow-sm"
+              : "bg-primary text-white placeholder:text-white/80 focus-visible:ring-1 focus-visible:ring-white/20"
+          )}
         />
       </div>
     </div>

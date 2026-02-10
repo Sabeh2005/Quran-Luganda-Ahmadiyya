@@ -644,6 +644,13 @@
     font-family: 'Inter', system-ui, sans-serif;
   }
 
+  /* Ensure cards have distinct background when app bg is colored and card bg is NOT colored */
+  body.colored-app-bg .verse-card,
+  body.colored-app-bg .surah-card,
+  body.colored-app-bg .card {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+
   /* Arabic text styling */
   .arabic-text {
     font-family: var(--arabic-font, 'Noorehuda'), serif;

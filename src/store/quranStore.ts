@@ -66,6 +66,8 @@ const defaultSettings: AppSettings = {
   arabicFontColor: '#166534', // Green - matches default theme
   translationFontColor: '#000000', // Black
   themeColor: 'green',
+  coloredBackground: false,
+  coloredAppBackground: false,
   fullscreen: false,
 };
 
