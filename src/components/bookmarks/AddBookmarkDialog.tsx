@@ -31,6 +31,7 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
         addBookmark,
         removeBookmark,
         toggleBookmarkInCollection,
+        settings,
     } = useQuranStore();
 
     const [mode, setMode] = useState<'single' | 'collection'>('single');
@@ -54,15 +55,8 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
             });
             setSelectedCollectionIds(inCollections);
 
-            // Determine initial mode
-            // If in any collection, default to collection mode. 
-            // Else if single exists, single mode.
-            // Else default to single.
-            if (inCollections.size > 0) {
-                setMode('collection');
-            } else {
-                setMode('single');
-            }
+            // Default to single bookmark mode as per requirement
+            setMode('single');
         }
     }, [isOpen, surahNumber, verseNumber, bookmarks, collections]);
 
@@ -158,6 +152,66 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
         }
     };
 
+    const singleSection = (
+        <div
+            className="flex items-center gap-3 cursor-pointer"
+            onClick={() => {
+                setMode('single');
+                setSelectedCollectionIds(new Set());
+            }}
+        >
+            <div className={cn(
+                "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
+                mode === 'single' ? "bg-green-600 border-green-600" : "border-muted-foreground"
+            )}>
+                {mode === 'single' && <Check className="w-4 h-4 text-white" />}
+            </div>
+            <span className="font-semibold text-lg">
+                {bookmarks.some(b => b.surahNumber === surahNumber && b.verseNumber === verseNumber)
+                    ? "Remove Single Bookmark"
+                    : "Single Bookmark"}
+            </span>
+        </div>
+    );
+
+    const collectionSection = (
+        <div className="space-y-3">
+            <div
+                className="flex items-center gap-3 cursor-pointer"
+                onClick={() => setMode('collection')}
+            >
+                <div className={cn(
+                    "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
+                    mode === 'collection' ? "bg-green-600 border-green-600" : "border-muted-foreground"
+                )}>
+                    {mode === 'collection' && <Check className="w-4 h-4 text-white" />}
+                </div>
+                <span className="font-semibold text-lg">Bookmarks Collection</span>
+            </div>
+
+            <div className="pl-9 space-y-3 transition-opacity">
+                {collections.map((collection) => (
+                    <div
+                        key={collection.id}
+                        className="flex items-center justify-between cursor-pointer"
+                        onClick={() => handleToggleCollection(collection.id)}
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className={cn("w-2.5 h-2.5 rounded-full", getColorClass(collection.color))} />
+                            <span className="text-base font-medium">{collection.name}</span>
+                        </div>
+                        <div className={cn(
+                            "w-5 h-5 border-2 rounded flex items-center justify-center transition-colors",
+                            selectedCollectionIds.has(collection.id) ? "bg-green-600 border-green-600" : "border-muted-foreground"
+                        )}>
+                            {selectedCollectionIds.has(collection.id) && <Check className="w-3.5 h-3.5 text-white" />}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+
     return (
         <>
             <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -169,63 +223,17 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
                     </DialogHeader>
 
                     <div className="space-y-6 py-4">
-                        {/* Single Bookmark Option */}
-                        <div
-                            className="flex items-center gap-3 cursor-pointer"
-                            onClick={() => setMode('single')}
-                        >
-                            <div className={cn(
-                                "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
-                                mode === 'single' ? "bg-green-600 border-green-600" : "border-muted-foreground"
-                            )}>
-                                {mode === 'single' && <Check className="w-4 h-4 text-white" />}
-                            </div>
-                            <span className="font-semibold text-lg">
-                                {bookmarks.some(b => b.surahNumber === surahNumber && b.verseNumber === verseNumber)
-                                    ? "Remove Single Bookmark"
-                                    : "Single Bookmark"}
-                            </span>
-                        </div>
-
-                        {/* Collections Section */}
-                        <div className="space-y-3">
-                            <div
-                                className="flex items-center gap-3 cursor-pointer"
-                                onClick={() => setMode('collection')}
-                            >
-                                <div className={cn(
-                                    "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
-                                    mode === 'collection' ? "bg-green-600 border-green-600" : "border-muted-foreground"
-                                )}>
-                                    {mode === 'collection' && <Check className="w-4 h-4 text-white" />}
-                                </div>
-                                <span className="font-semibold text-lg">Bookmarks Collection</span>
-                            </div>
-
-                            <div className={cn(
-                                "pl-9 space-y-3 transition-opacity",
-                                mode === 'collection' ? "opacity-100" : "opacity-50 pointer-events-none"
-                            )}>
-                                {collections.map((collection) => (
-                                    <div
-                                        key={collection.id}
-                                        className="flex items-center justify-between cursor-pointer"
-                                        onClick={() => handleToggleCollection(collection.id)}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <div className={cn("w-2.5 h-2.5 rounded-full", getColorClass(collection.color))} />
-                                            <span className="text-base font-medium">{collection.name}</span>
-                                        </div>
-                                        <div className={cn(
-                                            "w-5 h-5 border-2 rounded flex items-center justify-center transition-colors",
-                                            selectedCollectionIds.has(collection.id) ? "bg-green-600 border-green-600" : "border-muted-foreground"
-                                        )}>
-                                            {selectedCollectionIds.has(collection.id) && <Check className="w-3.5 h-3.5 text-white" />}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        {settings.swapBookmarksAndCollections ? (
+                            <>
+                                {collectionSection}
+                                {singleSection}
+                            </>
+                        ) : (
+                            <>
+                                {singleSection}
+                                {collectionSection}
+                            </>
+                        )}
                     </div>
 
                     <div className="flex gap-2 justify-center mt-2">
@@ -249,6 +257,9 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
             <CreateCollectionDialog
                 isOpen={showCreateCollection}
                 onClose={() => setShowCreateCollection(false)}
+                onSuccess={onClose}
+                surahNumber={surahNumber}
+                verseNumber={verseNumber}
             />
         </>
     );

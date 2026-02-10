@@ -29,12 +29,13 @@ const BookmarksPage = () => {
         collections,
         clearAllBookmarks,
         clearAllCollections,
+        settings,
     } = useQuranStore();
     const { surahs } = useQuranData();
     const scrollDirection = useScrollDirection();
     const isHeaderHidden = scrollDirection === 'down';
 
-    const [activeTab, setActiveTab] = useState('single');
+    const [activeTab, setActiveTab] = useState(settings.swapBookmarksAndCollections ? 'collections' : 'single');
     const [viewingCollection, setViewingCollection] = useState<BookmarkCollection | null>(null);
     const [showClearDialog, setShowClearDialog] = useState(false);
     const [editingCollectionId, setEditingCollectionId] = useState<string | null>(null);
@@ -110,6 +111,24 @@ const BookmarksPage = () => {
         );
     }
 
+    const singleTabTrigger = (
+        <TabsTrigger
+            value="single"
+            className="rounded-none h-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base transition-colors"
+        >
+            Single Bookmarks
+        </TabsTrigger>
+    );
+
+    const collectionsTabTrigger = (
+        <TabsTrigger
+            value="collections"
+            className="rounded-none h-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base transition-colors"
+        >
+            Collections
+        </TabsTrigger>
+    );
+
     return (
         <div className="min-h-screen bg-background flex flex-col">
             {/* Main Header */}
@@ -139,18 +158,17 @@ const BookmarksPage = () => {
             {/* Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
                 <TabsList className="w-full grid grid-cols-2 rounded-none h-12 bg-white dark:bg-card border-b">
-                    <TabsTrigger
-                        value="single"
-                        className="rounded-none h-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base transition-colors"
-                    >
-                        Single Bookmarks
-                    </TabsTrigger>
-                    <TabsTrigger
-                        value="collections"
-                        className="rounded-none h-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base transition-colors"
-                    >
-                        Collections
-                    </TabsTrigger>
+                    {settings.swapBookmarksAndCollections ? (
+                        <>
+                            {collectionsTabTrigger}
+                            {singleTabTrigger}
+                        </>
+                    ) : (
+                        <>
+                            {singleTabTrigger}
+                            {collectionsTabTrigger}
+                        </>
+                    )}
                 </TabsList>
 
                 <div className="flex-1 bg-background">

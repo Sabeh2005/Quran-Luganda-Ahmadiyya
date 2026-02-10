@@ -27,7 +27,7 @@ interface QuranStore {
 
   // Collections
   collections: BookmarkCollection[];
-  createCollection: (name: string, color: CollectionColor) => void;
+  createCollection: (name: string, color: CollectionColor, initiallyAddVerse?: { surahNumber: number; verseNumber: number }) => void;
   editCollection: (id: string, name: string, color: CollectionColor) => void;
   deleteCollection: (id: string) => void;
   clearAllCollections: () => void;
@@ -72,6 +72,7 @@ const defaultSettings: AppSettings = {
   coloredAppBackground: false,
   fullscreen: false,
   verseHighlightColor: null,
+  swapBookmarksAndCollections: false,
 };
 
 // Export defaultSettings for reset functionality
@@ -119,7 +120,7 @@ export const useQuranStore = create<QuranStore>()(
 
       collections: [],
 
-      createCollection: (name, color) => {
+      createCollection: (name, color, initiallyAddVerse) => {
         set((state) => ({
           collections: [
             ...state.collections,
@@ -127,7 +128,7 @@ export const useQuranStore = create<QuranStore>()(
               id: uuidv4(),
               name,
               color,
-              bookmarks: [],
+              bookmarks: initiallyAddVerse ? [initiallyAddVerse] : [],
             },
           ],
         }));

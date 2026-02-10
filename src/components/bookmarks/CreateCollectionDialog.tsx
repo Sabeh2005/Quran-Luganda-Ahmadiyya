@@ -16,7 +16,10 @@ import { useQuranStore } from '@/store/quranStore';
 interface CreateCollectionDialogProps {
     isOpen: boolean;
     onClose: () => void;
+    onSuccess?: () => void; // Called when "Create and Add" is successful
     editCollectionId?: string; // If provided, we are in edit mode
+    surahNumber?: number;
+    verseNumber?: number;
 }
 
 const colors: { color: CollectionColor; className: string }[] = [
@@ -35,7 +38,10 @@ const colors: { color: CollectionColor; className: string }[] = [
 export const CreateCollectionDialog: React.FC<CreateCollectionDialogProps> = ({
     isOpen,
     onClose,
+    onSuccess,
     editCollectionId,
+    surahNumber,
+    verseNumber,
 }) => {
     const { collections, createCollection, editCollection, deleteCollection } = useQuranStore();
     const [name, setName] = useState('');
@@ -61,10 +67,18 @@ export const CreateCollectionDialog: React.FC<CreateCollectionDialogProps> = ({
 
         if (editCollectionId) {
             editCollection(editCollectionId, name, selectedColor);
+            onClose();
         } else {
-            createCollection(name, selectedColor);
+            createCollection(
+                name,
+                selectedColor,
+                surahNumber && verseNumber ? { surahNumber, verseNumber } : undefined
+            );
+            if (onSuccess) {
+                onSuccess();
+            }
+            onClose();
         }
-        onClose();
     };
 
     const handleDelete = () => {

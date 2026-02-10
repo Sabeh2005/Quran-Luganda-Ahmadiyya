@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Moon, Sun, Type, Palette, Languages, RotateCcw, Bold, Italic, Maximize, Highlighter } from 'lucide-react';
+import { X, Moon, Sun, Type, Palette, Languages, RotateCcw, Bold, Italic, Maximize, Highlighter, ArrowDownUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
@@ -240,6 +240,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
                 />
               </div>
             </section>
+
+
 
             {/* Night Mode */}
             <section>
@@ -600,6 +602,20 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
                     style={{ backgroundColor: color }}
                   />
                 ))}
+              </div>
+            </section>
+
+            {/* Bookmark Section Swapping */}
+            <section>
+              <div className="flex items-center justify-between p-3 rounded-lg border-2 border-border mb-4">
+                <div className="flex items-center gap-3">
+                  <ArrowDownUp className="h-5 w-5 text-primary" />
+                  <Label className="font-semibold cursor-pointer">Swap Single and Collections Bookmarks</Label>
+                </div>
+                <Switch
+                  checked={settings.swapBookmarksAndCollections}
+                  onCheckedChange={(checked) => updateSettings({ swapBookmarksAndCollections: checked })}
+                />
               </div>
             </section>
 

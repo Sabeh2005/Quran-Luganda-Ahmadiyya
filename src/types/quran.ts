@@ -83,6 +83,7 @@ export interface AppSettings {
   coloredAppBackground: boolean;
   fullscreen: boolean;
   verseHighlightColor: HighlightColor;
+  swapBookmarksAndCollections: boolean;
 }
 
 export interface SearchResult {
