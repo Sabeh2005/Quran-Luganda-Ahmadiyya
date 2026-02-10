@@ -17,7 +17,7 @@ import AboutPage from "./pages/AboutPage";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const { settings } = useQuranStore();
+  const settings = useQuranStore(state => state.settings);
 
   // Initialize theme color on app load
   // Apply theme and night mode globally

@@ -18,7 +18,9 @@ const Index = () => {
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const { surahs, loading, error, getSurah } = useQuranData();
-  const { settings, bookmarks, lastReadPosition } = useQuranStore();
+  const settings = useQuranStore(state => state.settings);
+  const bookmarks = useQuranStore(state => state.bookmarks);
+  const lastReadPosition = useQuranStore(state => state.lastReadPosition);
   const navigate = useNavigate();
 
   // Handle hydration to prevent UI mismatch and ensure persistent data is loaded
@@ -55,7 +57,7 @@ const Index = () => {
       'theme-forest'
     );
     if (settings.themeColor !== 'green') {
-      document.documentElement.classList.add(`theme - ${settings.themeColor} `);
+      document.documentElement.classList.add(`theme-${settings.themeColor}`);
     }
   }, [settings.nightMode, settings.themeColor]);
 
@@ -103,7 +105,7 @@ const Index = () => {
         {/* Continue Reading */}
         {isHydrated && (
           <div
-            onClick={() => lastReadPosition && navigate(`/ surah / ${lastReadPosition.surahNumber}?verse = ${lastReadPosition.verseNumber} `)}
+            onClick={() => lastReadPosition && navigate(`/surah/${lastReadPosition.surahNumber}?verse=${lastReadPosition.verseNumber}`)}
             className={cn(
               "w-full mb-2 p-4 rounded-xl transition-all border cursor-pointer active:scale-[0.98]",
               settings.coloredAppBackground

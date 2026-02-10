@@ -19,7 +19,8 @@ const SurahPage = () => {
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
   const navigate = useNavigate();
   const { getSurah, loading, error } = useQuranData();
-  const { settings, setLastReadPosition } = useQuranStore();
+  const settings = useQuranStore(state => state.settings);
+  const setLastReadPosition = useQuranStore(state => state.setLastReadPosition);
   const verseRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const scrollDirection = useScrollDirection(10, isAutoScrolling);
 

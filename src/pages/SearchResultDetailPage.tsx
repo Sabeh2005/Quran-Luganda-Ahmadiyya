@@ -14,7 +14,8 @@ import { useScrollDirection } from '@/hooks/useScrollDirection';
 const SearchResultDetailPage = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const { searchState } = useQuranStore();
+    const searchState = useQuranStore(state => state.searchState);
+    const settings = useQuranStore(state => state.settings);
     const { searchVerses, loading } = useQuranData();
     const [settingsOpen, setSettingsOpen] = React.useState(false);
     const [isAutoScrolling, setIsAutoScrolling] = React.useState(false);
@@ -24,11 +25,11 @@ const SearchResultDetailPage = () => {
     const surahNumber = parseInt(searchParams.get('surah') || '0');
     const verseNumber = parseInt(searchParams.get('verse') || '0');
 
-    const results = searchVerses(
+    const results = React.useMemo(() => searchVerses(
         searchState.query,
         searchState.language,
         searchState.mode
-    );
+    ), [searchVerses, searchState.query, searchState.language, searchState.mode]);
 
 
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { CombinedSurah } from '@/types/quran';
 import { cn } from '@/lib/utils';
@@ -8,9 +9,9 @@ interface SurahCardProps {
   index: number;
 }
 
-export const SurahCard: React.FC<SurahCardProps> = ({ surah, index }) => {
+export const SurahCard: React.FC<SurahCardProps> = React.memo(({ surah, index }) => {
   const navigate = useNavigate();
-  const { settings } = useQuranStore();
+  const settings = useQuranStore(state => state.settings);
 
   return (
     <button
@@ -59,4 +60,4 @@ export const SurahCard: React.FC<SurahCardProps> = ({ surah, index }) => {
       </div>
     </button>
   );
-};
+});

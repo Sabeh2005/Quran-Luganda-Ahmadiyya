@@ -24,13 +24,11 @@ import { BookmarkCollection } from '@/types/quran';
 
 const BookmarksPage = () => {
     const navigate = useNavigate();
-    const {
-        bookmarks,
-        collections,
-        clearAllBookmarks,
-        clearAllCollections,
-        settings,
-    } = useQuranStore();
+    const bookmarks = useQuranStore(state => state.bookmarks);
+    const collections = useQuranStore(state => state.collections);
+    const clearAllBookmarks = useQuranStore(state => state.clearAllBookmarks);
+    const clearAllCollections = useQuranStore(state => state.clearAllCollections);
+    const settings = useQuranStore(state => state.settings);
     const { surahs } = useQuranData();
     const scrollDirection = useScrollDirection();
     const isHeaderHidden = scrollDirection === 'down';

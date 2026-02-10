@@ -14,7 +14,8 @@ import { SearchResult } from '@/types/quran';
 
 export default function SearchPage() {
     const navigate = useNavigate();
-    const { searchState, setSearchState } = useQuranStore();
+    const searchState = useQuranStore(state => state.searchState);
+    const setSearchState = useQuranStore(state => state.setSearchState);
     const [query, setQuery] = useState(searchState.query);
     const [debouncedQuery, setDebouncedQuery] = useState(searchState.query);
     const [selectedLanguage, setSelectedLanguage] = useState(searchState.language);

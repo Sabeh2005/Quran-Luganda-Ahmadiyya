@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { CombinedSurah, CombinedVerse } from '@/types/quran';
 
 
@@ -179,11 +179,11 @@ export const useQuranData = (): UseQuranDataReturn => {
   }, []);
 
 
-  const getSurah = (surahNumber: number): CombinedSurah | undefined => {
+  const getSurah = useCallback((surahNumber: number): CombinedSurah | undefined => {
     return surahs.find((s) => s.number === surahNumber);
-  };
+  }, [surahs]);
 
-  const searchVerses = (query: string, language: 'all' | 'arabic' | 'luganda' | 'english' = 'all', mode: 'similar' | 'exact' = 'similar'): SearchResult[] => {
+  const searchVerses = useCallback((query: string, language: 'all' | 'arabic' | 'luganda' | 'english' = 'all', mode: 'similar' | 'exact' = 'similar'): SearchResult[] => {
     const trimmedQuery = query.trim();
     if (!trimmedQuery) return [];
 
@@ -294,8 +294,14 @@ export const useQuranData = (): UseQuranDataReturn => {
     });
 
     return results;
-  };
+  }, [surahs]);
 
-  return { surahs, loading, error, getSurah, searchVerses };
+  return useMemo(() => ({
+    surahs,
+    loading,
+    error,
+    getSurah,
+    searchVerses
+  }), [surahs, loading, error, getSurah, searchVerses]);
 };
 

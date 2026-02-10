@@ -38,7 +38,7 @@ const bookmarkColors: { color: BookmarkColor; className: string; label: string }
 ];
 
 
-export const VerseCard: React.FC<VerseCardProps> = ({
+export const VerseCard: React.FC<VerseCardProps> = React.memo(({
   verse,
   surahNumber,
   surahName,
@@ -48,12 +48,21 @@ export const VerseCard: React.FC<VerseCardProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const [showBookmarkDialog, setShowBookmarkDialog] = useState(false);
-  const { settings, getBookmark, removeBookmark, getHighlight, addHighlight, removeHighlight, collections } = useQuranStore();
+
+  const settings = useQuranStore(state => state.settings);
+  const getBookmark = useQuranStore(state => state.getBookmark);
+  const getHighlight = useQuranStore(state => state.getHighlight);
+  const addHighlight = useQuranStore(state => state.addHighlight);
+  const removeHighlight = useQuranStore(state => state.removeHighlight);
+  const collections = useQuranStore(state => state.collections);
 
   const bookmark = getBookmark(surahNumber, verse.verseNumber);
   const highlight = getHighlight(surahNumber, verse.verseNumber);
 
-  const isInCollection = collections.some(c => c.bookmarks.some(b => b.surahNumber === surahNumber && b.verseNumber === verse.verseNumber));
+  const isInCollection = React.useMemo(() =>
+    collections.some(c => c.bookmarks.some(b => b.surahNumber === surahNumber && b.verseNumber === verse.verseNumber)),
+    [collections, surahNumber, verse.verseNumber]
+  );
   const isBookmarked = !!bookmark || isInCollection;
 
   const getHighlightClass = () => {
@@ -376,4 +385,4 @@ export const VerseCard: React.FC<VerseCardProps> = ({
       </div>
     </div>
   );
-};
+});
