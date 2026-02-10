@@ -79,7 +79,7 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
         <div className="grid grid-cols-2 h-[400px] divide-x">
           {/* Surah Selection Column */}
           <div className="flex flex-col h-full overflow-hidden">
-            <h3 className="p-3 text-lg font-bold text-center border-b bg-muted/30 sticky top-0 z-10 text-black">
+            <h3 className="p-3 text-lg font-bold text-center border-b bg-muted/30 sticky top-0 z-10 text-foreground">
               Select Surah
             </h3>
             <ScrollArea className="flex-1">
@@ -97,7 +97,7 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
                         "w-full text-left px-4 py-3 rounded-lg text-base transition-all duration-200 font-bold",
                         selectedSurah === surah.number.toString()
                           ? "bg-primary text-primary-foreground shadow-sm"
-                          : "hover:bg-muted text-black"
+                          : "hover:bg-muted text-foreground"
                       )}
                     >
                       <span className="mr-2 text-sm font-bold">{surah.number}.</span>
@@ -113,7 +113,7 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
 
           {/* Verse Selection Column */}
           <div className="flex flex-col h-full overflow-hidden">
-            <h3 className="p-3 text-lg font-bold text-center border-b bg-muted/30 sticky top-0 z-10 text-black">
+            <h3 className="p-3 text-lg font-bold text-center border-b bg-muted/30 sticky top-0 z-10 text-foreground">
               Select Verse
             </h3>
             <ScrollArea className="flex-1">
@@ -130,7 +130,7 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
                       "w-full text-left px-4 py-3 rounded-lg text-base transition-all duration-200 flex items-center justify-between font-bold",
                       selectedVerse === v.toString()
                         ? "bg-primary text-primary-foreground shadow-sm"
-                        : "hover:bg-muted text-black"
+                        : "hover:bg-muted text-foreground"
                     )}
                   >
                     <span>Verse {v}</span>
