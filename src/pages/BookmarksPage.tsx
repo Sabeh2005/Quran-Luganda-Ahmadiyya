@@ -141,13 +141,13 @@ const BookmarksPage = () => {
                 <TabsList className="w-full grid grid-cols-2 rounded-none h-12 bg-white dark:bg-card border-b">
                     <TabsTrigger
                         value="single"
-                        className="rounded-none h-full data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary text-base"
+                        className="rounded-none h-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base transition-colors"
                     >
                         Single Bookmarks
                     </TabsTrigger>
                     <TabsTrigger
                         value="collections"
-                        className="rounded-none h-full data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary text-base"
+                        className="rounded-none h-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base transition-colors"
                     >
                         Collections
                     </TabsTrigger>

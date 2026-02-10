@@ -30,7 +30,7 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({ verse, surahNumber }
     return (
         <div className="group py-6 px-4 border-b border-border/40 last:border-none flex flex-col gap-4 transition-colors">
             <div className="flex flex-col gap-2">
-                <div className="text-[#327D3D] font-bold text-3xl">
+                <div className="text-[#327D3D] font-bold text-[25px]">
                     Surah {surahName} {surahNumber}:{verse.verseNumber}
                 </div>
 
@@ -38,7 +38,7 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({ verse, surahNumber }
                     {/* Arabic */}
                     {showArabic && (
                         <div
-                            className="text-4xl text-right w-full font-noorehuda leading-[2] text-foreground/90"
+                            className="text-[25px] text-right w-full font-noorehuda leading-[2] text-foreground/90"
                             dir="rtl"
                             style={{ color: settings.arabicFontColor }}
                         >
@@ -49,7 +49,7 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({ verse, surahNumber }
                     {/* Luganda */}
                     {showLuganda && (
                         <div
-                            className="text-3xl leading-relaxed text-foreground/80 font-medium"
+                            className="text-[25px] leading-relaxed text-foreground/80 font-medium"
                             style={{ color: settings.translationFontColor }}
                         >
                             {verse.luganda}
@@ -59,7 +59,7 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({ verse, surahNumber }
                     {/* English */}
                     {showEnglish && (
                         <div
-                            className="text-3xl leading-relaxed text-foreground/80 font-medium"
+                            className="text-[25px] leading-relaxed text-foreground/80 font-medium"
                             style={{ color: settings.translationFontColor }}
                         >
                             {verse.english}

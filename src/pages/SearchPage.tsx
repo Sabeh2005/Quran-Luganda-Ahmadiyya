@@ -102,7 +102,8 @@ export default function SearchPage() {
                             onChange={(e) => setQuery(e.target.value)}
                             onCompositionStart={handleCompositionStart}
                             onCompositionEnd={handleCompositionEnd}
-                            className="pl-10 pr-10 h-12 bg-primary border-none text-primary-foreground placeholder:text-primary-foreground/70 rounded-lg text-base shadow-inner focus-visible:ring-2 focus-visible:ring-primary-foreground/50"
+                            style={{ fontSize: '20px' }}
+                            className="pl-10 pr-10 h-12 bg-primary border-none text-primary-foreground placeholder:text-white placeholder:opacity-100 rounded-lg shadow-inner focus-visible:ring-2 focus-visible:ring-primary-foreground/50"
                         />
                         {query && (
                             <Button
@@ -199,12 +200,12 @@ export default function SearchPage() {
                                     className="cursor-pointer group py-3 border-b border-border/40 last:border-none"
                                 >
                                     <div className="flex flex-col gap-1">
-                                        <div className="text-primary font-bold text-xl">
+                                        <div className="text-primary font-bold text-[25px]">
                                             {result.surahName.split(' — ')[0]} {result.surahNumber}:{result.verseNumber}
                                         </div>
 
                                         <div className={cn(
-                                            "text-2xl leading-relaxed text-foreground/90",
+                                            "text-[25px] leading-relaxed text-foreground/90",
                                             result.matchType === 'arabic' ? "font-noorehuda text-right w-full" : ""
                                         )} dir={result.matchType === 'arabic' ? "rtl" : "ltr"}>
                                             {result.matchType === 'surah' && (
