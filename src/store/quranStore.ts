@@ -52,6 +52,7 @@ interface QuranStore {
   };
   setSearchState: (state: Partial<QuranStore['searchState']>) => void;
   setLastReadPosition: (surahNumber: number, verseNumber: number) => void;
+  clearLastReadPosition: () => void;
 }
 
 const defaultSettings: AppSettings = {
@@ -228,6 +229,9 @@ export const useQuranStore = create<QuranStore>()(
       })),
       setLastReadPosition: (surahNumber, verseNumber) => {
         set({ lastReadPosition: { surahNumber, verseNumber } });
+      },
+      clearLastReadPosition: () => {
+        set({ lastReadPosition: null });
       },
     }),
     {

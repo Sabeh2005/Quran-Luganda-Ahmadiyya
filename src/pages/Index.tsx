@@ -99,9 +99,9 @@ const Index = () => {
 
       <main className="container mx-auto pt-2 pb-6 px-2">
         {/* Continue Reading */}
-        {isHydrated && lastReadPosition && (
+        {isHydrated && (
           <button
-            onClick={() => navigate(`/surah/${lastReadPosition.surahNumber}?verse=${lastReadPosition.verseNumber}`)}
+            onClick={() => lastReadPosition && navigate(`/surah/${lastReadPosition.surahNumber}?verse=${lastReadPosition.verseNumber}`)}
             className={cn(
               "w-full mb-2 p-4 rounded-xl transition-all border",
               settings.coloredAppBackground
@@ -114,9 +114,11 @@ const Index = () => {
                 <BookOpen className="h-6 w-6 text-primary-foreground" />
               </div>
               <div className="text-left flex-1">
-                <p className={cn("text-sm", settings.coloredAppBackground ? "text-muted-foreground" : "text-muted-foreground")}>Continue Reading</p>
+                <p className={cn("text-sm text-muted-foreground")}>Continue Reading</p>
                 <p className="font-semibold text-foreground">
-                  {getSurah(lastReadPosition.surahNumber)?.englishName} — Verse {lastReadPosition.verseNumber}
+                  {lastReadPosition
+                    ? `${getSurah(lastReadPosition.surahNumber)?.englishName} — Verse ${lastReadPosition.verseNumber}`
+                    : "No history yet"}
                 </p>
               </div>
               <button
