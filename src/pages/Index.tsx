@@ -3,6 +3,8 @@ import { Loader2, BookOpen, Bookmark } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { SurahCard } from '@/components/SurahCard';
 import { SearchBar } from '@/components/SearchBar';
+import settingsIcon from '@/assets/settings-icon.svg';
+import infoIcon from '@/assets/information-icon.svg';
 import { SettingsPanel } from '@/components/SettingsPanel';
 import { NavigationModal } from '@/components/NavigationModal';
 import { useQuranData } from '@/hooks/useQuranData';
@@ -53,7 +55,7 @@ const Index = () => {
       'theme-forest'
     );
     if (settings.themeColor !== 'green') {
-      document.documentElement.classList.add(`theme-${settings.themeColor}`);
+      document.documentElement.classList.add(`theme - ${settings.themeColor} `);
     }
   }, [settings.nightMode, settings.themeColor]);
 
@@ -100,10 +102,10 @@ const Index = () => {
       <main className="container mx-auto pt-2 pb-6 px-2">
         {/* Continue Reading */}
         {isHydrated && (
-          <button
-            onClick={() => lastReadPosition && navigate(`/surah/${lastReadPosition.surahNumber}?verse=${lastReadPosition.verseNumber}`)}
+          <div
+            onClick={() => lastReadPosition && navigate(`/ surah / ${lastReadPosition.surahNumber}?verse = ${lastReadPosition.verseNumber} `)}
             className={cn(
-              "w-full mb-2 p-4 rounded-xl transition-all border",
+              "w-full mb-2 p-4 rounded-xl transition-all border cursor-pointer active:scale-[0.98]",
               settings.coloredAppBackground
                 ? "bg-card border-border shadow-sm"
                 : "bg-primary/10 border-primary/20"
@@ -117,7 +119,7 @@ const Index = () => {
                 <p className={cn("text-sm text-muted-foreground")}>Continue Reading</p>
                 <p className="font-semibold text-foreground">
                   {lastReadPosition
-                    ? `${getSurah(lastReadPosition.surahNumber)?.englishName} — Verse ${lastReadPosition.verseNumber}`
+                    ? `${getSurah(lastReadPosition.surahNumber)?.englishName} — Verse ${lastReadPosition.verseNumber} `
                     : "No history yet"}
                 </p>
               </div>
@@ -126,17 +128,17 @@ const Index = () => {
                   e.stopPropagation();
                   navigate('/about');
                 }}
-                className="p-2 -mr-2 rounded-full hover:bg-black/10 transition-colors text-black"
-                title="About"
+                className="p-1 -mr-2 rounded-full transition-all hover:scale-110 active:scale-95 bg-primary flex items-center justify-center w-[34px] h-[34px]"
+                aria-label="About"
               >
-                <svg stroke="black" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-6 w-6">
-                  <circle cx="12" cy="11.9999" r="9" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                  <rect x="12" y="8" width="0.01" height="0.01" stroke="black" stroke-width="2.25" stroke-linejoin="round" />
-                  <path d="M12 12V16" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
+                <img
+                  src={infoIcon}
+                  alt="About"
+                  className="h-6 w-6 brightness-0 invert"
+                />
               </button>
             </div>
-          </button>
+          </div>
         )}
 
         {/* Search Bar */}
