@@ -115,6 +115,11 @@ const SurahPage = () => {
       setLastReadPosition(surahNum, closestVerse);
     };
 
+    // Set initial position on load
+    if (surah) {
+      handleScroll();
+    }
+
     const debounced = debounce(handleScroll, 500);
     window.addEventListener('scroll', debounced);
     return () => window.removeEventListener('scroll', debounced);

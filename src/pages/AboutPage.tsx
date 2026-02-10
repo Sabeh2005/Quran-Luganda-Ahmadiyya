@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
-import AppInfo from '@/assets/app-information.svg';
+import AppInfo from '@/assets/quran-app-information.svg';
 import { SettingsPanel } from '@/components/SettingsPanel';
 import { NavigationModal } from '@/components/NavigationModal';
 
@@ -28,7 +28,7 @@ const AboutPage = () => {
                 </div>
 
                 <p className="mt-8 text-sm text-muted-foreground font-medium">
-                    © {new Date().getFullYear()} Holy Quran Luganda
+                    © {new Date().getFullYear()} Quran Luganda Ahmadiyya
                 </p>
             </main>
 

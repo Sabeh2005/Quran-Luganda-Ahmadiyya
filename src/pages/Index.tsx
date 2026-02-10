@@ -14,9 +14,15 @@ import { cn } from '@/lib/utils';
 const Index = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [navigationOpen, setNavigationOpen] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
   const { surahs, loading, error, getSurah } = useQuranData();
   const { settings, bookmarks, lastReadPosition } = useQuranStore();
   const navigate = useNavigate();
+
+  // Handle hydration to prevent UI mismatch and ensure persistent data is loaded
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   // Apply theme and night mode on mount
   useEffect(() => {
@@ -90,7 +96,7 @@ const Index = () => {
 
       <main className="container mx-auto pt-2 pb-6 px-2">
         {/* Continue Reading */}
-        {lastReadPosition && (
+        {isHydrated && lastReadPosition && (
           <button
             onClick={() => navigate(`/surah/${lastReadPosition.surahNumber}?verse=${lastReadPosition.verseNumber}`)}
             className={cn(
