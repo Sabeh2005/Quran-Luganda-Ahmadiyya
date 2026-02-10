@@ -31,10 +31,10 @@ export const SearchBar: React.FC = () => {
           onClick={handleFocus}
           style={{ fontSize: '20px' }}
           className={cn(
-            "pl-9 h-11 border-none cursor-pointer transition-all placeholder:text-white placeholder:opacity-100",
+            "pl-9 h-11 border-none cursor-pointer transition-all placeholder:opacity-100",
             settings.coloredAppBackground
-              ? "bg-card text-foreground shadow-sm"
-              : "bg-primary text-white focus-visible:ring-1 focus-visible:ring-white/20"
+              ? "bg-card text-foreground shadow-sm placeholder:text-muted-foreground"
+              : "bg-primary text-white placeholder:text-white focus-visible:ring-1 focus-visible:ring-white/20"
           )}
         />
       </div>
