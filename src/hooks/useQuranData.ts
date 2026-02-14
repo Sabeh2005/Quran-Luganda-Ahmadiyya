@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import type { CombinedSurah, CombinedVerse } from '@/types/quran';
+import type { CombinedSurah, CombinedVerse, SearchResult } from '@/types/quran';
 
 
-const ARABIC_URL = '/data/quran_arabic.json';
+const ARABIC_URL = '/data/quran_arabic_ahmadiyya.json';
 const LUGANDA_URL = '/data/quran_luganda_ahmadiyya.json';
 const ENGLISH_URL = '/data/quran_english_ahmadiyya.json';
+const TRANSLITERATION_URL = '/data/quran_transliteration.json';
 
 interface FlatVerse {
   surah_number: number;
@@ -60,18 +61,7 @@ interface UseQuranDataReturn {
   searchVerses: (query: string, language?: 'all' | 'arabic' | 'luganda' | 'english', mode?: 'similar' | 'exact') => SearchResult[];
 }
 
-interface SearchResult {
-  surahNumber: number;
-  surahName: string;
-  verseNumber: number;
-  arabic: string;
-  normalizedArabic: string;
-  luganda: string;
-  normalizedLuganda: string;
-  english: string;
-  normalizedEnglish: string;
-  matchType: 'arabic' | 'luganda' | 'english' | 'surah';
-}
+
 
 import { normalizeArabic, normalizeText } from '@/lib/highlight';
 
@@ -95,24 +85,27 @@ export const useQuranData = (): UseQuranDataReturn => {
     if (!fetchLoadingPromise) {
       fetchLoadingPromise = (async () => {
         try {
-          const [arabicRes, lugandaRes, englishRes] = await Promise.all([
+          const [arabicRes, lugandaRes, englishRes, transliterationRes] = await Promise.all([
             fetch(ARABIC_URL),
             fetch(LUGANDA_URL),
             fetch(ENGLISH_URL),
+            fetch(TRANSLITERATION_URL),
           ]);
 
-          if (!arabicRes.ok || !lugandaRes.ok || !englishRes.ok) {
+          if (!arabicRes.ok || !lugandaRes.ok || !englishRes.ok || !transliterationRes.ok) {
             throw new Error('Failed to fetch Quran data');
           }
 
-          const [arabicData, lugandaData, englishData]: [FlatArabicVerse[], FlatVerse[], FlatVerse[]] = await Promise.all([
+          const [arabicData, lugandaData, englishData, transliterationData]: [FlatArabicVerse[], FlatVerse[], FlatVerse[], FlatVerse[]] = await Promise.all([
             arabicRes.json(),
             lugandaRes.json(),
             englishRes.json(),
+            transliterationRes.json(),
           ]);
 
           const lugandaMap = createVerseMap(lugandaData);
           const englishMap = createVerseMap(englishData);
+          const transliterationMap = createVerseMap(transliterationData);
           const englishSurahNames = extractEnglishSurahNames(englishData);
           const arabicBySurah = groupArabicVersesBySurah(arabicData);
 
@@ -133,15 +126,18 @@ export const useQuranData = (): UseQuranDataReturn => {
               const arabicText = arabicVerse.text_content;
               const lugandaText = lugandaMap.get(verseKey) || '';
               const englishText = englishMap.get(verseKey) || '';
+              const transliterationText = transliterationMap.get(verseKey) || '';
 
               return {
                 verseNumber: arabicVerse.ayah_number,
-                arabic: arabicText,
-                normalizedArabic: normalizeArabic(arabicText),
+                arabic: arabicVerse.text_content.normalize('NFKC'), // Normalize presentation forms to standard Arabic
+                normalizedArabic: normalizeArabic(arabicVerse.text_content), // For search
                 luganda: lugandaText,
                 normalizedLuganda: normalizeText(lugandaText),
                 english: englishText,
                 normalizedEnglish: normalizeText(englishText),
+                transliteration: transliterationText,
+                normalizedTransliteration: normalizeText(transliterationText),
               };
             });
 
@@ -213,7 +209,7 @@ export const useQuranData = (): UseQuranDataReturn => {
       }
 
       surah.verses.forEach((verse) => {
-        let matchType: 'arabic' | 'luganda' | 'english' | 'surah' | null = null;
+        let matchType: SearchResult['matchType'] | null = null;
         let isMatch = false;
 
         // A. Surah Name Priority
@@ -276,6 +272,25 @@ export const useQuranData = (): UseQuranDataReturn => {
           }
         }
 
+        // E. Check Transliteration
+        if (!isMatch && (language === 'all')) {
+          const target = verse.normalizedTransliteration;
+          // Use English logic for transliteration as it uses Latin script
+          if (mode === 'exact') {
+            const allWordsMatch = exactWordRegexes.every(re => re.test(target));
+            if (allWordsMatch && queryWords.length > 0) {
+              matchType = 'transliteration';
+              isMatch = true;
+            }
+          } else {
+            const allWordsPresent = queryWords.every(word => target.includes(word));
+            if (allWordsPresent && queryWords.length > 0) {
+              matchType = 'transliteration';
+              isMatch = true;
+            }
+          }
+        }
+
         if (isMatch && matchType) {
           results.push({
             surahNumber: surah.number,
@@ -287,6 +302,8 @@ export const useQuranData = (): UseQuranDataReturn => {
             normalizedLuganda: verse.normalizedLuganda,
             english: verse.english,
             normalizedEnglish: verse.normalizedEnglish,
+            transliteration: verse.transliteration,
+            normalizedTransliteration: verse.normalizedTransliteration,
             matchType,
           });
         }

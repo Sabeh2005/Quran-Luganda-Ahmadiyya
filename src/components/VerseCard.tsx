@@ -108,6 +108,8 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
     };
   };
 
+
+
   const getBookmarkColorClass = () => {
     if (!bookmark?.color) return '';
     const found = bookmarkColors.find(b => b.color === bookmark.color);
@@ -193,6 +195,7 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
 
   const showLuganda = settings.translationDisplay === 'all' || settings.translationDisplay === 'luganda';
   const showEnglish = settings.translationDisplay === 'all' || settings.translationDisplay === 'english';
+  const showTransliteration = settings.showTransliteration;
   const translationStyles = getTranslationFontStyle();
 
   return (
@@ -244,56 +247,82 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
           </p>
         </div>
 
-        {/* Luganda translation - full width from left */}
-        {showLuganda && (
-          <p
-            className="translation-text text-left w-full"
-            style={{
-              fontSize: `${settings.translationFontSize}px`,
-              color: settings.coloredBackground ? '#ffffff' : settings.translationFontColor,
-              fontFamily: getTranslationFontFamily(settings.translationFont),
-              ...translationStyles,
-              lineHeight: '1.5',
-              wordBreak: 'normal',
-              overflowWrap: 'anywhere',
-              whiteSpace: 'pre-wrap',
-            }}
-          >
-            <span className={cn(
-              "text-[15px] font-semibold uppercase tracking-wide block mb-1",
-              settings.coloredBackground ? "text-white/90" : "text-primary"
-            )} style={{ fontStyle: 'normal' }}>
-              Luganda
-            </span>
-            {searchQuery ? highlightMatch(verse.luganda, searchQuery, searchMode) : verse.luganda}
-          </p>
-        )}
-
-        {/* English translation - full width from left */}
-        {showEnglish && (
-          <p
-            className="translation-text text-left w-full"
-            style={{
-              fontSize: `${settings.translationFontSize}px`,
-              color: settings.coloredBackground ? '#ffffff' : settings.translationFontColor,
-              fontFamily: getTranslationFontFamily(settings.translationFont),
-              ...translationStyles,
-              lineHeight: '1.5',
-              wordBreak: 'normal',
-              overflowWrap: 'anywhere',
-              whiteSpace: 'pre-wrap',
-            }}
-          >
-            <span className={cn(
-              "text-[15px] font-semibold uppercase tracking-wide block mb-1",
-              settings.coloredBackground ? "text-white/90" : "text-primary"
-            )} style={{ fontStyle: 'normal' }}>
-              English
-            </span>
-            {searchQuery ? highlightMatch(verse.english, searchQuery, searchMode) : verse.english}
-          </p>
-        )}
       </div>
+
+      {/* Transliteration - displayed below Arabic if enabled */}
+      {showTransliteration && (
+        <p
+          className="transliteration-text text-left w-full mb-2"
+          style={{
+            fontSize: `${settings.translationFontSize}px`,
+            color: settings.coloredBackground ? '#ffffff' : settings.translationFontColor,
+            fontFamily: getTranslationFontFamily(settings.translationFont),
+            ...translationStyles,
+            lineHeight: '1.6',
+            wordBreak: 'normal',
+            overflowWrap: 'anywhere',
+            whiteSpace: 'pre-wrap',
+          }}
+        >
+          <span className={cn(
+            "text-[13px] font-semibold uppercase tracking-wide block mb-1 opacity-80",
+            settings.coloredBackground ? "text-white/80" : "text-primary/80"
+          )} style={{ fontStyle: 'normal' }}>
+            Transliteration
+          </span>
+          {searchQuery ? highlightMatch(verse.transliteration, searchQuery, searchMode) : verse.transliteration}
+        </p>
+      )}
+
+      {/* Luganda translation - full width from left */}
+      {showLuganda && (
+        <p
+          className="translation-text text-left w-full"
+          style={{
+            fontSize: `${settings.translationFontSize}px`,
+            color: settings.coloredBackground ? '#ffffff' : settings.translationFontColor,
+            fontFamily: getTranslationFontFamily(settings.translationFont),
+            ...translationStyles,
+            lineHeight: '1.5',
+            wordBreak: 'normal',
+            overflowWrap: 'anywhere',
+            whiteSpace: 'pre-wrap',
+          }}
+        >
+          <span className={cn(
+            "text-[15px] font-semibold uppercase tracking-wide block mb-1",
+            settings.coloredBackground ? "text-white/90" : "text-primary"
+          )} style={{ fontStyle: 'normal' }}>
+            Luganda
+          </span>
+          {searchQuery ? highlightMatch(verse.luganda, searchQuery, searchMode) : verse.luganda}
+        </p>
+      )}
+
+      {/* English translation - full width from left */}
+      {showEnglish && (
+        <p
+          className="translation-text text-left w-full"
+          style={{
+            fontSize: `${settings.translationFontSize}px`,
+            color: settings.coloredBackground ? '#ffffff' : settings.translationFontColor,
+            fontFamily: getTranslationFontFamily(settings.translationFont),
+            ...translationStyles,
+            lineHeight: '1.5',
+            wordBreak: 'normal',
+            overflowWrap: 'anywhere',
+            whiteSpace: 'pre-wrap',
+          }}
+        >
+          <span className={cn(
+            "text-[15px] font-semibold uppercase tracking-wide block mb-1",
+            settings.coloredBackground ? "text-white/90" : "text-primary"
+          )} style={{ fontStyle: 'normal' }}>
+            English
+          </span>
+          {searchQuery ? highlightMatch(verse.english, searchQuery, searchMode) : verse.english}
+        </p>
+      )}
 
       {/* Action buttons */}
       <div className="flex items-center justify-end gap-1 mt-4 pt-3 border-t border-border/50">

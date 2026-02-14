@@ -73,6 +73,8 @@ const defaultSettings: AppSettings = {
   fullscreen: false,
   verseHighlightColor: null,
   swapBookmarksAndCollections: false,
+  // Transliteration settings
+  showTransliteration: false,
 };
 
 // Export defaultSettings for reset functionality

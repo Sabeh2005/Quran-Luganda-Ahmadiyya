@@ -24,6 +24,8 @@ export interface CombinedVerse {
   normalizedLuganda: string;
   english: string;
   normalizedEnglish: string;
+  transliteration: string;
+  normalizedTransliteration: string;
 }
 
 export interface CombinedSurah {
@@ -84,6 +86,8 @@ export interface AppSettings {
   fullscreen: boolean;
   verseHighlightColor: HighlightColor;
   swapBookmarksAndCollections: boolean;
+  // Transliteration settings
+  showTransliteration: boolean;
 }
 
 export interface SearchResult {
@@ -91,7 +95,12 @@ export interface SearchResult {
   surahName: string;
   verseNumber: number;
   arabic: string;
+  normalizedArabic: string;
   luganda: string;
+  normalizedLuganda: string;
   english: string;
-  matchType: 'arabic' | 'luganda' | 'english' | 'surah';
+  normalizedEnglish: string;
+  transliteration: string;
+  normalizedTransliteration: string;
+  matchType: 'arabic' | 'luganda' | 'english' | 'transliteration' | 'surah';
 }

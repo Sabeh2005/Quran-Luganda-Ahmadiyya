@@ -605,6 +605,31 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
               </div>
             </section>
 
+            {/* Transliteration Settings Section */}
+            <div className="border-t border-border my-6 pt-6">
+              <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
+                <Languages className="h-5 w-5 text-primary" />
+                Transliteration Settings
+              </h3>
+
+              <div className="space-y-8">
+                {/* Show Transliteration Toggle */}
+                <section>
+                  <div className="flex items-center justify-between p-3 rounded-lg border-2 border-border">
+                    <div className="flex items-center gap-3">
+                      <Label className="font-semibold cursor-pointer">Show Transliteration</Label>
+                    </div>
+                    <Switch
+                      checked={settings.showTransliteration}
+                      onCheckedChange={(checked) => updateSettings({ showTransliteration: checked })}
+                    />
+                  </div>
+                </section>
+
+
+              </div>
+            </div>
+
             {/* Bookmark Section Swapping */}
             <section>
               <div className="flex items-center justify-between p-3 rounded-lg border-2 border-border mb-4">
