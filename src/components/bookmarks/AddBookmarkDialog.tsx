@@ -87,24 +87,18 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
         // - Update Collections based on selection.
 
         if (mode === 'single') {
-            const currentlyInSingle = bookmarks.some(
-                (b) => b.surahNumber === surahNumber && b.verseNumber === verseNumber
-            );
-
-            if (currentlyInSingle) {
-                // Remove the bookmark
+            if (isUpdate) {
+                // If it's bookmarked ANYWHERE, selecting this mode should remove it from everywhere
                 removeBookmark(surahNumber, verseNumber);
+                collections.forEach(c => {
+                    if (c.bookmarks.some(b => b.surahNumber === surahNumber && b.verseNumber === verseNumber)) {
+                        toggleBookmarkInCollection(c.id, surahNumber, verseNumber);
+                    }
+                });
             } else {
-                // Add the bookmark
+                // Not bookmarked anywhere, add to single
                 addBookmark(surahNumber, verseNumber, 'green');
             }
-
-            // Remove from ALL Collections
-            collections.forEach(c => {
-                if (c.bookmarks.some(b => b.surahNumber === surahNumber && b.verseNumber === verseNumber)) {
-                    toggleBookmarkInCollection(c.id, surahNumber, verseNumber);
-                }
-            });
         } else {
             // Mode is COLLECTION
 
@@ -167,9 +161,7 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
                 {mode === 'single' && <Check className="w-4 h-4 text-white" />}
             </div>
             <span className="font-semibold text-lg">
-                {bookmarks.some(b => b.surahNumber === surahNumber && b.verseNumber === verseNumber)
-                    ? "Remove Single Bookmark"
-                    : "Single Bookmark"}
+                {isUpdate ? "Remove Bookmark" : "Single Bookmark"}
             </span>
         </div>
     );
@@ -245,10 +237,15 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
                             Create New
                         </Button>
                         <Button
-                            className="rounded-full px-8 bg-[#75a47f] hover:bg-[#5e8e68] text-white"
+                            className={cn(
+                                "rounded-full px-8 text-white transition-colors",
+                                mode === 'single' && isUpdate
+                                    ? "bg-red-500 hover:bg-red-600"
+                                    : "bg-[#75a47f] hover:bg-[#5e8e68]"
+                            )}
                             onClick={handleDone}
                         >
-                            Done
+                            {mode === 'single' && isUpdate ? 'Remove' : 'Done'}
                         </Button>
                     </div>
                 </DialogContent>
