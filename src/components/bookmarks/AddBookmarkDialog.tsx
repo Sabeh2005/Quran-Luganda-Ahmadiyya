@@ -181,7 +181,7 @@ export const AddBookmarkDialog: React.FC<AddBookmarkDialogProps> = ({
                 <span className="font-semibold text-lg">Bookmarks Collection</span>
             </div>
 
-            <div className="pl-9 space-y-3 transition-opacity">
+            <div className="pl-9 space-y-3 transition-opacity max-h-[320px] overflow-y-auto pr-2 scrollbar-hide">
                 {collections.map((collection) => (
                     <div
                         key={collection.id}
