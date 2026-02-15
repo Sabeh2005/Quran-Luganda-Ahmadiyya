@@ -212,8 +212,11 @@ export default function SearchPage() {
                                     className="cursor-pointer group py-3 border-b border-border/40 last:border-none"
                                 >
                                     <div className="flex flex-col gap-1">
-                                        <div className="text-primary font-bold text-[25px]">
-                                            {result.surahName.split(' — ')[0]} {result.surahNumber}:{result.verseNumber}
+                                        <div className="text-primary font-bold text-[25px] flex items-center justify-between w-full">
+                                            <span>{result.surahName.split(' — ')[0]} {result.surahNumber}:{result.verseNumber}</span>
+                                            <span className={cn("text-primary font-bold text-[25px]", getArabicFontClass())} dir="rtl">
+                                                {getArabicTextForFont(result.surahName.split(' — ')[1], settings.arabicFont)}
+                                            </span>
                                         </div>
 
                                         <div className={cn(

@@ -28,18 +28,19 @@ const SHADDA_MADDA_COMBINATION = /(\u0651\u0653|\u0653\u0651)/g;
 const MADDA_ONLY = '\u0653';
 
 /**
- * Cleans Arabic text for display with the Uthmani (UthmanicHafs) font by:
- * 1. Normalizing to NFC to help the font trigger correct ligatures/anchors
- * 2. Fixing Shadda+Madda collisions by prioritizing the Madda
- * 3. Removing Quranic annotation marks that cause circular visual artifacts
- * 4. Replacing Farsi Yeh with standard Arabic Yeh for proper glyph rendering
+ * Cleans Arabic text for display with Quranic fonts (Uthmani, IndoPak) by:
+ * 1. Fixing Shadda+Madda collisions by prioritizing the Madda (important for fonts like UthmanicHafs)
+ * 2. Removing Quranic annotation marks that cause circular visual artifacts
+ * 3. Replacing Farsi Yeh with standard Arabic Yeh for proper glyph rendering
+ * 
+ * Note: We avoid .normalize() here because it can reorder diacritics, which
+ * breaks ligature/GPOS features in many specialized Quran fonts.
  * 
  * @param text - The Arabic text to clean
- * @returns The cleaned text compatible with UthmanicHafs font
+ * @returns The cleaned text compatible with Quranic fonts
  */
-export function cleanArabicForUthmani(text: string): string {
+export function cleanArabicForQuranFont(text: string): string {
     return text
-        .normalize('NFC')
         .replace(SHADDA_MADDA_COMBINATION, MADDA_ONLY) // Fix collision in words like Alm
         .replace(PROBLEMATIC_QURANIC_MARKS_REGEX, '')
         .replace(FARSI_YEH, ARABIC_YEH);
@@ -47,16 +48,16 @@ export function cleanArabicForUthmani(text: string): string {
 
 /**
  * Returns the appropriate Arabic text based on the selected font.
- * For Uthmani font, cleans text to avoid rendering artifacts.
- * For other fonts (Noorehuda, IndoPak), returns the text as-is.
+ * For Uthmani and IndoPak fonts, cleans text to avoid rendering artifacts.
+ * For Noorehuda, returns the text as-is.
  * 
  * @param text - The Arabic text
  * @param font - The currently selected Arabic font
  * @returns The text, cleaned if necessary for the selected font
  */
 export function getArabicTextForFont(text: string, font: string): string {
-    if (font === 'uthmani') {
-        return cleanArabicForUthmani(text);
+    if (font === 'uthmani' || font === 'indopak') {
+        return cleanArabicForQuranFont(text);
     }
     return text;
 }

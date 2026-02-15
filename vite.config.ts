@@ -46,7 +46,7 @@ export default defineConfig(({ mode }) => ({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,ttf}'],
         // Ensure older precaches are cleaned up and updates take control quickly
         cleanupOutdatedCaches: true,
         clientsClaim: true,

@@ -5,7 +5,7 @@ import "./index.css";
 import { clearOldCachesIfVersionChanged } from "@/utils/cache";
 
 // Bump this version when you want to force-clear the PWA cache on clients
-clearOldCachesIfVersionChanged("2026-01-26-03");
+clearOldCachesIfVersionChanged("2026-02-15-01");
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

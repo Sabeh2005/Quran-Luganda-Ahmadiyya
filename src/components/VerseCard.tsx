@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { AddBookmarkDialog } from './bookmarks/AddBookmarkDialog';
 import { highlightMatch } from '@/lib/highlight';
 import { getArabicTextForFont } from '@/lib/arabicTextUtils';
+import { getArabicFontClass } from '@/lib/fontUtils';
 
 import { highlightColors } from '@/lib/colors';
 
@@ -82,13 +83,6 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
     return '';
   };
 
-  const getArabicFontClass = () => {
-    switch (settings.arabicFont) {
-      case 'uthmani': return 'font-uthmani';
-      case 'indopak': return 'font-indopak';
-      default: return 'font-noorehuda';
-    }
-  };
 
   const getTranslationFontFamily = (font: TranslationFont): string => {
     switch (font) {
@@ -236,7 +230,7 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
             {verse.verseNumber}
           </div>
           <p
-            className={cn("arabic-text w-full text-right leading-normal", getArabicFontClass())}
+            className={cn("arabic-text w-full text-right leading-normal", getArabicFontClass(settings.arabicFont))}
             style={{
               fontSize: `${settings.arabicFontSize}px`,
               color: settings.coloredBackground ? '#ffffff' : settings.arabicFontColor,

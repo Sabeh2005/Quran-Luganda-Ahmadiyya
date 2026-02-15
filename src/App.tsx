@@ -50,7 +50,15 @@ const App = () => {
     if (settings.themeColor !== 'green') {
       document.documentElement.classList.add(`theme-${settings.themeColor}`);
     }
-  }, [settings.themeColor, settings.nightMode]);
+
+    // Apply global font family variable
+    const fontFamilies = {
+      noorehuda: 'Noorehuda, serif',
+      uthmani: 'UthmanicHafs, serif',
+      indopak: 'IndoPak, serif'
+    };
+    document.documentElement.style.setProperty('--arabic-font', fontFamilies[settings.arabicFont] || fontFamilies.noorehuda);
+  }, [settings.themeColor, settings.nightMode, settings.arabicFont]);
 
   return (
     <QueryClientProvider client={queryClient}>

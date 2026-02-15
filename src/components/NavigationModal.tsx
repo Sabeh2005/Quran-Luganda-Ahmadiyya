@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 import { useQuranData } from "@/hooks/useQuranData";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useQuranStore } from "@/store/quranStore";
+import { getArabicTextForFont } from "@/lib/arabicTextUtils";
+import { getArabicFontClass } from "@/lib/fontUtils";
 
 interface NavigationModalProps {
   isOpen: boolean;
@@ -22,6 +25,7 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
 }) => {
   const navigate = useNavigate();
   const { surahs } = useQuranData();
+  const settings = useQuranStore(state => state.settings);
   const [selectedSurah, setSelectedSurah] = useState<string>("1");
   const [selectedVerse, setSelectedVerse] = useState<string>("1");
   const [verseCount, setVerseCount] = useState<number>(7); // Default Fatiha
@@ -67,6 +71,8 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
     setSelectedVerse("1"); // Reset verse when surah changes
   };
 
+  const arabicFontClass = getArabicFontClass(settings.arabicFont);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-xl p-0 overflow-hidden bg-background">
@@ -94,14 +100,19 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
                       data-selected-surah={selectedSurah === surah.number.toString()}
                       onClick={() => handleSurahSelect(surah.number.toString())}
                       className={cn(
-                        "w-full text-left px-4 py-3 rounded-lg text-base transition-all duration-200 font-bold",
+                        "w-full text-left px-4 py-3 rounded-lg text-base transition-all duration-200 flex items-center justify-between font-bold",
                         selectedSurah === surah.number.toString()
                           ? "bg-primary text-primary-foreground shadow-sm"
                           : "hover:bg-muted text-foreground"
                       )}
                     >
-                      <span className="mr-2 text-sm font-bold">{surah.number}.</span>
-                      {surah.englishName}
+                      <div className="flex items-center">
+                        <span className="mr-2 text-sm font-bold">{surah.number}.</span>
+                        {surah.englishName}
+                      </div>
+                      <span className={cn("arabic-text text-xl", arabicFontClass)} dir="rtl">
+                        {getArabicTextForFont(surah.arabicName, settings.arabicFont)}
+                      </span>
                     </button>
                   ))
                 ) : (

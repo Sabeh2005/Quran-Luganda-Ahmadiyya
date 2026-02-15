@@ -13,6 +13,7 @@ import { toast } from '@/hooks/use-toast';
 import { updateMetaThemeColor } from '@/utils/themeColors';
 import { highlightColors } from '@/lib/colors';
 import { getArabicTextForFont } from '@/lib/arabicTextUtils';
+import { getArabicFontClass } from '@/lib/fontUtils';
 
 interface SettingsPanelProps {
   isOpen: boolean;
@@ -206,13 +207,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
     }
   };
 
-  const getArabicFontClass = (font: ArabicFont): string => {
-    switch (font) {
-      case 'uthmani': return 'font-uthmani';
-      case 'indopak': return 'font-indopak';
-      default: return 'font-noorehuda';
-    }
-  };
 
   if (!isOpen) return null;
 

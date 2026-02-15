@@ -672,7 +672,6 @@
     font-family: 'IndoPak', serif !important;
   }
 
-
   .translation-text {
     color: hsl(var(--translation-color));
     font-size: var(--translation-font-size, 16px);
@@ -874,6 +873,7 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }

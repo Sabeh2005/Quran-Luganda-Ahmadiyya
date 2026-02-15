@@ -15,6 +15,7 @@ import { useQuranData } from '@/hooks/useQuranData';
 import { useQuranStore } from '@/store/quranStore';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { getArabicTextForFont } from '@/lib/arabicTextUtils';
+import { getArabicFontClass } from '@/lib/fontUtils';
 
 const SurahPage = () => {
   const { surahNumber } = useParams<{ surahNumber: string }>();
@@ -50,13 +51,7 @@ const SurahPage = () => {
     }
   };
 
-  const getArabicFontClass = () => {
-    switch (settings.arabicFont) {
-      case 'uthmani': return 'font-uthmani';
-      case 'indopak': return 'font-indopak';
-      default: return 'font-noorehuda';
-    }
-  };
+  const arabicFontClass = getArabicFontClass(settings.arabicFont);
 
   // Apply theme and night mode
   useEffect(() => {
@@ -206,7 +201,7 @@ const SurahPage = () => {
             </div>
 
             <div className="flex-1 flex justify-center items-center">
-              <h1 className={cn("text-3xl text-primary-foreground", getArabicFontClass())} dir="rtl">
+              <h1 className={cn("arabic-text text-3xl text-primary-foreground", arabicFontClass)} dir="rtl">
                 {getArabicTextForFont(surah.arabicName, settings.arabicFont)}
               </h1>
             </div>
@@ -245,7 +240,7 @@ const SurahPage = () => {
             "bg-primary text-primary-foreground"
           )}
         >
-          <p className={cn("text-5xl mb-2 text-primary-foreground", getArabicFontClass())} dir="rtl">
+          <p className={cn("arabic-text text-5xl mb-2 text-primary-foreground", arabicFontClass)} dir="rtl">
             {getArabicTextForFont(surah.arabicName, settings.arabicFont)}
           </p>
           <h2 className="text-3xl font-semibold text-primary-foreground">

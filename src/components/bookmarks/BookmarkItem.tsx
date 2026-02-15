@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 import { useQuranData } from '@/hooks/useQuranData';
 import { getArabicTextForFont } from '@/lib/arabicTextUtils';
+import { getArabicFontClass } from '@/lib/fontUtils';
 
 interface BookmarkItemProps {
     verse: CombinedVerse;
@@ -24,13 +25,7 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({ verse, surahNumber }
         navigate(`/surah/${surahNumber}?verse=${verse.verseNumber}`);
     };
 
-    const getArabicFontClass = () => {
-        switch (settings.arabicFont) {
-            case 'uthmani': return 'font-uthmani';
-            case 'indopak': return 'font-indopak';
-            default: return 'font-noorehuda';
-        }
-    };
+    const arabicFontClass = getArabicFontClass(settings.arabicFont);
 
     const showArabic = true;
     const showLuganda = settings.translationDisplay === 'all' || settings.translationDisplay === 'luganda';
@@ -39,15 +34,20 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({ verse, surahNumber }
     return (
         <div className="group py-6 px-4 border-b border-border/40 last:border-none flex flex-col gap-4 transition-colors">
             <div className="flex flex-col gap-2">
-                <div className="text-[#327D3D] font-bold text-[25px]">
-                    Surah {surahName} {surahNumber}:{verse.verseNumber}
+                <div className="text-[#327D3D] font-bold text-[25px] flex items-center justify-between w-full">
+                    <span>Surah {surahName} {surahNumber}:{verse.verseNumber}</span>
+                    {surah && (
+                        <span className={cn("arabic-text text-2xl", arabicFontClass)} dir="rtl">
+                            {getArabicTextForFont(surah.arabicName, settings.arabicFont)}
+                        </span>
+                    )}
                 </div>
 
                 <div className="space-y-4">
                     {/* Arabic */}
                     {showArabic && (
                         <div
-                            className={cn("text-[25px] text-right w-full leading-[2] text-foreground/90", getArabicFontClass())}
+                            className={cn("arabic-text text-[25px] text-right w-full leading-[2] text-foreground/90", arabicFontClass)}
                             dir="rtl"
                             style={{ color: settings.arabicFontColor }}
                         >

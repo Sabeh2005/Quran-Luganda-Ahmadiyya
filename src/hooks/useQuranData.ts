@@ -130,7 +130,7 @@ export const useQuranData = (): UseQuranDataReturn => {
 
               return {
                 verseNumber: arabicVerse.ayah_number,
-                arabic: arabicVerse.text_content.normalize('NFKC'), // Normalize presentation forms to standard Arabic
+                arabic: arabicVerse.text_content, // DO NOT normalize - breaks GPOS for many Arabic fonts
                 normalizedArabic: normalizeArabic(arabicVerse.text_content), // For search
                 luganda: lugandaText,
                 normalizedLuganda: normalizeText(lugandaText),

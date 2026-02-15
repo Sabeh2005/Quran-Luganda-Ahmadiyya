@@ -4,6 +4,7 @@ import type { CombinedSurah } from '@/types/quran';
 import { cn } from '@/lib/utils';
 import { useQuranStore } from '@/store/quranStore';
 import { getArabicTextForFont } from '@/lib/arabicTextUtils';
+import { getArabicFontClass } from '@/lib/fontUtils';
 
 interface SurahCardProps {
   surah: CombinedSurah;
@@ -14,13 +15,7 @@ export const SurahCard: React.FC<SurahCardProps> = React.memo(({ surah, index })
   const navigate = useNavigate();
   const settings = useQuranStore(state => state.settings);
 
-  const getArabicFontClass = () => {
-    switch (settings.arabicFont) {
-      case 'uthmani': return 'font-uthmani';
-      case 'indopak': return 'font-indopak';
-      default: return 'font-noorehuda';
-    }
-  };
+  const arabicFontClass = getArabicFontClass(settings.arabicFont);
 
   return (
     <button
@@ -61,8 +56,8 @@ export const SurahCard: React.FC<SurahCardProps> = React.memo(({ surah, index })
       {/* Arabic name - larger */}
       <div className="text-right flex-shrink-0">
         <p className={cn(
-          "text-4xl",
-          getArabicFontClass(),
+          "arabic-text text-4xl",
+          arabicFontClass,
           settings.coloredBackground ? "text-primary-foreground" : "text-primary"
         )} dir="rtl">
           {getArabicTextForFont(surah.arabicName, settings.arabicFont)}
