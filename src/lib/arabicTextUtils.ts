@@ -14,25 +14,33 @@
  */
 
 // Quranic annotation combining marks that cause circular visual artifacts with UthmanicHafs.
-// Range U+06D6–U+06ED, excluding U+06DD (End of Ayah mark which is intentional).
+// Range U+06D6–U+06ED, excluding U+06DD (End of Ayah mark).
 const PROBLEMATIC_QURANIC_MARKS_REGEX = /[\u06D6-\u06DC\u06DE-\u06ED]/g;
 
 // Farsi Yeh (U+06CC) → Arabic Yeh (U+064A)
-// The Ahmadiyya text uses Farsi Yeh which UthmanicHafs doesn't support,
-// causing dotted circles to appear on nearly every verse.
 const FARSI_YEH = /\u06CC/g;
 const ARABIC_YEH = '\u064A';
 
+// Shadda + Madda combination (in any order). 
+// The Usmani font often renders this combination incorrectly (marks overlapping or shifting).
+// In Uthmani script Muqatta'at, the Shadda is omitted to allow the Madda to display clearly.
+const SHADDA_MADDA_COMBINATION = /(\u0651\u0653|\u0653\u0651)/g;
+const MADDA_ONLY = '\u0653';
+
 /**
  * Cleans Arabic text for display with the Uthmani (UthmanicHafs) font by:
- * 1. Removing Quranic annotation marks that cause circular visual artifacts
- * 2. Replacing Farsi Yeh with standard Arabic Yeh for proper glyph rendering
+ * 1. Normalizing to NFC to help the font trigger correct ligatures/anchors
+ * 2. Fixing Shadda+Madda collisions by prioritizing the Madda
+ * 3. Removing Quranic annotation marks that cause circular visual artifacts
+ * 4. Replacing Farsi Yeh with standard Arabic Yeh for proper glyph rendering
  * 
  * @param text - The Arabic text to clean
  * @returns The cleaned text compatible with UthmanicHafs font
  */
 export function cleanArabicForUthmani(text: string): string {
     return text
+        .normalize('NFC')
+        .replace(SHADDA_MADDA_COMBINATION, MADDA_ONLY) // Fix collision in words like Alm
         .replace(PROBLEMATIC_QURANIC_MARKS_REGEX, '')
         .replace(FARSI_YEH, ARABIC_YEH);
 }
