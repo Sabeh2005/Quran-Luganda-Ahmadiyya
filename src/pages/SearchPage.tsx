@@ -1,13 +1,14 @@
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, X, Loader2 } from 'lucide-react';
+import { X, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useQuranData } from '@/hooks/useQuranData';
 import { useQuranStore } from '@/store/quranStore';
 import { cn } from '@/lib/utils';
 import backIcon from '@/assets/back-icon.svg';
+import searchIcon from '@/assets/search-icon.svg';
 import { highlightMatch } from '@/lib/highlight';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { SearchResult } from '@/types/quran';
@@ -104,7 +105,7 @@ export default function SearchPage() {
                 {/* Search Input */}
                 <div className="relative">
                     <div className="relative flex items-center">
-                        <Search className="absolute left-3 h-5 w-5 text-primary-foreground" />
+                        <img src={searchIcon} alt="Search" className="absolute left-3 h-5 w-5 brightness-0 invert" />
                         <Input
                             ref={inputRef}
                             type="text"

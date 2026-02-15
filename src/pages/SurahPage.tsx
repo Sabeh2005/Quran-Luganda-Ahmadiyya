@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import settingsIcon from '@/assets/settings-icon.svg';
 import backIcon from '@/assets/back-icon.svg';
+import menuIcon from '@/assets/menu-icon.svg';
+import searchIcon from '@/assets/search-icon.svg';
+import { NavigationModal } from '@/components/NavigationModal';
 
 import { useQuranData } from '@/hooks/useQuranData';
 import { useQuranStore } from '@/store/quranStore';
@@ -17,6 +20,7 @@ const SurahPage = () => {
   const { surahNumber } = useParams<{ surahNumber: string }>();
   const [searchParams] = useSearchParams();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [navigationOpen, setNavigationOpen] = useState(false);
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
   const navigate = useNavigate();
   const { getSurah, loading, error } = useQuranData();
@@ -181,28 +185,51 @@ const SurahPage = () => {
       >
         <div className="header-gradient px-0 py-4 shadow-lg">
           <div className="flex items-center justify-between px-0">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate(-1)}
-              className="text-primary-foreground hover:bg-primary-foreground/20"
-            >
-              <img src={backIcon} alt="Back" className="h-6 w-6 brightness-0 invert" />
-            </Button>
-            <div className="text-center">
-              <h1 className="text-lg font-bold text-primary-foreground">{surahDisplayName}</h1>
-              <p className="text-sm text-primary-foreground/80">
-                {surah.totalVerses} verses • {surah.revelationType}
-              </p>
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate(-1)}
+                className="text-primary-foreground hover:bg-primary-foreground/20"
+              >
+                <img src={backIcon} alt="Back" className="h-6 w-6 brightness-0 invert" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setNavigationOpen(true)}
+                className="text-primary-foreground hover:bg-primary-foreground/20"
+                title="Quick Navigation"
+              >
+                <img src={menuIcon} alt="Menu" className="h-6 w-6 brightness-0 invert" />
+              </Button>
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setSettingsOpen(true)}
-              className="text-primary-foreground hover:bg-primary-foreground/20"
-            >
-              <img src={settingsIcon} alt="Settings" className="h-6 w-6 brightness-0 invert" />
-            </Button>
+
+            <div className="flex-1 flex justify-center items-center">
+              <h1 className={cn("text-3xl text-primary-foreground", getArabicFontClass())} dir="rtl">
+                {getArabicTextForFont(surah.arabicName, settings.arabicFont)}
+              </h1>
+            </div>
+
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate('/search')}
+                className="text-primary-foreground hover:bg-primary-foreground/20"
+                title="Search"
+              >
+                <img src={searchIcon} alt="Search" className="h-6 w-6 brightness-0 invert" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setSettingsOpen(true)}
+                className="text-primary-foreground hover:bg-primary-foreground/20"
+              >
+                <img src={settingsIcon} alt="Settings" className="h-6 w-6 brightness-0 invert" />
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -291,6 +318,7 @@ const SurahPage = () => {
       </main>
 
       <SettingsPanel isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <NavigationModal isOpen={navigationOpen} onClose={() => setNavigationOpen(false)} />
     </div>
   );
 };
