@@ -11,8 +11,6 @@ import { useQuranData } from "@/hooks/useQuranData";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuranStore } from "@/store/quranStore";
-import { getArabicTextForFont } from "@/lib/arabicTextUtils";
-import { getArabicFontClass } from "@/lib/fontUtils";
 
 interface NavigationModalProps {
   isOpen: boolean;
@@ -71,7 +69,6 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
     setSelectedVerse("1"); // Reset verse when surah changes
   };
 
-  const arabicFontClass = getArabicFontClass(settings.arabicFont);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -110,9 +107,6 @@ export const NavigationModal: React.FC<NavigationModalProps> = ({
                         <span className="mr-2 text-sm font-bold">{surah.number}.</span>
                         {surah.englishName}
                       </div>
-                      <span className={cn("arabic-text text-xl", arabicFontClass)} dir="rtl">
-                        {getArabicTextForFont(surah.arabicName, settings.arabicFont)}
-                      </span>
                     </button>
                   ))
                 ) : (

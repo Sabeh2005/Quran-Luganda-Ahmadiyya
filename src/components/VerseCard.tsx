@@ -250,21 +250,21 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
       {/* Transliteration - displayed below Arabic if enabled */}
       {showTransliteration && (
         <p
-          className="transliteration-text text-left w-full mb-2"
+          className="translation-text text-left w-full mt-4"
           style={{
             fontSize: `${settings.translationFontSize}px`,
             color: settings.coloredBackground ? '#ffffff' : settings.translationFontColor,
             fontFamily: getTranslationFontFamily(settings.translationFont),
             ...translationStyles,
-            lineHeight: '1.6',
+            lineHeight: '1.5',
             wordBreak: 'normal',
             overflowWrap: 'anywhere',
             whiteSpace: 'pre-wrap',
           }}
         >
           <span className={cn(
-            "text-[13px] font-semibold uppercase tracking-wide block mb-1 opacity-80",
-            settings.coloredBackground ? "text-white/80" : "text-primary/80"
+            "text-[15px] font-semibold uppercase tracking-wide block mb-1",
+            settings.coloredBackground ? "text-white/90" : "text-primary"
           )} style={{ fontStyle: 'normal' }}>
             Transliteration
           </span>
@@ -275,7 +275,7 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
       {/* Luganda translation - full width from left */}
       {showLuganda && (
         <p
-          className="translation-text text-left w-full"
+          className="translation-text text-left w-full mt-4"
           style={{
             fontSize: `${settings.translationFontSize}px`,
             color: settings.coloredBackground ? '#ffffff' : settings.translationFontColor,
@@ -300,7 +300,7 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
       {/* English translation - full width from left */}
       {showEnglish && (
         <p
-          className="translation-text text-left w-full"
+          className="translation-text text-left w-full mt-4"
           style={{
             fontSize: `${settings.translationFontSize}px`,
             color: settings.coloredBackground ? '#ffffff' : settings.translationFontColor,

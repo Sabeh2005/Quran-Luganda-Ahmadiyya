@@ -12,8 +12,6 @@ import { useQuranStore } from '@/store/quranStore';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { getArabicTextForFont } from '@/lib/arabicTextUtils';
-import { getArabicFontClass } from '@/lib/fontUtils';
 
 const Index = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -96,7 +94,6 @@ const Index = () => {
     return acc;
   }, {} as Record<number, typeof bookmarks>);
 
-  const arabicFontClass = getArabicFontClass(settings.arabicFont);
 
   return (
     <div className={cn("min-h-screen transition-colors duration-300", settings.coloredAppBackground ? "bg-primary" : "bg-background")}>
@@ -129,11 +126,6 @@ const Index = () => {
                       ? `${getSurah(lastReadPosition.surahNumber)?.englishName} — Verse ${lastReadPosition.verseNumber} `
                       : "No history yet"}
                   </span>
-                  {lastReadPosition && (
-                    <span className={cn("arabic-text text-lg", arabicFontClass)} dir="rtl">
-                      {getArabicTextForFont(getSurah(lastReadPosition.surahNumber)?.arabicName || '', settings.arabicFont)}
-                    </span>
-                  )}
                 </p>
               </div>
               <button

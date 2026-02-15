@@ -10,7 +10,7 @@ import { useQuranStore, defaultSettings } from '@/store/quranStore';
 import type { ArabicFont, ThemeColor, TranslationFont, TranslationDisplay, TranslationFontStyle } from '@/types/quran';
 import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
-import { updateMetaThemeColor } from '@/utils/themeColors';
+import { updateMetaThemeColor, THEME_ARABIC_COLORS } from '@/utils/themeColors';
 import { highlightColors } from '@/lib/colors';
 import { getArabicTextForFont } from '@/lib/arabicTextUtils';
 import { getArabicFontClass } from '@/lib/fontUtils';
@@ -115,6 +115,11 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
     if (theme !== 'green') {
       document.documentElement.classList.add(`theme-${theme}`);
     }
+
+    // Automatically update Arabic font color to match theme
+    const recommendedColors = THEME_ARABIC_COLORS[theme];
+    const newArabicColor = settings.nightMode ? recommendedColors.dark : recommendedColors.light;
+    updateSettings({ arabicFontColor: newArabicColor });
   };
 
   const handleNightModeToggle = () => {
@@ -124,13 +129,20 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
     // Auto-adjust font colors for better readability
     if (newNightMode) {
       document.documentElement.classList.add('dark');
-      // Set lighter colors for dark mode if using dark colors
-      if (fontColorsLight.includes(settings.arabicFontColor)) {
+
+      // 1. Check if Arabic color matches theme default
+      const themeDefaults = THEME_ARABIC_COLORS[settings.themeColor];
+      if (settings.arabicFontColor === themeDefaults.light) {
+        updateSettings({ arabicFontColor: themeDefaults.dark });
+      }
+      // 2. Fall back to global color swap logic
+      else if (fontColorsLight.includes(settings.arabicFontColor)) {
         const index = fontColorsLight.indexOf(settings.arabicFontColor);
         if (index !== -1) {
           updateSettings({ arabicFontColor: fontColorsDark[index] });
         }
       }
+
       if (fontColorsLight.includes(settings.translationFontColor)) {
         const index = fontColorsLight.indexOf(settings.translationFontColor);
         if (index !== -1) {
@@ -139,13 +151,20 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
       }
     } else {
       document.documentElement.classList.remove('dark');
-      // Set darker colors for light mode if using light colors
-      if (fontColorsDark.includes(settings.arabicFontColor)) {
+
+      // 1. Check if Arabic color matches theme default
+      const themeDefaults = THEME_ARABIC_COLORS[settings.themeColor];
+      if (settings.arabicFontColor === themeDefaults.dark) {
+        updateSettings({ arabicFontColor: themeDefaults.light });
+      }
+      // 2. Fall back to global color swap logic
+      else if (fontColorsDark.includes(settings.arabicFontColor)) {
         const index = fontColorsDark.indexOf(settings.arabicFontColor);
         if (index !== -1) {
           updateSettings({ arabicFontColor: fontColorsLight[index] });
         }
       }
+
       if (fontColorsDark.includes(settings.translationFontColor)) {
         const index = fontColorsDark.indexOf(settings.translationFontColor);
         if (index !== -1) {
