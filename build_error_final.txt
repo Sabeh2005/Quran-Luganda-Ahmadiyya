@@ -1,0 +1,24 @@
+
+> vite_react_shadcn_ts@0.0.0 build
+> vite build
+
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32mΓ£ô[39m 1782 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mregisterSW.js                              [39m[1m[2m  0.13 kB[22m[1m[22m
+[2mdist/[22m[32mmanifest.webmanifest                       [39m[1m[2m  0.46 kB[22m[1m[22m
+[2mdist/[22m[32mindex.html                                 [39m[1m[2m  2.55 kB[22m[1m[22m[2m Γöé gzip:   0.94 kB[22m
+[2mdist/[22m[32massets/al-quran-calligraphy-CZHzDmRw.svg   [39m[1m[2m 12.33 kB[22m[1m[22m[2m Γöé gzip:   5.30 kB[22m
+[2mdist/[22m[32massets/quran-app-information-Bbfrxh0i.svg  [39m[1m[2m 82.51 kB[22m[1m[22m[2m Γöé gzip:  23.10 kB[22m
+[2mdist/[22m[35massets/index-BCIX0-de.css                  [39m[1m[2m 86.66 kB[22m[1m[22m[2m Γöé gzip:  15.22 kB[22m
+[2mdist/[22m[36massets/index-DlBGi1VK.js                   [39m[1m[2m459.44 kB[22m[1m[22m[2m Γöé gzip: 142.31 kB[22m
+[32mΓ£ô built in 4.50s[39m
+
+PWA v1.2.0
+mode      generateSW
+precache  24 entries (7836.69 KiB)
+files generated
+  dist/sw.js
+  dist/workbox-8c29f6e4.js
