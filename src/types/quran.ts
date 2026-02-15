@@ -73,13 +73,27 @@ export interface AppSettings {
   arabicFont: ArabicFont;
   arabicFontSize: number;
   arabicFontBold: boolean;
-  translationFont: TranslationFont;
-  translationFontSize: number;
-  translationFontBold: boolean;
-  translationFontStyle: TranslationFontStyle;
-  translationDisplay: TranslationDisplay;
   arabicFontColor: string;
-  translationFontColor: string;
+  translationDisplay: TranslationDisplay;
+
+  lugandaFont: TranslationFont;
+  lugandaFontSize: number;
+  lugandaFontBold: boolean;
+  lugandaFontStyle: TranslationFontStyle;
+  lugandaFontColor: string;
+
+  englishFont: TranslationFont;
+  englishFontSize: number;
+  englishFontBold: boolean;
+  englishFontStyle: TranslationFontStyle;
+  englishFontColor: string;
+
+  transliterationFont: TranslationFont;
+  transliterationFontSize: number;
+  transliterationFontBold: boolean;
+  transliterationFontStyle: TranslationFontStyle;
+  transliterationFontColor: string;
+
   themeColor: ThemeColor;
   coloredBackground: boolean;
   coloredAppBackground: boolean;

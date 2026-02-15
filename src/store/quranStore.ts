@@ -60,13 +60,27 @@ const defaultSettings: AppSettings = {
   arabicFont: 'noorehuda',
   arabicFontSize: 40,
   arabicFontBold: false,
-  translationFont: 'default',
-  translationFontSize: 30,
-  translationFontBold: false,
-  translationFontStyle: 'normal',
-  translationDisplay: 'all',
   arabicFontColor: '#166534', // Green - matches default theme
-  translationFontColor: '#000000', // Black
+  translationDisplay: 'all',
+
+  lugandaFont: 'default',
+  lugandaFontSize: 30,
+  lugandaFontBold: false,
+  lugandaFontStyle: 'normal',
+  lugandaFontColor: '#000000',
+
+  englishFont: 'default',
+  englishFontSize: 30,
+  englishFontBold: false,
+  englishFontStyle: 'normal',
+  englishFontColor: '#000000',
+
+  transliterationFont: 'default',
+  transliterationFontSize: 30,
+  transliterationFontBold: false,
+  transliterationFontStyle: 'normal',
+  transliterationFontColor: '#000000',
+
   themeColor: 'green',
   coloredBackground: false,
   coloredAppBackground: false,

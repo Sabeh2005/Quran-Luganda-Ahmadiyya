@@ -122,7 +122,9 @@ const SearchResultDetailPage = () => {
                                     luganda: result.luganda,
                                     normalizedLuganda: result.normalizedLuganda,
                                     english: result.english,
-                                    normalizedEnglish: result.normalizedEnglish
+                                    normalizedEnglish: result.normalizedEnglish,
+                                    transliteration: result.transliteration,
+                                    normalizedTransliteration: result.normalizedTransliteration
                                 }}
                                 surahNumber={result.surahNumber}
                                 surahName={result.surahName}

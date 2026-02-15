@@ -143,10 +143,25 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
         }
       }
 
-      if (fontColorsLight.includes(settings.translationFontColor)) {
-        const index = fontColorsLight.indexOf(settings.translationFontColor);
+      // Toggle Luganda color
+      if (fontColorsLight.includes(settings.lugandaFontColor)) {
+        const index = fontColorsLight.indexOf(settings.lugandaFontColor);
         if (index !== -1) {
-          updateSettings({ translationFontColor: fontColorsDark[index] });
+          updateSettings({ lugandaFontColor: fontColorsDark[index] });
+        }
+      }
+      // Toggle English color
+      if (fontColorsLight.includes(settings.englishFontColor)) {
+        const index = fontColorsLight.indexOf(settings.englishFontColor);
+        if (index !== -1) {
+          updateSettings({ englishFontColor: fontColorsDark[index] });
+        }
+      }
+      // Toggle Transliteration color
+      if (fontColorsLight.includes(settings.transliterationFontColor)) {
+        const index = fontColorsLight.indexOf(settings.transliterationFontColor);
+        if (index !== -1) {
+          updateSettings({ transliterationFontColor: fontColorsDark[index] });
         }
       }
     } else {
@@ -165,10 +180,25 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
         }
       }
 
-      if (fontColorsDark.includes(settings.translationFontColor)) {
-        const index = fontColorsDark.indexOf(settings.translationFontColor);
+      // Toggle Luganda color
+      if (fontColorsDark.includes(settings.lugandaFontColor)) {
+        const index = fontColorsDark.indexOf(settings.lugandaFontColor);
         if (index !== -1) {
-          updateSettings({ translationFontColor: fontColorsLight[index] });
+          updateSettings({ lugandaFontColor: fontColorsLight[index] });
+        }
+      }
+      // Toggle English color
+      if (fontColorsDark.includes(settings.englishFontColor)) {
+        const index = fontColorsDark.indexOf(settings.englishFontColor);
+        if (index !== -1) {
+          updateSettings({ englishFontColor: fontColorsLight[index] });
+        }
+      }
+      // Toggle Transliteration color
+      if (fontColorsDark.includes(settings.transliterationFontColor)) {
+        const index = fontColorsDark.indexOf(settings.transliterationFontColor);
+        if (index !== -1) {
+          updateSettings({ transliterationFontColor: fontColorsLight[index] });
         }
       }
     }
@@ -478,107 +508,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
               </div>
             </section>
 
-            {/* Translation Font */}
-            <section>
-              <div className="flex items-center gap-2 mb-4">
-                <Type className="h-5 w-5 text-primary" />
-                <h3 className="font-semibold">Translation Font</h3>
-              </div>
-              <RadioGroup
-                value={settings.translationFont}
-                onValueChange={(value) => updateSettings({ translationFont: value as TranslationFont })}
-                className="space-y-2"
-              >
-                {translationFonts.map((font) => (
-                  <label
-                    key={font.value}
-                    className={cn(
-                      "flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all",
-                      settings.translationFont === font.value
-                        ? "border-primary bg-primary/10"
-                        : "border-border"
-                    )}
-                  >
-                    <RadioGroupItem value={font.value} />
-                    <span
-                      className="font-medium"
-                      style={{ fontFamily: getTranslationFontFamily(font.value) }}
-                    >
-                      {font.label}
-                    </span>
-                  </label>
-                ))}
-              </RadioGroup>
-            </section>
-
-            {/* Translation Font Size */}
-            <section>
-              <div className="flex items-center justify-between mb-4">
-                <Label className="font-semibold">Translation Font Size</Label>
-                <span className="text-sm text-muted-foreground">{settings.translationFontSize}px</span>
-              </div>
-              <Slider
-                value={[settings.translationFontSize]}
-                onValueChange={([value]) => updateSettings({ translationFontSize: value })}
-                min={12}
-                max={100}
-                step={1}
-                className="w-full"
-              />
-              <p
-                className="mt-3 text-center"
-                style={{
-                  fontSize: `${settings.translationFontSize}px`,
-                  fontFamily: getTranslationFontFamily(settings.translationFont),
-                  fontWeight: settings.translationFontBold || settings.translationFontStyle === 'bold-italic' ? 'bold' : 'normal',
-                  fontStyle: settings.translationFontStyle === 'italic' || settings.translationFontStyle === 'bold-italic' ? 'italic' : 'normal',
-                  wordBreak: 'normal',
-                  overflowWrap: 'normal',
-                }}
-              >
-                In the name of Allah
-              </p>
-            </section>
-
-            {/* Translation Text Bold */}
-            <section>
-              <div className="flex items-center justify-between p-3 rounded-lg border-2 border-border">
-                <div className="flex items-center gap-3">
-                  <Bold className="h-5 w-5 text-primary" />
-                  <Label className="font-semibold cursor-pointer">Bold Translation Text</Label>
-                </div>
-                <Switch
-                  checked={settings.translationFontBold}
-                  onCheckedChange={(checked) => updateSettings({ translationFontBold: checked })}
-                />
-              </div>
-            </section>
-
-            {/* Translation Font Style (Italic options) */}
-            <section>
-              <div className="flex items-center gap-2 mb-4">
-                <Italic className="h-5 w-5 text-primary" />
-                <h3 className="font-semibold">Translation Font Style</h3>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                {translationFontStyles.map((style) => (
-                  <button
-                    key={style.value}
-                    onClick={() => updateSettings({ translationFontStyle: style.value })}
-                    className={cn(
-                      "flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all",
-                      settings.translationFontStyle === style.value
-                        ? "border-primary bg-primary/10"
-                        : "border-border"
-                    )}
-                  >
-                    <span className="text-lg">{style.icon}</span>
-                    <span className="text-xs font-medium">{style.label}</span>
-                  </button>
-                ))}
-              </div>
-            </section>
-
             {/* Arabic Font Color */}
             <section>
               <Label className="font-semibold block mb-4">Arabic Font Color</Label>
@@ -599,25 +528,233 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
               </div>
             </section>
 
-            {/* Translation Font Color */}
-            <section>
-              <Label className="font-semibold block mb-4">Translation Font Color</Label>
-              <div className="flex flex-wrap gap-2">
-                {fontColors.map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => updateSettings({ translationFontColor: color })}
-                    className={cn(
-                      "w-8 h-8 rounded-full border-2 transition-transform hover:scale-110",
-                      settings.translationFontColor === color
-                        ? "ring-2 ring-offset-2 ring-primary"
-                        : "border-border"
-                    )}
-                    style={{ backgroundColor: color }}
-                  />
-                ))}
+            {/* Luganda Font Settings */}
+            <div className="border-t border-border pt-6">
+              <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-primary">
+                <Languages className="h-5 w-5" />
+                Luganda Font Settings
+              </h3>
+
+              <div className="space-y-6">
+                <section>
+                  <Label className="font-semibold block mb-3 text-sm italic">Font Family</Label>
+                  <RadioGroup
+                    value={settings.lugandaFont}
+                    onValueChange={(value) => updateSettings({ lugandaFont: value as TranslationFont })}
+                    className="grid grid-cols-1 gap-2"
+                  >
+                    {translationFonts.map((font) => (
+                      <label key={font.value} className={cn("flex items-center gap-3 p-2 rounded-lg border transition-all cursor-pointer", settings.lugandaFont === font.value ? "border-primary bg-primary/5" : "border-border")}>
+                        <RadioGroupItem value={font.value} />
+                        <span className="text-sm" style={{ fontFamily: getTranslationFontFamily(font.value) }}>{font.label}</span>
+                      </label>
+                    ))}
+                  </RadioGroup>
+                </section>
+
+                <section>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label className="text-sm italic">Font Size</Label>
+                    <span className="text-xs text-muted-foreground">{settings.lugandaFontSize}px</span>
+                  </div>
+                  <Slider value={[settings.lugandaFontSize]} onValueChange={([v]) => updateSettings({ lugandaFontSize: v })} min={12} max={80} step={1} />
+                </section>
+
+                <div className="flex items-center justify-between p-2 rounded-lg border border-border">
+                  <div className="flex items-center gap-2">
+                    <Bold className="h-4 w-4 text-primary" />
+                    <Label className="text-sm cursor-pointer">Bold Text</Label>
+                  </div>
+                  <Switch checked={settings.lugandaFontBold} onCheckedChange={(v) => updateSettings({ lugandaFontBold: v })} />
+                </div>
+
+                <section>
+                  <Label className="text-sm block mb-2 italic">Font Style</Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {translationFontStyles.map((s) => (
+                      <button key={s.value} onClick={() => updateSettings({ lugandaFontStyle: s.value })} className={cn("flex flex-col items-center gap-1 p-2 rounded-lg border transition-all", settings.lugandaFontStyle === s.value ? "border-primary bg-primary/5" : "border-border")}>
+                        <span className="text-sm">{s.icon}</span>
+                        <span className="text-[10px]">{s.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+
+                <section>
+                  <Label className="text-sm block mb-2 italic">Text Color</Label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {fontColors.map((color) => (
+                      <button key={color} onClick={() => updateSettings({ lugandaFontColor: color })} className={cn("w-6 h-6 rounded-full border transition-transform hover:scale-110", settings.lugandaFontColor === color ? "ring-2 ring-offset-1 ring-primary" : "border-border")} style={{ backgroundColor: color }} />
+                    ))}
+                  </div>
+                </section>
+
+                <p
+                  className="mt-3 p-3 text-center"
+                  style={{
+                    fontSize: `${settings.lugandaFontSize}px`,
+                    fontFamily: getTranslationFontFamily(settings.lugandaFont),
+                    color: settings.lugandaFontColor,
+                    fontWeight: settings.lugandaFontBold || settings.lugandaFontStyle === 'bold-italic' ? 'bold' : 'normal',
+                    fontStyle: settings.lugandaFontStyle === 'italic' || settings.lugandaFontStyle === 'bold-italic' ? 'italic' : 'normal',
+                  }}
+                >
+                  Mu linnya lya Allah
+                </p>
               </div>
-            </section>
+            </div>
+
+            {/* English Font Settings */}
+            <div className="border-t border-border pt-6">
+              <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-primary">
+                <Languages className="h-5 w-5" />
+                English Font Settings
+              </h3>
+
+              <div className="space-y-6">
+                <section>
+                  <Label className="font-semibold block mb-3 text-sm italic">Font Family</Label>
+                  <RadioGroup
+                    value={settings.englishFont}
+                    onValueChange={(value) => updateSettings({ englishFont: value as TranslationFont })}
+                    className="grid grid-cols-1 gap-2"
+                  >
+                    {translationFonts.map((font) => (
+                      <label key={font.value} className={cn("flex items-center gap-3 p-2 rounded-lg border transition-all cursor-pointer", settings.englishFont === font.value ? "border-primary bg-primary/5" : "border-border")}>
+                        <RadioGroupItem value={font.value} />
+                        <span className="text-sm" style={{ fontFamily: getTranslationFontFamily(font.value) }}>{font.label}</span>
+                      </label>
+                    ))}
+                  </RadioGroup>
+                </section>
+
+                <section>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label className="text-sm italic">Font Size</Label>
+                    <span className="text-xs text-muted-foreground">{settings.englishFontSize}px</span>
+                  </div>
+                  <Slider value={[settings.englishFontSize]} onValueChange={([v]) => updateSettings({ englishFontSize: v })} min={12} max={80} step={1} />
+                </section>
+
+                <div className="flex items-center justify-between p-2 rounded-lg border border-border">
+                  <div className="flex items-center gap-2">
+                    <Bold className="h-4 w-4 text-primary" />
+                    <Label className="text-sm cursor-pointer">Bold Text</Label>
+                  </div>
+                  <Switch checked={settings.englishFontBold} onCheckedChange={(v) => updateSettings({ englishFontBold: v })} />
+                </div>
+
+                <section>
+                  <Label className="text-sm block mb-2 italic">Font Style</Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {translationFontStyles.map((s) => (
+                      <button key={s.value} onClick={() => updateSettings({ englishFontStyle: s.value })} className={cn("flex flex-col items-center gap-1 p-2 rounded-lg border transition-all", settings.englishFontStyle === s.value ? "border-primary bg-primary/5" : "border-border")}>
+                        <span className="text-sm">{s.icon}</span>
+                        <span className="text-[10px]">{s.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+
+                <section>
+                  <Label className="text-sm block mb-2 italic">Text Color</Label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {fontColors.map((color) => (
+                      <button key={color} onClick={() => updateSettings({ englishFontColor: color })} className={cn("w-6 h-6 rounded-full border transition-transform hover:scale-110", settings.englishFontColor === color ? "ring-2 ring-offset-1 ring-primary" : "border-border")} style={{ backgroundColor: color }} />
+                    ))}
+                  </div>
+                </section>
+
+                <p
+                  className="mt-3 p-3 text-center"
+                  style={{
+                    fontSize: `${settings.englishFontSize}px`,
+                    fontFamily: getTranslationFontFamily(settings.englishFont),
+                    color: settings.englishFontColor,
+                    fontWeight: settings.englishFontBold || settings.englishFontStyle === 'bold-italic' ? 'bold' : 'normal',
+                    fontStyle: settings.englishFontStyle === 'italic' || settings.englishFontStyle === 'bold-italic' ? 'italic' : 'normal',
+                  }}
+                >
+                  In the name of Allah
+                </p>
+              </div>
+            </div>
+
+            {/* Transliteration Font Settings */}
+            <div className="border-t border-border pt-6">
+              <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-primary">
+                <Languages className="h-5 w-5" />
+                Transliteration Font Settings
+              </h3>
+
+              <div className="space-y-6">
+                <section>
+                  <Label className="font-semibold block mb-3 text-sm italic">Font Family</Label>
+                  <RadioGroup
+                    value={settings.transliterationFont}
+                    onValueChange={(value) => updateSettings({ transliterationFont: value as TranslationFont })}
+                    className="grid grid-cols-1 gap-2"
+                  >
+                    {translationFonts.map((font) => (
+                      <label key={font.value} className={cn("flex items-center gap-3 p-2 rounded-lg border transition-all cursor-pointer", settings.transliterationFont === font.value ? "border-primary bg-primary/5" : "border-border")}>
+                        <RadioGroupItem value={font.value} />
+                        <span className="text-sm" style={{ fontFamily: getTranslationFontFamily(font.value) }}>{font.label}</span>
+                      </label>
+                    ))}
+                  </RadioGroup>
+                </section>
+
+                <section>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label className="text-sm italic">Font Size</Label>
+                    <span className="text-xs text-muted-foreground">{settings.transliterationFontSize}px</span>
+                  </div>
+                  <Slider value={[settings.transliterationFontSize]} onValueChange={([v]) => updateSettings({ transliterationFontSize: v })} min={12} max={80} step={1} />
+                </section>
+
+                <div className="flex items-center justify-between p-2 rounded-lg border border-border">
+                  <div className="flex items-center gap-2">
+                    <Bold className="h-4 w-4 text-primary" />
+                    <Label className="text-sm cursor-pointer">Bold Text</Label>
+                  </div>
+                  <Switch checked={settings.transliterationFontBold} onCheckedChange={(v) => updateSettings({ transliterationFontBold: v })} />
+                </div>
+
+                <section>
+                  <Label className="text-sm block mb-2 italic">Font Style</Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {translationFontStyles.map((s) => (
+                      <button key={s.value} onClick={() => updateSettings({ transliterationFontStyle: s.value })} className={cn("flex flex-col items-center gap-1 p-2 rounded-lg border transition-all", settings.transliterationFontStyle === s.value ? "border-primary bg-primary/5" : "border-border")}>
+                        <span className="text-sm">{s.icon}</span>
+                        <span className="text-[10px]">{s.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+
+                <section>
+                  <Label className="text-sm block mb-2 italic">Text Color</Label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {fontColors.map((color) => (
+                      <button key={color} onClick={() => updateSettings({ transliterationFontColor: color })} className={cn("w-6 h-6 rounded-full border transition-transform hover:scale-110", settings.transliterationFontColor === color ? "ring-2 ring-offset-1 ring-primary" : "border-border")} style={{ backgroundColor: color }} />
+                    ))}
+                  </div>
+                </section>
+
+                <p
+                  className="mt-3 p-3 text-center"
+                  style={{
+                    fontSize: `${settings.transliterationFontSize}px`,
+                    fontFamily: getTranslationFontFamily(settings.transliterationFont),
+                    color: settings.transliterationFontColor,
+                    fontWeight: settings.transliterationFontBold || settings.transliterationFontStyle === 'bold-italic' ? 'bold' : 'normal',
+                    fontStyle: settings.transliterationFontStyle === 'italic' || settings.transliterationFontStyle === 'bold-italic' ? 'italic' : 'normal',
+                  }}
+                >
+                  Bismillaahir Rahmaanir Raheem
+                </p>
+              </div>
+            </div>
 
             {/* Transliteration Settings Section */}
             <div className="border-t border-border my-6 pt-6">

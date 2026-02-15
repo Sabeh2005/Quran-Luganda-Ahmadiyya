@@ -94,11 +94,11 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
     }
   };
 
-  const getTranslationFontStyle = () => {
-    const isBold = settings.translationFontBold || settings.translationFontStyle === 'bold-italic';
-    const isItalic = settings.translationFontStyle === 'italic' || settings.translationFontStyle === 'bold-italic';
+  const getTranslationFontStyle = (isBold: boolean, style: string) => {
+    const finalBold = isBold || style === 'bold-italic';
+    const isItalic = style === 'italic' || style === 'bold-italic';
     return {
-      fontWeight: isBold ? 'bold' : 'normal',
+      fontWeight: finalBold ? 'bold' : 'normal',
       fontStyle: isItalic ? 'italic' : 'normal',
     };
   };
@@ -194,7 +194,6 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
   const showLuganda = settings.translationDisplay === 'all' || settings.translationDisplay === 'luganda';
   const showEnglish = settings.translationDisplay === 'all' || settings.translationDisplay === 'english';
   const showTransliteration = settings.showTransliteration;
-  const translationStyles = getTranslationFontStyle();
 
   return (
     <div
@@ -252,10 +251,10 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
         <p
           className="translation-text text-left w-full mt-4"
           style={{
-            fontSize: `${settings.translationFontSize}px`,
-            color: settings.coloredBackground ? '#ffffff' : settings.translationFontColor,
-            fontFamily: getTranslationFontFamily(settings.translationFont),
-            ...translationStyles,
+            fontSize: `${settings.transliterationFontSize}px`,
+            color: settings.coloredBackground ? '#ffffff' : settings.transliterationFontColor,
+            fontFamily: getTranslationFontFamily(settings.transliterationFont),
+            ...getTranslationFontStyle(settings.transliterationFontBold, settings.transliterationFontStyle),
             lineHeight: '1.5',
             wordBreak: 'normal',
             overflowWrap: 'anywhere',
@@ -277,10 +276,10 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
         <p
           className="translation-text text-left w-full mt-4"
           style={{
-            fontSize: `${settings.translationFontSize}px`,
-            color: settings.coloredBackground ? '#ffffff' : settings.translationFontColor,
-            fontFamily: getTranslationFontFamily(settings.translationFont),
-            ...translationStyles,
+            fontSize: `${settings.lugandaFontSize}px`,
+            color: settings.coloredBackground ? '#ffffff' : settings.lugandaFontColor,
+            fontFamily: getTranslationFontFamily(settings.lugandaFont),
+            ...getTranslationFontStyle(settings.lugandaFontBold, settings.lugandaFontStyle),
             lineHeight: '1.5',
             wordBreak: 'normal',
             overflowWrap: 'anywhere',
@@ -302,10 +301,10 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
         <p
           className="translation-text text-left w-full mt-4"
           style={{
-            fontSize: `${settings.translationFontSize}px`,
-            color: settings.coloredBackground ? '#ffffff' : settings.translationFontColor,
-            fontFamily: getTranslationFontFamily(settings.translationFont),
-            ...translationStyles,
+            fontSize: `${settings.englishFontSize}px`,
+            color: settings.coloredBackground ? '#ffffff' : settings.englishFontColor,
+            fontFamily: getTranslationFontFamily(settings.englishFont),
+            ...getTranslationFontStyle(settings.englishFontBold, settings.englishFontStyle),
             lineHeight: '1.5',
             wordBreak: 'normal',
             overflowWrap: 'anywhere',
