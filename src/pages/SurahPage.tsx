@@ -11,6 +11,7 @@ import backIcon from '@/assets/back-icon.svg';
 import { useQuranData } from '@/hooks/useQuranData';
 import { useQuranStore } from '@/store/quranStore';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
+import { getArabicTextForFont } from '@/lib/arabicTextUtils';
 
 const SurahPage = () => {
   const { surahNumber } = useParams<{ surahNumber: string }>();
@@ -42,6 +43,14 @@ const SurahPage = () => {
     if (hasNextSurah) {
       navigate(`/surah/${surahNum + 1}`);
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const getArabicFontClass = () => {
+    switch (settings.arabicFont) {
+      case 'uthmani': return 'font-uthmani';
+      case 'indopak': return 'font-indopak';
+      default: return 'font-noorehuda';
     }
   };
 
@@ -209,8 +218,8 @@ const SurahPage = () => {
             "bg-primary text-primary-foreground"
           )}
         >
-          <p className="text-5xl font-noorehuda mb-2 text-primary-foreground" dir="rtl">
-            {surah.arabicName}
+          <p className={cn("text-5xl mb-2 text-primary-foreground", getArabicFontClass())} dir="rtl">
+            {getArabicTextForFont(surah.arabicName, settings.arabicFont)}
           </p>
           <h2 className="text-3xl font-semibold text-primary-foreground">
             {surah.englishName}

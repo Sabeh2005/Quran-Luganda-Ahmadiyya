@@ -5,6 +5,7 @@ import { BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 import { useQuranData } from '@/hooks/useQuranData';
+import { getArabicTextForFont } from '@/lib/arabicTextUtils';
 
 interface BookmarkItemProps {
     verse: CombinedVerse;
@@ -23,6 +24,14 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({ verse, surahNumber }
         navigate(`/surah/${surahNumber}?verse=${verse.verseNumber}`);
     };
 
+    const getArabicFontClass = () => {
+        switch (settings.arabicFont) {
+            case 'uthmani': return 'font-uthmani';
+            case 'indopak': return 'font-indopak';
+            default: return 'font-noorehuda';
+        }
+    };
+
     const showArabic = true;
     const showLuganda = settings.translationDisplay === 'all' || settings.translationDisplay === 'luganda';
     const showEnglish = settings.translationDisplay === 'all' || settings.translationDisplay === 'english';
@@ -38,11 +47,11 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({ verse, surahNumber }
                     {/* Arabic */}
                     {showArabic && (
                         <div
-                            className="text-[25px] text-right w-full font-noorehuda leading-[2] text-foreground/90"
+                            className={cn("text-[25px] text-right w-full leading-[2] text-foreground/90", getArabicFontClass())}
                             dir="rtl"
                             style={{ color: settings.arabicFontColor }}
                         >
-                            {verse.arabic}
+                            {getArabicTextForFont(verse.arabic, settings.arabicFont)}
                         </div>
                     )}
 

@@ -12,6 +12,7 @@ import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { AddBookmarkDialog } from './bookmarks/AddBookmarkDialog';
 import { highlightMatch } from '@/lib/highlight';
+import { getArabicTextForFont } from '@/lib/arabicTextUtils';
 
 import { highlightColors } from '@/lib/colors';
 
@@ -116,8 +117,11 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
     return found ? found.className : '';
   };
 
+  // Get the display-ready Arabic text based on the selected font
+  const displayArabic = getArabicTextForFont(verse.arabic, settings.arabicFont);
+
   const handleCopy = async () => {
-    let text = verse.arabic;
+    let text = displayArabic;
 
     // Add translations based on settings
     if (settings.translationDisplay === 'all') {
@@ -145,7 +149,7 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
   };
 
   const handleShare = async () => {
-    let text = verse.arabic;
+    let text = displayArabic;
 
     // Add translations based on settings
     if (settings.translationDisplay === 'all') {
@@ -243,7 +247,7 @@ export const VerseCard: React.FC<VerseCardProps> = React.memo(({
             }}
             dir="rtl"
           >
-            {searchQuery ? highlightMatch(verse.arabic, searchQuery, searchMode) : verse.arabic}
+            {searchQuery ? highlightMatch(displayArabic, searchQuery, searchMode) : displayArabic}
           </p>
         </div>
 

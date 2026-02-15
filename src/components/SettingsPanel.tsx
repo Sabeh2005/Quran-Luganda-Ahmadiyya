@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 import { updateMetaThemeColor } from '@/utils/themeColors';
 import { highlightColors } from '@/lib/colors';
+import { getArabicTextForFont } from '@/lib/arabicTextUtils';
 
 interface SettingsPanelProps {
   isOpen: boolean;
@@ -21,7 +22,7 @@ interface SettingsPanelProps {
 const arabicFonts: { value: ArabicFont; label: string; sample: string }[] = [
   { value: 'noorehuda', label: 'Noorehuda', sample: 'بِسۡمِ ٱللَّهِ' },
   { value: 'uthmani', label: 'Usmani (Uthmanic)', sample: 'بِسۡمِ ٱللَّهِ' },
-  { value: 'indopak', label: 'Indo-Pak', sample: 'بِسۡمِ ٱللَّهِ' },
+  { value: 'indopak', label: 'Indo-Pak', sample: 'بِسْمِ اللهِ' },
 ];
 
 const translationFonts: { value: TranslationFont; label: string }[] = [
@@ -409,13 +410,13 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
                   >
                     <div className="flex items-center gap-3">
                       <RadioGroupItem value={font.value} />
-                      <span className="font-medium">{font.label}</span>
+                      <span className="font-medium text-base">{font.label}</span>
                     </div>
                     <span
-                      className={cn("text-xl", getArabicFontClass(font.value))}
+                      className={cn("text-2xl", getArabicFontClass(font.value))}
                       dir="rtl"
                     >
-                      {font.sample}
+                      {getArabicTextForFont(font.sample, font.value)}
                     </span>
                   </label>
                 ))}
@@ -437,16 +438,16 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose })
                 className="w-full"
               />
               <p
-                className={cn("mt-3 text-center text-primary", getArabicFontClass(settings.arabicFont))}
+                className={cn("mt-4 text-center transition-all duration-300", getArabicFontClass(settings.arabicFont))}
                 style={{
                   fontSize: `${settings.arabicFontSize}px`,
                   fontWeight: settings.arabicFontBold ? 'bold' : 'normal',
-                  wordBreak: 'normal',
-                  overflowWrap: 'normal',
+                  color: settings.arabicFontColor,
+                  lineHeight: 1.5,
                 }}
                 dir="rtl"
               >
-                بِسۡمِ ٱللَّهِ
+                {getArabicTextForFont('بِسۡمِ ٱللَّهِ الرَّحْمٰنِ الرَّحِيْمِ', settings.arabicFont)}
               </p>
             </section>
 

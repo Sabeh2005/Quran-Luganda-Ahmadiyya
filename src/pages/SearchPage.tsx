@@ -11,6 +11,7 @@ import backIcon from '@/assets/back-icon.svg';
 import { highlightMatch } from '@/lib/highlight';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { SearchResult } from '@/types/quran';
+import { getArabicTextForFont } from '@/lib/arabicTextUtils';
 
 export default function SearchPage() {
     const navigate = useNavigate();
@@ -23,6 +24,15 @@ export default function SearchPage() {
     const { searchVerses, loading } = useQuranData();
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollDirection = useScrollDirection();
+    const settings = useQuranStore(state => state.settings);
+
+    const getArabicFontClass = () => {
+        switch (settings.arabicFont) {
+            case 'uthmani': return 'font-uthmani';
+            case 'indopak': return 'font-indopak';
+            default: return 'font-noorehuda';
+        }
+    };
 
     // Track IME composition state to fix Arabic input delay
     const isComposingRef = useRef(false);
@@ -207,13 +217,13 @@ export default function SearchPage() {
 
                                         <div className={cn(
                                             "text-[25px] leading-relaxed text-foreground/90",
-                                            result.matchType === 'arabic' ? "font-noorehuda text-right w-full" : ""
+                                            result.matchType === 'arabic' ? cn(getArabicFontClass(), "text-right w-full") : ""
                                         )} dir={result.matchType === 'arabic' ? "rtl" : "ltr"}>
                                             {result.matchType === 'surah' && (
                                                 <span className="text-xs font-bold bg-primary/10 text-primary px-2 py-0.5 rounded mr-2 uppercase tracking-wider">Chapter</span>
                                             )}
                                             {result.matchType === 'arabic' ? (
-                                                highlightMatch(result.arabic, debouncedQuery, searchMode)
+                                                highlightMatch(getArabicTextForFont(result.arabic, settings.arabicFont), debouncedQuery, searchMode)
                                             ) : (result.matchType === 'luganda' || result.matchType === 'surah' && selectedLanguage === 'luganda') ? (
                                                 highlightMatch(result.luganda, debouncedQuery, searchMode)
                                             ) : (
